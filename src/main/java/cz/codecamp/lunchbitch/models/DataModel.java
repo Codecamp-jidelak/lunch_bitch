@@ -1,4 +1,4 @@
-package model;
+package cz.codecamp.lunchbitch.models;
 
 
 import java.util.ArrayList;

@@ -1,11 +1,11 @@
-package cz.codecamp.lunchbitch.services.restaurant_search_service.service;
+package cz.codecamp.lunchbitch.services.restaurantSearchService;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import model.DataModel;
-import model.Location;
-import model.Restaurant;
+import cz.codecamp.lunchbitch.models.DataModel;
+import cz.codecamp.lunchbitch.models.Location;
+import cz.codecamp.lunchbitch.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
 @Service
-public class RestaurantService {
+public class RestaurantSearch {
 
     private final RestTemplate restTemplate;
 
@@ -28,7 +28,7 @@ public class RestaurantService {
     private String url;
 
     @Autowired
-    public RestaurantService(HttpEntity<String> entity, RestTemplate restTemplate) {
+    public RestaurantSearch(HttpEntity<String> entity, RestTemplate restTemplate) {
         this.entity = entity;
         this.restTemplate = restTemplate;
     }

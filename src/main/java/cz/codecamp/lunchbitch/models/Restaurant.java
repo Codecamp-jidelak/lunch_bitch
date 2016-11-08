@@ -1,4 +1,4 @@
-package model;
+package cz.codecamp.lunchbitch.models;
 
 @SuppressWarnings("unused")
 public class Restaurant {

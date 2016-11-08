@@ -1,10 +1,10 @@
-package cz.codecamp.lunchbitch.services.restaurant_search_service.controller;
+package cz.codecamp.lunchbitch.controllers.restaurantSearchController;
 
-import model.DataModel;
+import cz.codecamp.lunchbitch.models.DataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import cz.codecamp.lunchbitch.services.restaurant_search_service.service.RestaurantService;
+import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearch;
 
 import java.io.IOException;
 
@@ -12,10 +12,10 @@ import java.io.IOException;
 @RequestMapping(value = "/")
 public class RestaurantController {
 
-    private final RestaurantService service;
+    private final RestaurantSearch service;
 
     @Autowired
-    public RestaurantController(RestaurantService service) {
+    public RestaurantController(RestaurantSearch service) {
         this.service = service;
     }
 

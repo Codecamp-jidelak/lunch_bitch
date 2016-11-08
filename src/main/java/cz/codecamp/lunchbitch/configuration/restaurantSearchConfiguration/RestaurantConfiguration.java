@@ -1,4 +1,4 @@
-package cz.codecamp.lunchbitch.services.restaurant_search_service.config;
+package cz.codecamp.lunchbitch.configuration.restaurantSearchConfiguration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
