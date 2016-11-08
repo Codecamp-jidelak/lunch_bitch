@@ -12,13 +12,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-
 import java.io.IOException;
 
 @Service
-public class RestaurantSearch {
+public class RestaurantSearchServiceImpl implements RestaurantSearchService{
 
     private final RestTemplate restTemplate;
 
@@ -28,12 +26,12 @@ public class RestaurantSearch {
     private String url;
 
     @Autowired
-    public RestaurantSearch(HttpEntity<String> entity, RestTemplate restTemplate) {
+    public RestaurantSearchServiceImpl(HttpEntity<String> entity, RestTemplate restTemplate) {
         this.entity = entity;
         this.restTemplate = restTemplate;
     }
 
-    public @ResponseBody DataModel searchForRestaurants(String keyword) throws IOException {
+    public DataModel searchForRestaurants(String keyword) throws IOException {
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, keyword);
         return createDataModel(responseEntity);
     }
