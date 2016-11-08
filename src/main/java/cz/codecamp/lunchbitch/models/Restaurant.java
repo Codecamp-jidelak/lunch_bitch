@@ -9,8 +9,19 @@ public class Restaurant {
 
     private Location location;
 
+    private LunchMenu lunchMenu;
+
     public String getRes_id() {
         return res_id;
+    }
+
+    public LunchMenu getLunchMenu() {
+        return lunchMenu;
+    }
+
+    public Restaurant setLunchMenu(LunchMenu lunchMenu) {
+        this.lunchMenu = lunchMenu;
+        return this;
     }
 
     public Restaurant setRes_id(String res_id) {
@@ -45,7 +56,8 @@ public class Restaurant {
 
         return res_id != null ? res_id.equals(that.res_id) : that.res_id == null
                 && (name != null ? name.equals(that.name) : that.name == null
-                && (location != null ? location.equals(that.location) : that.location == null));
+                && (location != null ? location.equals(that.location) : that.location == null
+                && (lunchMenu != null ? lunchMenu.equals(that.lunchMenu) : that.lunchMenu == null)));
 
     }
 
@@ -54,6 +66,7 @@ public class Restaurant {
         int result = res_id != null ? res_id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + (lunchMenu != null ? lunchMenu.hashCode() : 0);
         return result;
     }
 }
