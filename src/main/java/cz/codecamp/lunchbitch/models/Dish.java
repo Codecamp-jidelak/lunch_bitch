@@ -1,7 +1,7 @@
 package cz.codecamp.lunchbitch.models;
 
-
-public class Dishes {
+@SuppressWarnings("unused")
+public class Dish {
 
     private String dish_id;
 
@@ -38,7 +38,7 @@ public class Dishes {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Dishes dishes = (Dishes) o;
+        Dish dishes = (Dish) o;
 
         return dish_id != null ? dish_id.equals(dishes.dish_id) : dishes.dish_id == null
                 && (name != null ? name.equals(dishes.name) : dishes.name == null
@@ -56,7 +56,7 @@ public class Dishes {
 
     @Override
     public String toString() {
-        return "Dishes{" +
+        return "Dish{" +
                 "dish_id='" + dish_id + '\'' +
                 ", name='" + name + '\'' +
                 ", price='" + price + '\'' +

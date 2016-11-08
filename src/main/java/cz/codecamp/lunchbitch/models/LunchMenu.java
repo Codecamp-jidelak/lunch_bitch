@@ -1,8 +1,8 @@
 package cz.codecamp.lunchbitch.models;
 
-
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class LunchMenu {
 
     private String daily_menu_id;
@@ -13,13 +13,13 @@ public class LunchMenu {
 
     private String end_date;
 
-    private List<Dishes> dishes;
+    private List<Dish> dishes;
 
-    public List<Dishes> getDishes() {
+    public List<Dish> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<Dishes> dishes) {
+    public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
     }
 

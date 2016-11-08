@@ -1,13 +1,11 @@
 package cz.codecamp.lunchbitch.controllers.dailyMenuDemandController;
 
-
-import cz.codecamp.lunchbitch.models.DataModel;
-import cz.codecamp.lunchbitch.services.dailyMenuDemandService.DailyMenuDemandService;
+import cz.codecamp.lunchbitch.models.LunchMenuDemand;
+import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 
 @SuppressWarnings("unused")
@@ -15,16 +13,17 @@ import java.io.IOException;
 @RequestMapping(value = "/menu")
 public class DailyMenuDemandController {
 
-    private final DailyMenuDemandService service;
+    private final LunchMenuDemandService service;
 
     @Autowired
-    public DailyMenuDemandController(DailyMenuDemandService service) {
+    public DailyMenuDemandController(LunchMenuDemandService service) {
         this.service = service;
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody HttpStatus searchRestaurant(@RequestBody DataModel dataModel) throws IOException {
-        return service.saveDailyMenuPreferences(dataModel);
+    public @ResponseBody HttpStatus saveLunchMenuPreferences(@RequestBody LunchMenuDemand dataModel) throws IOException {
+        service.saveLunchMenuPreferences(dataModel);
+        return HttpStatus.CREATED;
     }
 
 }
