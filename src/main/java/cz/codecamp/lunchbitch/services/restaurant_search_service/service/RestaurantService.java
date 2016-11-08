@@ -1,4 +1,4 @@
-package services.restaurant_search_service.service;
+package cz.codecamp.lunchbitch.services.restaurant_search_service.service;
 
 
 import com.fasterxml.jackson.databind.JsonNode;

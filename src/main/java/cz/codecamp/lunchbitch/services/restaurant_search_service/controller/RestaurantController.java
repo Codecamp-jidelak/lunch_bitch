@@ -1,17 +1,16 @@
-package services.restaurant_search_service.controller;
+package cz.codecamp.lunchbitch.services.restaurant_search_service.controller;
 
 import model.DataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import services.restaurant_search_service.IRestaurantSearch;
-import services.restaurant_search_service.service.RestaurantService;
+import cz.codecamp.lunchbitch.services.restaurant_search_service.service.RestaurantService;
 
 import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/")
-public class RestaurantController implements IRestaurantSearch {
+public class RestaurantController {
 
     private final RestaurantService service;
 
