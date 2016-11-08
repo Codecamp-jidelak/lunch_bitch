@@ -87,7 +87,7 @@ public class LunchMenu {
                 ", name='" + name + '\'' +
                 ", start_date='" + start_date + '\'' +
                 ", end_date='" + end_date + '\'' +
-                ", dishes=" + (dishes != null ? dishes.toString() : null) +
+                ", dishes=" + dishes +
                 '}';
     }
 }

@@ -75,8 +75,8 @@ public class Restaurant {
         return "Restaurant{" +
                 "res_id='" + res_id + '\'' +
                 ", name='" + name + '\'' +
-                ", location=" + (location != null ? location.toString() : null) +
-                ", lunchmenu=" + (lunchmenu != null ? lunchmenu.toString() : null) +
+                ", location=" + location +
+                ", lunchmenu=" + lunchmenu +
                 '}';
     }
 }
