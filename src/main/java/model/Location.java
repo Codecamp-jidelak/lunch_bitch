@@ -1,6 +1,6 @@
 package model;
 
-
+@SuppressWarnings("unused")
 public class Location {
 
     private String address;
@@ -87,13 +87,13 @@ public class Location {
 
         Location location = (Location) o;
 
-        if (address != null ? !address.equals(location.address) : location.address != null) return false;
-        if (locality != null ? !locality.equals(location.locality) : location.locality != null) return false;
-        if (city != null ? !city.equals(location.city) : location.city != null) return false;
-        if (latitude != null ? !latitude.equals(location.latitude) : location.latitude != null) return false;
-        if (longitude != null ? !longitude.equals(location.longitude) : location.longitude != null) return false;
-        if (zipcode != null ? !zipcode.equals(location.zipcode) : location.zipcode != null) return false;
-        return country_id != null ? country_id.equals(location.country_id) : location.country_id == null;
+        return address != null ? address.equals(location.address) : location.address == null
+                && (locality != null ? locality.equals(location.locality) : location.locality == null
+                && (city != null ? city.equals(location.city) : location.city == null
+                && (latitude != null ? latitude.equals(location.latitude) : location.latitude == null
+                && (longitude != null ? longitude.equals(location.longitude) : location.longitude == null
+                && (zipcode != null ? zipcode.equals(location.zipcode) : location.zipcode == null
+                && (country_id != null ? country_id.equals(location.country_id) : location.country_id == null))))));
 
     }
 

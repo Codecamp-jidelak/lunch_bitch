@@ -1,6 +1,6 @@
 package model;
 
-
+@SuppressWarnings("unused")
 public class Restaurant {
 
     private String res_id;
@@ -43,9 +43,9 @@ public class Restaurant {
 
         Restaurant that = (Restaurant) o;
 
-        if (res_id != null ? !res_id.equals(that.res_id) : that.res_id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        return location != null ? location.equals(that.location) : that.location == null;
+        return res_id != null ? res_id.equals(that.res_id) : that.res_id == null
+                && (name != null ? name.equals(that.name) : that.name == null
+                && (location != null ? location.equals(that.location) : that.location == null));
 
     }
 

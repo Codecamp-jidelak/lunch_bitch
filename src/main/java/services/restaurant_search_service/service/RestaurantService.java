@@ -24,8 +24,6 @@ public class RestaurantService {
 
     private final HttpEntity<String> entity;
 
-    private ResponseEntity responseEntity;
-
     @Value("${search.url}")
     private String url;
 
@@ -36,7 +34,7 @@ public class RestaurantService {
     }
 
     public @ResponseBody DataModel searchForRestaurants(String keyword) throws IOException {
-        responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, keyword);
+        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, keyword);
         return createDataModel(responseEntity);
     }
 
