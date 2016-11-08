@@ -50,4 +50,12 @@ public class DataModel {
     public int hashCode() {
         return restaurants != null ? restaurants.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "DataModel{" +
+                "restaurants=" + restaurants +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

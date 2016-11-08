@@ -53,4 +53,13 @@ public class Dishes {
         result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Dishes{" +
+                "dish_id='" + dish_id + '\'' +
+                ", name='" + name + '\'' +
+                ", price='" + price + '\'' +
+                '}';
+    }
 }

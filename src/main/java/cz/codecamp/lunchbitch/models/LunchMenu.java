@@ -79,4 +79,15 @@ public class LunchMenu {
         result = 31 * result + (dishes != null ? dishes.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "LunchMenu{" +
+                "daily_menu_id='" + daily_menu_id + '\'' +
+                ", name='" + name + '\'' +
+                ", start_date='" + start_date + '\'' +
+                ", end_date='" + end_date + '\'' +
+                ", dishes=" + dishes +
+                '}';
+    }
 }

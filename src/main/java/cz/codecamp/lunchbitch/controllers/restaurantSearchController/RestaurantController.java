@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @SuppressWarnings("unused")
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/search")
 public class RestaurantController {
 
     private final RestaurantSearchService service;
