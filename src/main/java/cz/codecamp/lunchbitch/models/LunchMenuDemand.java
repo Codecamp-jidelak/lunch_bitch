@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class DataModel {
+public class LunchMenuDemand {
 
     private List<Restaurant> restaurants;
 
     private String email;
 
-    public DataModel (){
+    public LunchMenuDemand(){
         restaurants = new ArrayList<>();
     }
 
@@ -40,7 +40,7 @@ public class DataModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DataModel dataModel = (DataModel) o;
+        LunchMenuDemand dataModel = (LunchMenuDemand) o;
 
         return restaurants != null ? restaurants.equals(dataModel.restaurants) : dataModel.restaurants == null;
 
@@ -53,7 +53,7 @@ public class DataModel {
 
     @Override
     public String toString() {
-        return "DataModel{" +
+        return "LunchMenuDemand{" +
                 "restaurants=" + restaurants +
                 ", email='" + email + '\'' +
                 '}';
