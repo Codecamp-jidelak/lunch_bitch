@@ -9,18 +9,18 @@ public class Restaurant {
 
     private Location location;
 
-    private LunchMenu lunchMenu;
+    private LunchMenu lunchmenu;
 
     public String getRes_id() {
         return res_id;
     }
 
-    public LunchMenu getLunchMenu() {
-        return lunchMenu;
+    public LunchMenu getLunchmenu() {
+        return lunchmenu;
     }
 
-    public Restaurant setLunchMenu(LunchMenu lunchMenu) {
-        this.lunchMenu = lunchMenu;
+    public Restaurant setLunchmenu(LunchMenu lunchmenu) {
+        this.lunchmenu = lunchmenu;
         return this;
     }
 
@@ -57,7 +57,7 @@ public class Restaurant {
         return res_id != null ? res_id.equals(that.res_id) : that.res_id == null
                 && (name != null ? name.equals(that.name) : that.name == null
                 && (location != null ? location.equals(that.location) : that.location == null
-                && (lunchMenu != null ? lunchMenu.equals(that.lunchMenu) : that.lunchMenu == null)));
+                && (lunchmenu != null ? lunchmenu.equals(that.lunchmenu) : that.lunchmenu == null)));
 
     }
 
@@ -66,7 +66,17 @@ public class Restaurant {
         int result = res_id != null ? res_id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (lunchMenu != null ? lunchMenu.hashCode() : 0);
+        result = 31 * result + (lunchmenu != null ? lunchmenu.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "res_id='" + res_id + '\'' +
+                ", name='" + name + '\'' +
+                ", location=" + (location != null ? location.toString() : null) +
+                ", lunchmenu=" + (lunchmenu != null ? lunchmenu.toString() : null) +
+                '}';
     }
 }

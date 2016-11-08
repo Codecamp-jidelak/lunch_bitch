@@ -108,4 +108,17 @@ public class Location {
         result = 31 * result + (country_id != null ? country_id.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "address='" + address + '\'' +
+                ", locality='" + locality + '\'' +
+                ", city='" + city + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", country_id='" + country_id + '\'' +
+                '}';
+    }
 }
