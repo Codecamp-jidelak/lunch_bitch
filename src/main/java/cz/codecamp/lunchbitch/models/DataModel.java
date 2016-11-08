@@ -7,22 +7,32 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class DataModel {
 
-    private List<Restaurant> restaurantList;
+    private List<Restaurant> restaurants;
+
+    private String email;
 
     public DataModel (){
-        restaurantList = new ArrayList<>();
+        restaurants = new ArrayList<>();
     }
 
     public void addRestaurant(Restaurant restaurant){
-        restaurantList.add(restaurant);
+        restaurants.add(restaurant);
     }
 
-    public List<Restaurant> getRestaurantList() {
-        return restaurantList;
+    public List<Restaurant> getRestaurants() {
+        return restaurants;
     }
 
-    public void setRestaurantList(List<Restaurant> restaurantList) {
-        this.restaurantList = restaurantList;
+    public void setRestaurants(List<Restaurant> restaurantList) {
+        this.restaurants = restaurantList;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -32,12 +42,12 @@ public class DataModel {
 
         DataModel dataModel = (DataModel) o;
 
-        return restaurantList != null ? restaurantList.equals(dataModel.restaurantList) : dataModel.restaurantList == null;
+        return restaurants != null ? restaurants.equals(dataModel.restaurants) : dataModel.restaurants == null;
 
     }
 
     @Override
     public int hashCode() {
-        return restaurantList != null ? restaurantList.hashCode() : 0;
+        return restaurants != null ? restaurants.hashCode() : 0;
     }
 }
