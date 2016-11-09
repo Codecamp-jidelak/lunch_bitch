@@ -1,4 +1,4 @@
-package cz.codecamp.lunchbitch.controllers.dailyMenuDemandController;
+package cz.codecamp.lunchbitch.controllers.lunchMenuDemandController;
 
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
@@ -11,12 +11,12 @@ import java.io.IOException;
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping(value = "/menu")
-public class DailyMenuDemandController {
+public class LunchMenuDemandController {
 
     private final LunchMenuDemandService service;
 
     @Autowired
-    public DailyMenuDemandController(LunchMenuDemandService service) {
+    public LunchMenuDemandController(LunchMenuDemandService service) {
         this.service = service;
     }
 

@@ -3,29 +3,29 @@ package cz.codecamp.lunchbitch.models;
 @SuppressWarnings("unused")
 public class Restaurant {
 
-    private String res_id;
+    private String id;
 
     private String name;
 
     private Location location;
 
-    private LunchMenu lunchmenu;
+    private LunchMenu lunchmenus;
 
-    public String getRes_id() {
-        return res_id;
+    public String getId() {
+        return id;
     }
 
     public LunchMenu getLunchmenu() {
-        return lunchmenu;
+        return lunchmenus;
     }
 
-    public Restaurant setLunchmenu(LunchMenu lunchmenu) {
-        this.lunchmenu = lunchmenu;
+    public Restaurant setLunchmenu(LunchMenu lunchmenus) {
+        this.lunchmenus = lunchmenus;
         return this;
     }
 
-    public Restaurant setRes_id(String res_id) {
-        this.res_id = res_id;
+    public Restaurant setId(String id) {
+        this.id = id;
         return this;
     }
 
@@ -54,29 +54,29 @@ public class Restaurant {
 
         Restaurant that = (Restaurant) o;
 
-        return res_id != null ? res_id.equals(that.res_id) : that.res_id == null
+        return id != null ? id.equals(that.id) : that.id == null
                 && (name != null ? name.equals(that.name) : that.name == null
                 && (location != null ? location.equals(that.location) : that.location == null
-                && (lunchmenu != null ? lunchmenu.equals(that.lunchmenu) : that.lunchmenu == null)));
+                && (lunchmenus != null ? lunchmenus.equals(that.lunchmenus) : that.lunchmenus == null)));
 
     }
 
     @Override
     public int hashCode() {
-        int result = res_id != null ? res_id.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (lunchmenu != null ? lunchmenu.hashCode() : 0);
+        result = 31 * result + (lunchmenus != null ? lunchmenus.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Restaurant{" +
-                "res_id='" + res_id + '\'' +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", location=" + location +
-                ", lunchmenu=" + lunchmenu +
+                ", lunchmenu=" + lunchmenus +
                 '}';
     }
 }

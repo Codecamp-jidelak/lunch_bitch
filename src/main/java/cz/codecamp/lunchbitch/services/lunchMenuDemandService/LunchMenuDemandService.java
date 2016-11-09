@@ -8,4 +8,6 @@ public interface LunchMenuDemandService {
 
     void saveLunchMenuPreferences(LunchMenuDemand lunchMenuDemand);
 
+    void unsubscribeMenuPreferences(LunchMenuDemand lunchMenuDemand);
+
 }
