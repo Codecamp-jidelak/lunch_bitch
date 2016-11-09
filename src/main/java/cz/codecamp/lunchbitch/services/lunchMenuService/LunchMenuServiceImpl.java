@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -20,9 +21,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Service
 public class LunchMenuServiceImpl implements LunchMenuService {
+
+    private final Logger logger;
 
     private final RestTemplate restTemplate;
 
@@ -34,23 +38,28 @@ public class LunchMenuServiceImpl implements LunchMenuService {
     private String url;
 
     @Autowired
-    public LunchMenuServiceImpl(HttpEntity<String> entity, RestTemplate restTemplate) {
+    public LunchMenuServiceImpl(HttpEntity<String> entity, RestTemplate restTemplate, Logger logger) {
         this.entity = entity;
         this.restTemplate = restTemplate;
+        this.logger = logger;
     }
 
     @Override
-    public void lunchMenuDownload(List<String> restaurants, List<LunchMenuDemand> demands) throws IOException {
+    public Map<String, LunchMenu> lunchMenuDownload(List<String> restaurants, List<LunchMenuDemand> demands) throws IOException {
 
         Map<String, LunchMenu> lunchMenuMap = new HashMap<>();
 
         for(String id: restaurants){
-            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, id);
-            lunchMenuMap.put(id, createLunchMenu(responseEntity));
+
+            try{
+                ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, id);
+                lunchMenuMap.put(id, createLunchMenu(responseEntity));
+            }catch (HttpClientErrorException e){
+                logger.warning("Restaurant with ID [" + id + "] has no lunch menu");
+            }
+
         }
-        for(LunchMenu lunchMenu : lunchMenuMap.values()){
-            System.out.printf(lunchMenu.toString());
-        }
+        return lunchMenuMap;
     }
 
 
@@ -74,7 +83,6 @@ public class LunchMenuServiceImpl implements LunchMenuService {
 
                 lunchMenu
                         .setStartDate(dailyMenu.get("start_date").textValue())
-                        .setEndDate(dailyMenu.get("end_date").textValue())
                         .setName(dailyMenu.get("name").textValue());
 
                 JsonNode dishes = dailyMenu.path("dishes");

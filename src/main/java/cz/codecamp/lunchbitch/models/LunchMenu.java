@@ -8,8 +8,6 @@ public class LunchMenu {
 
     private String startDate;
 
-    private String endDate;
-
     private String name;
 
     private List<Dish> dishes;
@@ -24,15 +22,6 @@ public class LunchMenu {
 
     public LunchMenu setStartDate(String startDate) {
         this.startDate = startDate;
-        return this;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public LunchMenu setEndDate(String endDate) {
-        this.endDate = endDate;
         return this;
     }
 
@@ -62,7 +51,6 @@ public class LunchMenu {
     public String toString() {
         return "LunchMenu{" +
                 "startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
                 ", name='" + name + '\'' +
                 ", dishes=" + dishes +
                 '}';
