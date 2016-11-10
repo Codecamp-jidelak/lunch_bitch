@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Uloženo</title>
+</head>
+<body>
+    <h1>Úspěšně uloženo</h1>
+    <p>
+        <span th:each="email : ${emailAddress}">
+                Jídeláky se budou posílat na e-mail: <span th:text="${email}">test@email.com</span>
+        </span>
+    </p>
+    <a href="/">Zpět na start (bez 4000)</a>
+</body>
+</html>

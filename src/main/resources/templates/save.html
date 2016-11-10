@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Save restaurants</title>
+</head>
+<body>
+    <h1>Vybrané restaurace</h1>
+
+    <h2>Vyhledat další:</h2>
+    <div th:replace="searchForm :: search-form"></div>
+
+    <h2>Uložené restaurace</h2>
+
+    <span th:each="selectedRestaurant : ${selectedRestaurants}">
+        <p>
+            Restaurant: <span th:text="${selectedRestaurant.name}">Restaurant name</span>,
+            <span th:text="${selectedRestaurant.location.city}">City</span>
+        </p>
+    </span>
+
+    <form action="" th:action="@{/save}" method="post">
+        <p>E-mail: <input type="text" th:name="email"/> <input type="submit" value="Odeslat"/></p>
+    </form>
+
+</body>
+</html>

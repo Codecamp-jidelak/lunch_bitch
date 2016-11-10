@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Výsledky vyhledávání</title>
+</head>
+<body>
+
+    <h1>Naleneny tyto restaurace</h1>
+
+    <form action="#" th:action="@{/results}" th:object="${restaurantIDs}" method="post">
+
+            <span th:each="restaurant : ${foundRestaurants}">
+                <p>
+                    <input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.res_id}" />
+                    <span th:text="${restaurant.name}">Restaurant name</span>,
+                    <span th:text="${restaurant.location.city}">City</span>
+                </p>
+            </span>
+        <p><input type="submit" value="Uložit"/></p>
+    </form>
+
+</body>
+</html>
