@@ -1,10 +1,11 @@
 package cz.codecamp.lunchbitch.controllers.webController;
 
 import cz.codecamp.lunchbitch.models.Restaurant;
-import cz.codecamp.lunchbitch.models.RestaurantIDs;
 import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
 import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearchService;
 import cz.codecamp.lunchbitch.services.webService.WebService;
+import cz.codecamp.lunchbitch.webPageMappers.ResultsWebPage;
+import cz.codecamp.lunchbitch.webPageMappers.SetupWebPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,18 +64,18 @@ public class WebController {
     public ModelAndView getResults(Model model) {
         Map<String, Object> mapModel = new HashMap<>();
         mapModel.put("foundRestaurant", new Restaurant());
-        model.addAttribute("restaurantIDs", new RestaurantIDs());
+        model.addAttribute("resultsWebPage", new ResultsWebPage());
         return new ModelAndView("results", mapModel);
     }
 
     @RequestMapping(value = "/results", method = RequestMethod.POST)
-    public String selectRestaurants(@ModelAttribute("restaurantIDs") RestaurantIDs restaurantIDs, BindingResult bindingResult) {
+    public String selectRestaurants(@ModelAttribute("resultsWebPage") ResultsWebPage resultsWebPage, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getAllErrors());
             return "redirect:/results";
         }
-        webService.addSelectedRestaurantIDs(restaurantIDs.getRestaurantIDs());
-        return "redirect:/save";
+        webService.addSelectedRestaurantIDs(resultsWebPage.getRestaurantIDs());
+        return "redirect:/setup";
     }
 
     @ModelAttribute(value = "selectedRestaurants")
@@ -82,15 +83,28 @@ public class WebController {
         return webService.getSelectedRestaurants();
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.GET)
-    public ModelAndView showSelectedRestaurants() {
-        Map<String, Object> model = new HashMap<>();
-        model.put("selectedRestaurant", new Restaurant());
-        return new ModelAndView("save", model);
+    @RequestMapping(value = "/setup", method = RequestMethod.GET)
+    public ModelAndView showSelectedRestaurants(Model model) {
+        Map<String, Object> mapModel = new HashMap<>();
+        mapModel.put("selectedRestaurant", new Restaurant());
+        model.addAttribute("setupWebPage", new SetupWebPage(webService.getSelectedRestaurants()));
+        return new ModelAndView("setup", mapModel);
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/setup", method = RequestMethod.POST)
+    public String selectRestaurants(@ModelAttribute("setupWebPage") SetupWebPage setupWebPage, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
+            return "redirect:/setup";
+        }
+        webService.updateSelectedRestaurantIDs(setupWebPage.getRestaurantIDs());
+        return "redirect:/setup";
+    }
+
+
+    @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String sendAway(@Valid String email) {
+
         // to do proper email validation
         if(email != null && !email.trim().isEmpty()) {
 
@@ -98,7 +112,7 @@ public class WebController {
             lunchMenuDemandService.saveLunchMenuPreferences(webService.getLunchMenuDemandPreferences());
             return "redirect:/success";
         }
-        return "redirect:/save";
+        return "redirect:/setup";
     }
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)

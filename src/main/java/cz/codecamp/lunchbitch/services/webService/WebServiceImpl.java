@@ -3,16 +3,21 @@ package cz.codecamp.lunchbitch.services.webService;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class WebServiceImpl implements WebService {
 
     private LunchMenuDemand searchResults;
     private LunchMenuDemand selectedRestaurants;
+	private Set<Restaurant> expectedRestaurants;
 
     public WebServiceImpl(LunchMenuDemand lunchMenuDemand, LunchMenuDemand selectedRestaurants) {
         this.searchResults = lunchMenuDemand;
 	    this.selectedRestaurants = selectedRestaurants;
+	    expectedRestaurants = new HashSet<>();
     }
 
     @Override
@@ -22,7 +27,7 @@ public class WebServiceImpl implements WebService {
 
 	@Override
 	public List<Restaurant> getSelectedRestaurants() {
-		return selectedRestaurants.getRestaurants();
+		return new ArrayList<>(expectedRestaurants);
 	}
 
 	@Override
@@ -36,10 +41,16 @@ public class WebServiceImpl implements WebService {
 		for (String id : selectedRestaurantIDs) {
 			for (Restaurant restaurant : foundRestaurants) {
 				if (restaurant.getRes_id().equals(id)) {
-					selectedRestaurants.addRestaurant(restaurant);
+					expectedRestaurants.add(restaurant);
 				}
 			}
 		}
+	}
+
+	@Override
+	public void updateSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
+		expectedRestaurants.clear();
+		addSelectedRestaurantIDs(selectedRestaurantIDs);
 	}
 
 	@Override
@@ -49,6 +60,8 @@ public class WebServiceImpl implements WebService {
 
 	@Override
 	public LunchMenuDemand getLunchMenuDemandPreferences() {
+		selectedRestaurants.setRestaurants(new ArrayList<>(expectedRestaurants));
+		expectedRestaurants.clear();
 		return selectedRestaurants;
 	}
 

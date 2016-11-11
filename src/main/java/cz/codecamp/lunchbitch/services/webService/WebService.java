@@ -6,11 +6,12 @@ import cz.codecamp.lunchbitch.models.Restaurant;
 import java.util.List;
 
 public interface WebService {
-    public List<Restaurant> getFoundRestaurants();
-    public List<Restaurant> getSelectedRestaurants();
-    public void saveSearchResult(LunchMenuDemand result);
-    public void addSelectedRestaurantIDs(List<String> selectedRestaurantIDs);
-    public void setLunchMenuDemandEmail(String email);
-    public LunchMenuDemand getLunchMenuDemandPreferences();
-    public String getEmail();
+    List<Restaurant> getFoundRestaurants();
+    List<Restaurant> getSelectedRestaurants();
+    void saveSearchResult(LunchMenuDemand result);
+    void addSelectedRestaurantIDs(List<String> selectedRestaurantIDs);
+    void updateSelectedRestaurantIDs(List<String> selectedRestaurantIDs);
+    void setLunchMenuDemandEmail(String email);
+    LunchMenuDemand getLunchMenuDemandPreferences();
+    String getEmail();
 }

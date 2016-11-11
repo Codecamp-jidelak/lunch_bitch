@@ -7,7 +7,7 @@
 
     <h1>Naleneny tyto restaurace</h1>
 
-    <form action="#" th:action="@{/results}" th:object="${restaurantIDs}" method="post">
+    <form action="#" th:action="@{/results}" th:object="${resultsWebPage}" method="post">
 
             <span th:each="restaurant : ${foundRestaurants}">
                 <p>
@@ -16,7 +16,8 @@
                     <span th:text="${restaurant.location.city}">City</span>
                 </p>
             </span>
-        <p><input type="submit" value="Uložit"/></p>
+
+        <p><input type="submit" value="Vložit"/></p>
     </form>
 
 </body>
