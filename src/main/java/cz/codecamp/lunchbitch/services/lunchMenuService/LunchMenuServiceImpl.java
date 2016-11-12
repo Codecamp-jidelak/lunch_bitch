@@ -49,11 +49,11 @@ public class LunchMenuServiceImpl implements LunchMenuService {
     }
 
     @Override
-    public List<LunchMenuDemand> lunchMenuDownload(List<String> restaurants, List<LunchMenuDemand> demands) throws IOException {
+    public List<LunchMenuDemand> lunchMenuDownload(List<String> restaurantsIDs, List<LunchMenuDemand> demands) throws IOException {
 
         Map<String, LunchMenu> lunchMenuMap = new HashMap<>();
 
-        for(String id: restaurants){
+        for(String id: restaurantsIDs){
 
             try{
                 ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, id);

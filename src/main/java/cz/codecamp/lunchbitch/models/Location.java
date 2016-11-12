@@ -15,7 +15,7 @@ public class Location {
 
     private String zipcode;
 
-    private String country_id;
+    private String countryId;
 
     public String getAddress() {
         return address;
@@ -71,12 +71,12 @@ public class Location {
         return this;
     }
 
-    public String getCountry_id() {
-        return country_id;
+    public String getCountryId() {
+        return countryId;
     }
 
-    public Location setCountry_id(String country_id) {
-        this.country_id = country_id;
+    public Location setCountryId(String countryId) {
+        this.countryId = countryId;
         return this;
     }
 
@@ -93,7 +93,7 @@ public class Location {
                 && (latitude != null ? latitude.equals(location.latitude) : location.latitude == null
                 && (longitude != null ? longitude.equals(location.longitude) : location.longitude == null
                 && (zipcode != null ? zipcode.equals(location.zipcode) : location.zipcode == null
-                && (country_id != null ? country_id.equals(location.country_id) : location.country_id == null))))));
+                && (countryId != null ? countryId.equals(location.countryId) : location.countryId == null))))));
 
     }
 
@@ -105,7 +105,7 @@ public class Location {
         result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
         result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
         result = 31 * result + (zipcode != null ? zipcode.hashCode() : 0);
-        result = 31 * result + (country_id != null ? country_id.hashCode() : 0);
+        result = 31 * result + (countryId != null ? countryId.hashCode() : 0);
         return result;
     }
 
@@ -118,7 +118,7 @@ public class Location {
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", zipcode='" + zipcode + '\'' +
-                ", country_id='" + country_id + '\'' +
+                ", countryId='" + countryId + '\'' +
                 '}';
     }
 }

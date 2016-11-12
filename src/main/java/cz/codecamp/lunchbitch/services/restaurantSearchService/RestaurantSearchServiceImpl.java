@@ -66,7 +66,7 @@ public class RestaurantSearchServiceImpl implements RestaurantSearchService{
                 restaurant.setLocation(new Location()
                         .setAddress(location.path("address").asText())
                         .setCity(location.path("city").textValue())
-                        .setCountry_id(location.path("country_id").textValue())
+                        .setCountryId(location.path("country_id").textValue())
                         .setLatitude(location.path("latitude").textValue())
                         .setLongitude(location.path("longitude").textValue())
                         .setLocality(location.path("locality").textValue())

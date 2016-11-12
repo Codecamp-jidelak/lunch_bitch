@@ -9,18 +9,18 @@ public class Restaurant {
 
     private Location location;
 
-    private LunchMenu lunchmenus;
+    private LunchMenu lunchmenu;
 
     public String getId() {
         return id;
     }
 
     public LunchMenu getLunchmenu() {
-        return lunchmenus;
+        return lunchmenu;
     }
 
     public Restaurant setLunchmenu(LunchMenu lunchmenus) {
-        this.lunchmenus = lunchmenus;
+        this.lunchmenu = lunchmenus;
         return this;
     }
 
@@ -57,7 +57,7 @@ public class Restaurant {
         return id != null ? id.equals(that.id) : that.id == null
                 && (name != null ? name.equals(that.name) : that.name == null
                 && (location != null ? location.equals(that.location) : that.location == null
-                && (lunchmenus != null ? lunchmenus.equals(that.lunchmenus) : that.lunchmenus == null)));
+                && (lunchmenu != null ? lunchmenu.equals(that.lunchmenu) : that.lunchmenu == null)));
 
     }
 
@@ -66,7 +66,7 @@ public class Restaurant {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (lunchmenus != null ? lunchmenus.hashCode() : 0);
+        result = 31 * result + (lunchmenu != null ? lunchmenu.hashCode() : 0);
         return result;
     }
 
@@ -76,7 +76,7 @@ public class Restaurant {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", location=" + location +
-                ", lunchmenu=" + lunchmenus +
+                ", lunchmenu=" + lunchmenu +
                 '}';
     }
 }
