@@ -40,7 +40,7 @@ public class WebServiceImpl implements WebService {
 		List<Restaurant> foundRestaurants = searchResults.getRestaurants();
 		for (String id : selectedRestaurantIDs) {
 			for (Restaurant restaurant : foundRestaurants) {
-				if (restaurant.getRes_id().equals(id)) {
+				if (restaurant.getId().equals(id)) {
 					expectedRestaurants.add(restaurant);
 				}
 			}

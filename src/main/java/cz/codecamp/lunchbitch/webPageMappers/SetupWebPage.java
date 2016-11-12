@@ -16,7 +16,7 @@ public class SetupWebPage {
 	public SetupWebPage(List<Restaurant> restaurants) {
 		restaurantIDs = new ArrayList<>();
 		for (Restaurant restaurant : restaurants) {
-			restaurantIDs.add(restaurant.getRes_id());
+			restaurantIDs.add(restaurant.getId());
 		}
 	}
 

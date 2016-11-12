@@ -14,7 +14,7 @@
             <form action="#" th:action="@{/results}" th:object="${resultsWebPage}" method="post">
                 <table class="table">
                     <tr th:each="restaurant : ${foundRestaurants}">
-                        <td><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.res_id}" /></td>
+                        <td><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}" /></td>
                         <td th:text="${restaurant.name}">Restaurant name</td>
                         <td th:text="${restaurant.location.city}">City</td>
                     </tr>
