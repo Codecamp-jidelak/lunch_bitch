@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="layout/head::frag('Vyhledávání restaurací')"/>
+</head>
+<body>
+<div class="flex-container">
+    <div th:replace="layout/header"></div>
+    <div th:replace="layout/navigationBar"></div>
+    <div class="container">
+        <section id="content">
+            <h1>Najdi svou oblíbenou restauraci</h1>
+
+            <div th:replace="searchForm :: search-form"></div>
+        </section>
+    </div>
+    <div th:replace="layout/footer"></div>
+</div>
+</body>
+</html>
