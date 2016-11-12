@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="layout/head::frag('Vybrané restaurace')"/>
+</head>
+<body>
+<div class="flex-container">
+    <div th:replace="layout/header"></div>
+    <div th:replace="layout/navigationBar"></div>
+    <div class="container">
+        <section id="content">
+            <h1>Vybrané restaurace</h1>
+
+            <h2>Vyhledat další:</h2>
+            <div th:replace="searchForm :: search-form"></div>
+
+            <h2>Uložené restaurace</h2>
+
+            <form action="#" th:action="@{/setup}" th:object="${setupWebPage}" method="post">
+                    <table class="table">
+                        <tr th:each="restaurant : ${selectedRestaurants}">
+                            <td><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.res_id}" /></td>
+                            <td th:text="${restaurant.name}">Restaurant name</td>
+                            <td th:text="${restaurant.location.city}">City</td>
+                        </tr>
+                    </table>
+                <p><input type="submit" value="Aktualizovat"/></p>
+            </form>
+
+            <form action="" th:action="@{/success}" method="post">
+                <p>E-mail: <input type="text"  th:name="email"/> <input type="submit" value="Odeslat"/></p>
+            </form>
+        </section>
+    </div>
+    <div th:replace="layout/footer"></div>
+</div>
+</body>
+</html>
