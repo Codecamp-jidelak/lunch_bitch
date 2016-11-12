@@ -40,7 +40,12 @@ public class WebController {
         return new ModelAndView("index");
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ModelAndView startSearching() {
+        return new ModelAndView("search");
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String searchKeyword(@Valid String keyword) {
 
         if(keyword != null && !keyword.trim().isEmpty()) {
@@ -52,7 +57,7 @@ public class WebController {
             }
             return "redirect:/results";
         }
-        return "redirect:/";
+        return "redirect:/search";
     }
 
     @ModelAttribute(value = "foundRestaurants")
