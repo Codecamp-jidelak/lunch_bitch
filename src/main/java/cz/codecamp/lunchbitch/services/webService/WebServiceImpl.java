@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class WebServiceImpl implements WebService {
 
@@ -35,22 +36,23 @@ public class WebServiceImpl implements WebService {
         searchResults = result;
     }
 
+	private Set<Restaurant> matchRestaurantsByIDs(List<String> selectedRestaurantIDs, List<Restaurant> sourceRestaurants) {
+		Set<Restaurant> matchedRestaurants = new HashSet<>();
+		for(String id : selectedRestaurantIDs) {
+			matchedRestaurants.addAll(sourceRestaurants.stream().filter(restaurant -> restaurant.getId().equals(id)).collect(Collectors.toList()));
+		}
+		return matchedRestaurants;
+	}
+
 	@Override
 	public void addSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
-		List<Restaurant> foundRestaurants = searchResults.getRestaurants();
-		for (String id : selectedRestaurantIDs) {
-			for (Restaurant restaurant : foundRestaurants) {
-				if (restaurant.getId().equals(id)) {
-					expectedRestaurants.add(restaurant);
-				}
-			}
-		}
+		Set<Restaurant> newRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, searchResults.getRestaurants());
+		expectedRestaurants.addAll(newRestaurants);
 	}
 
 	@Override
 	public void updateSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
-		expectedRestaurants.clear();
-		addSelectedRestaurantIDs(selectedRestaurantIDs);
+		expectedRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, new ArrayList<>(expectedRestaurants));
 	}
 
 	@Override
