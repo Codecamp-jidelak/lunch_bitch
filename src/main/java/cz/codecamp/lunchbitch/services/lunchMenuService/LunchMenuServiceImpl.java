@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.codecamp.lunchbitch.models.Dish;
 import cz.codecamp.lunchbitch.models.LunchMenu;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
+import cz.codecamp.lunchbitch.services.mergerService.MergerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -32,24 +33,27 @@ public class LunchMenuServiceImpl implements LunchMenuService {
 
     private final HttpEntity<String> entity;
 
+    private final MergerService mergerService;
+
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
 
     @Value("${lunchMenu.url}")
     private String url;
 
     @Autowired
-    public LunchMenuServiceImpl(HttpEntity<String> entity, RestTemplate restTemplate, Logger logger) {
+    public LunchMenuServiceImpl(HttpEntity<String> entity, RestTemplate restTemplate, Logger logger, MergerService mergerService) {
         this.entity = entity;
         this.restTemplate = restTemplate;
         this.logger = logger;
+        this.mergerService = mergerService;
     }
 
     @Override
-    public Map<String, LunchMenu> lunchMenuDownload(List<String> restaurants, List<LunchMenuDemand> demands) throws IOException {
+    public List<LunchMenuDemand> lunchMenuDownload(List<String> restaurantsIDs, List<LunchMenuDemand> demands) throws IOException {
 
         Map<String, LunchMenu> lunchMenuMap = new HashMap<>();
 
-        for(String id: restaurants){
+        for(String id: restaurantsIDs){
 
             try{
                 ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, id);
@@ -64,7 +68,7 @@ public class LunchMenuServiceImpl implements LunchMenuService {
             }
 
         }
-        return lunchMenuMap;
+        return mergerService.mergeLunchMenusWithRestaurants(lunchMenuMap, demands);
     }
 
 
