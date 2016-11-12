@@ -6,6 +6,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.logging.Logger;
+
 @SpringBootApplication
 public class LunchBitchApplication {
 
@@ -16,5 +18,10 @@ public class LunchBitchApplication {
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
+	}
+
+	@Bean
+	public Logger logger(){
+		return Logger.getLogger("LunchBitch");
 	}
 }

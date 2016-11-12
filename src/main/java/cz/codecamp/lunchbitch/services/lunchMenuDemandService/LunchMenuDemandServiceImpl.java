@@ -11,4 +11,9 @@ public class LunchMenuDemandServiceImpl implements LunchMenuDemandService{
     public void saveLunchMenuPreferences(LunchMenuDemand lunchMenuDemand) {
 
     }
+
+    @Override
+    public void unsubscribeMenuPreferences(LunchMenuDemand lunchMenuDemand) {
+
+    }
 }

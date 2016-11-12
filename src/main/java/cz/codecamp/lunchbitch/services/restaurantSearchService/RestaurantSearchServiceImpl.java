@@ -33,7 +33,7 @@ public class RestaurantSearchServiceImpl implements RestaurantSearchService{
 
     public LunchMenuDemand searchForRestaurants(String keyword) throws IOException {
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, keyword);
-        return createDataModel(responseEntity);
+        return createLunchMenuDemand(responseEntity);
     }
 
     /**
@@ -41,7 +41,7 @@ public class RestaurantSearchServiceImpl implements RestaurantSearchService{
      * @return LunchMenuDemand object
      * @throws IOException from reading JSON
      */
-    private LunchMenuDemand createDataModel(ResponseEntity responseEntity) throws IOException {
+    private LunchMenuDemand createLunchMenuDemand(ResponseEntity responseEntity) throws IOException {
 
         LunchMenuDemand dataModel = new LunchMenuDemand();
 
@@ -58,7 +58,7 @@ public class RestaurantSearchServiceImpl implements RestaurantSearchService{
                 JsonNode restaurantNode = jsonNode.path("restaurant");
 
                 restaurant
-                        .setRes_id(restaurantNode.path("id").textValue())
+                        .setId(restaurantNode.path("id").textValue())
                         .setName(restaurantNode.path("name").textValue());
 
                 JsonNode location = restaurantNode.path("location");
