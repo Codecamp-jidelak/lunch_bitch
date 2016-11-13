@@ -1,10 +1,11 @@
 package cz.codecamp.lunchbitch.services.restaurantSearchService;
 
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-
+@Service
 public interface RestaurantSearchService  {
 
     /**

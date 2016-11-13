@@ -27,9 +27,16 @@ public class Dish {
 
     @Override
     public String toString() {
-        return "Dish{" +
-                "name='" + name + '\'' +
-                ", price='" + price + '\'' +
-                '}';
+        return
+                "<tr>" +
+                "   <td align=\"center\">" +
+                "       <p style=\"font-family:courier;\">" +
+                        name +
+                "       </p>" +
+                        "<p style=\"font-family:courier;\">" +
+                        "cena: " + price +
+                "       </p>" +
+                "   </td>" +
+                "</tr>";
     }
 }

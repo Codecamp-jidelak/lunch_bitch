@@ -49,10 +49,10 @@ public class LunchMenu {
 
     @Override
     public String toString() {
-        return "LunchMenu{" +
-                "startDate='" + startDate + '\'' +
-                ", name='" + name + '\'' +
-                ", dishes=" + dishes +
-                '}';
+        StringBuilder builder = new StringBuilder();
+        for(Dish dish: dishes){
+            builder.append(dish.toString());
+        }
+        return builder.toString();
     }
 }
