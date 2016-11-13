@@ -14,7 +14,7 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -56,7 +56,7 @@ public class LunchBitchApplication {
     public Message getMessage(Session session) throws MessagingException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(email));
-        message.setSubject("Pošli jídelák: " + new Date());
+        message.setSubject("Pošli jídelák: " + LocalDate.now());
         return message;
     }
 
