@@ -4,4 +4,19 @@
 
     <link th:href="@{/css/custom.css}" type="text/css" rel="stylesheet"/>
     <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'/>
+
+
+
+    <script type="text/javascript">
+        function onBlur(el) {
+            if (el.value == '') {
+                el.value = el.defaultValue;
+            }
+        }
+        function onFocus(el) {
+            if (el.value == el.defaultValue) {
+                el.value = '';
+            }
+        }
+    </script>
 </th:block>

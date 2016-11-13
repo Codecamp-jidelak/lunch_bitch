@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="layout/head::frag('Vyhledávání restaurací')"/>
+    <th:block th:include="layout/head::frag('Stránka nenalezena')"/>
 </head>
 <body>
 <div class="flex-container">
     <header th:replace="layout/header"></header>
     <nav th:replace="layout/navigationBar"></nav>
     <main id="content">
-            <h1>Najděte svou oblíbenou restauraci</h1>
-
-            <div th:replace="searchForm :: search-form"></div>
-
+        <h1>Litujeme, tato stránka neexistuje.</h1>
     </main>
     <div th:replace="layout/footer"></div>
 </div>
