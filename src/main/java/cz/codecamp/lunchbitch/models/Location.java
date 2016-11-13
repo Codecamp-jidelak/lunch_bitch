@@ -111,14 +111,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return "Location{" +
-                "address='" + address + '\'' +
-                ", locality='" + locality + '\'' +
-                ", city='" + city + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
-                ", zipcode='" + zipcode + '\'' +
-                ", countryId='" + countryId + '\'' +
-                '}';
+        return address;
     }
 }

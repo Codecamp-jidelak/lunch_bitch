@@ -72,11 +72,12 @@ public class Restaurant {
 
     @Override
     public String toString() {
-        return "Restaurant{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", location=" + location +
-                ", lunchmenu=" + lunchmenu +
-                '}';
+        return " <tr>\n" +
+                "  <td bgcolor=\"#696969\">\n" +
+                "<h2 style=\"color:white; text-align:center;\"><strong>" + getName() + "</strong></h2>" +
+                "<p style=\"color:white; text-align:center;\">" + (location != null ? location.toString() : "Adresa není k dispozici") + "</p>" +
+                "  </td>\n" +
+                " </tr>\n" +
+                 (lunchmenu != null ? lunchmenu.toString() : "<p style=\"text-align:center;\">Denní menu není k dispozici</p>");
     }
 }

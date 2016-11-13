@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,7 +50,7 @@ public class LunchMenuServiceImpl implements LunchMenuService {
     }
 
     @Override
-    public List<LunchMenuDemand> lunchMenuDownload(List<String> restaurantsIDs, List<LunchMenuDemand> demands) throws IOException {
+    public List<LunchMenuDemand> lunchMenuDownload(List<String> restaurantsIDs, List<LunchMenuDemand> demands) throws IOException, MessagingException {
 
         Map<String, LunchMenu> lunchMenuMap = new HashMap<>();
 

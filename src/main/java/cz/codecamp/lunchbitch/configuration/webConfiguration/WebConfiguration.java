@@ -11,7 +11,6 @@ public class WebConfiguration {
 
 	@Bean
 	public WebService webService() {
-		WebServiceImpl webService = new WebServiceImpl(new LunchMenuDemand(), new LunchMenuDemand());
-		return webService;
+		return new WebServiceImpl(new LunchMenuDemand(), new LunchMenuDemand());
 	}
 }
