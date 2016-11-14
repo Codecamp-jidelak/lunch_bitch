@@ -33,9 +33,10 @@ public class Dish {
                 "       <p style=\"font-family:courier;\">" +
                         name +
                 "       </p>" +
-                        "<p style=\"font-family:courier;\">" +
-                        "cena: " + price +
-                "       </p>" +
+                        (price.isEmpty() ? "" :
+                                "<p style=\"font-family:courier;\">" +
+                                "cena: " + price +
+                                "</p>") +
                 "   </td>" +
                 "</tr>";
     }

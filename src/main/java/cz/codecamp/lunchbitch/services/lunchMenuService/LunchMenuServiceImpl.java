@@ -59,8 +59,8 @@ public class LunchMenuServiceImpl implements LunchMenuService {
             try{
                 ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, id);
                 lunchMenuMap.put(id, createLunchMenu(responseEntity));
+                logger.info("Lunch menu downloaded for restaurant with ID [" + id + "]");
             }catch (HttpClientErrorException e){
-
                 if(e.getResponseBodyAsString().contains("No Daily Menu Available")){
                     logger.warning("Restaurant with ID [" + id + "] has no lunch menu");
                     continue;
