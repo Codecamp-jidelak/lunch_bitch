@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="layout/head::frag('Odhlásit odběr')"/>
+</head>
+<body>
+<div class="flex-container">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
+        <h1>Odhlásit odběr</h1>
+
+        Pro odhlášení odběru jídeláků vyplňte váši e-mailovou adresu a odešlete.
+        <form action="" th:action="@{/unsubscribe}" method="post">
+            <p><input class="inputText" type="text"  th:name="email" value="e-mail" onblur="onBlur(this)" onfocus="onFocus(this)" /></p>
+            <p><input class="sendEmailBtn"  type="submit" value="Odhlásit odběr"/></p>
+        </form>
+    </main>
+    <div th:replace="layout/footer"></div>
+</div>
+</body>
+</html>

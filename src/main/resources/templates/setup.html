@@ -5,16 +5,15 @@
 </head>
 <body>
 <div class="flex-container">
-    <div th:replace="layout/header"></div>
-    <div th:replace="layout/navigationBar"></div>
-    <div class="container">
-        <section id="content">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
             <h1>Vybrané restaurace</h1>
 
-            <h2>Vyhledat další:</h2>
+            <h2>Hledejte další restaurace</h2>
             <div th:replace="searchForm :: search-form"></div>
 
-            <h2>Uložené restaurace</h2>
+            <h2>Upravujte seznam restaurací</h2>
 
             <form action="#" th:action="@{/setup}" th:object="${setupWebPage}" method="post">
                     <table class="table">
@@ -24,14 +23,16 @@
                             <td th:text="${restaurant.location.city}">City</td>
                         </tr>
                     </table>
-                <p><input type="submit" value="Aktualizovat"/></p>
+                <p><input class="submitBtn" type="submit" value="Aktualizovat seznam"/></p>
             </form>
 
+            <h2>Kam máme posílát jídeláky?</h2>
+
             <form action="" th:action="@{/success}" method="post">
-                <p>E-mail: <input type="text"  th:name="email"/> <input type="submit" value="Odeslat"/></p>
+                <p><input class="inputText" type="text"  th:name="email" value="e-mail" onblur="onBlur(this)" onfocus="onFocus(this)" /></p>
+                <p><input class="sendEmailBtn"  type="submit" value="Odeslat"/></p>
             </form>
-        </section>
-    </div>
+    </main>
     <div th:replace="layout/footer"></div>
 </div>
 </body>

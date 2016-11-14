@@ -5,19 +5,17 @@
 </head>
 <body>
 <div class="flex-container">
-    <div th:replace="layout/header"></div>
-    <div th:replace="layout/navigationBar"></div>
-    <div class="container">
-        <section id="content">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
             <h1>Úspěšně uloženo</h1>
             <p>
                 <span th:each="email : ${emailAddress}">
-                        Jídeláky se budou posílat na e-mail: <span th:text="${email}">test@email.com</span>
+                    Jídeláky se budou posílat na e-mail: <span class="highlight" th:text="${email}">test@email.com</span>
                 </span>
             </p>
-            <a href="/">Návrat na úvodní stránku</a>
-        </section>
-    </div>
+            <a class="aLikeBtnSimple" href="/">Návrat na úvodní stránku</a>
+    </main>
     <div th:replace="layout/footer"></div>
 </div>
 </body>

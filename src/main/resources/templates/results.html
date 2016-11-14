@@ -5,10 +5,9 @@
 </head>
 <body>
 <div class="flex-container">
-    <div th:replace="layout/header"></div>
-    <div th:replace="layout/navigationBar"></div>
-    <div class="container">
-        <section id="content">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
             <h1>Nalezeny tyto restaurace</h1>
 
             <form action="#" th:action="@{/results}" th:object="${resultsWebPage}" method="post">
@@ -19,11 +18,18 @@
                         <td th:text="${restaurant.location.city}">City</td>
                     </tr>
                 </table>
-                <input type="submit" value="Vložit"/>
-            </form>
 
-        </section>
-    </div>
+                <!--<div class="restaurantList">
+                    <dl th:each="restaurant : ${foundRestaurants}">
+                        <dd th:text="${restaurant.name}">Restaurant name</dd>
+                        <dd><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}" /></dd>
+                        <dt th:text="${restaurant.location.city}">Restaurant name</dt>
+                    </dl>
+                </div>-->
+
+                <input class="submitBtn"  type="submit" value="Vložit vybrané restaurace"/>
+            </form>
+    </main>
     <div th:replace="layout/footer"></div>
 </div>
 </body>

@@ -126,4 +126,21 @@ public class WebController {
         model.put("emailAddress", webService.getEmail());
         return new ModelAndView("success", model);
     }
+
+    @RequestMapping(value = "/unsubscribe", method = RequestMethod.GET)
+    public ModelAndView showUnsubscribe() {
+        return new ModelAndView("unsubscribe");
+    }
+
+    @RequestMapping(value = "/unsubscribe", method = RequestMethod.POST)
+    public String unsubscribeEmail(@Valid String email) {
+
+        // to do proper email validation
+        if(email != null && !email.trim().isEmpty()) {
+            //to do - missing appropriate method of lunchMenuDemandService
+            return "redirect:/success";
+        }
+        return "redirect:/unsubscribe";
+    }
+
 }
