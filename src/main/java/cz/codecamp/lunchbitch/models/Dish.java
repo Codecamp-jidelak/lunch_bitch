@@ -12,7 +12,11 @@ public class Dish {
     }
 
     public Dish setName(String name) {
-        this.name = name;
+        if(this.name == null){
+            this.name = name;
+        }else{
+            this.name += "\n" + name;
+        }
         return this;
     }
 
@@ -33,11 +37,30 @@ public class Dish {
                 "       <p style=\"font-family:courier;\">" +
                         name +
                 "       </p>" +
-                        (price.isEmpty() ? "" :
+                        (price == null || price.isEmpty() ? "" :
                                 "<p style=\"font-family:courier;\">" +
                                 "cena: " + price +
                                 "</p>") +
                 "   </td>" +
                 "</tr>";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Dish dish = (Dish) o;
+
+        if (name != null ? !name.equals(dish.name) : dish.name != null) return false;
+        return price != null ? price.equals(dish.price) : dish.price == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        return result;
     }
 }

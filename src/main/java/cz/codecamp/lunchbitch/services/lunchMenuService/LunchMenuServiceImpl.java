@@ -99,16 +99,36 @@ public class LunchMenuServiceImpl implements LunchMenuService {
 
                 if(dishes.isArray()){
 
+                    Dish dish = null;
+
                     for(JsonNode dishesNode : dishes){
 
                         JsonNode dishNode = dishesNode.path("dish");
 
-                        Dish dish = new Dish();
+                        if(dish == null){
+                            dish = new Dish();
+                        }
+
+                        String dishName = dishNode.get("name").textValue();
+                        String dishPrice = dishNode.get("price").textValue();
+
+                        if(dishName.charAt(0) != '(' && dishName.charAt(dishName.length() - 1) != ')'){
+                            if(dish.getName() != null){
+                                lunchMenu.addDish(dish);
+                            }
+                            dish = new Dish();
+                        }
+
                         dish
-                                .setName(dishNode.get("name").textValue())
-                                .setPrice(dishNode.get("price").textValue());
+                                .setName(dishName)
+                                .setPrice(dishPrice);
+
+                        if(dishPrice.isEmpty()){
+                            continue;
+                        }
 
                         lunchMenu.addDish(dish);
+                        dish = null;
                     }
 
                 }
