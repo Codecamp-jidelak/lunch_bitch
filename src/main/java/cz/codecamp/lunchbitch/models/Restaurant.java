@@ -78,6 +78,6 @@ public class Restaurant {
                 "<p style=\"color:white; text-align:center;\">" + (location != null ? location.toString() : "Adresa není k dispozici") + "</p>" +
                 "  </td>\n" +
                 " </tr>\n" +
-                 (lunchmenu != null ? lunchmenu.toString() : "<p style=\"text-align:center;\">Denní menu není k dispozici</p>");
+                 (lunchmenu != null && !lunchmenu.isEmpty() ? lunchmenu.toString() : "<p style=\"text-align:center;\">Denní menu není k dispozici</p>");
     }
 }

@@ -18,19 +18,33 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class LunchDemandStorageServiceImpl implements LunchMenuDemandStorageService {
 
-	@Autowired
-	private UsersRestaurantSelectionRepository restaurantSelection;
+	private final UsersRestaurantSelectionRepository restaurantSelection;
+
+	private final RestaurantInfoRepository restaurantInfoRepository;
+
+	private final LunchMenuSendingTrigger lunchMenuSendingTrigger;
 
 	@Autowired
-	private RestaurantInfoRepository restaurantInfoRepository;
-
-	@Autowired
-	private LunchMenuSendingTrigger lunchMenuSendingTrigger;
+	public LunchDemandStorageServiceImpl(LunchMenuSendingTrigger lunchMenuSendingTrigger, UsersRestaurantSelectionRepository restaurantSelection, RestaurantInfoRepository restaurantInfoRepository) {
+		this.lunchMenuSendingTrigger = lunchMenuSendingTrigger;
+		this.restaurantSelection = restaurantSelection;
+		this.restaurantInfoRepository = restaurantInfoRepository;
+	}
 
 	@Override
 	public List<LunchMenuDemand> saveLunchDemandAndTriggerAllSending(LunchMenuDemand demand) {
 		saveLunchDemand(demand);
 		return lunchMenuSendingTrigger.onTrigger();
+	}
+
+	@Override
+	public LunchMenuDemand getLunchMenuDemand(String email) {
+		return null;
+	}
+
+	@Override
+	public void deleteLunchMenuDemand(LunchMenuDemand lunchMenuDemand) {
+
 	}
 
 	@Override

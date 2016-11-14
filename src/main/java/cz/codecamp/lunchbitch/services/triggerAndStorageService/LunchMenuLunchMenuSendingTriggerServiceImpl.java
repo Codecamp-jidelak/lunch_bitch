@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -46,7 +47,10 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
 		} catch (IOException e) {
 			System.err.println("Solving this is not this service's responsibility.");
 			return lunchMenuDemands;
+		} catch (MessagingException e) {
+			e.printStackTrace();
 		}
+		return lunchMenuDemands;
 	}
 
 

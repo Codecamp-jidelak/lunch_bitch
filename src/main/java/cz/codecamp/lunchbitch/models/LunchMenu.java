@@ -55,4 +55,8 @@ public class LunchMenu {
         }
         return builder.toString();
     }
+
+    public boolean isEmpty(){
+        return startDate == null || startDate.isEmpty();
+    }
 }
