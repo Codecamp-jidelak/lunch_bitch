@@ -20,29 +20,17 @@ public class Dish {
         return this;
     }
 
+    public boolean hasPrice(){
+        return price != null && !price.isEmpty();
+    }
+
     public String getPrice() {
-        return price;
+        return "Cena: " + price;
     }
 
     public Dish setPrice(String price) {
         this.price = price;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return
-                "<tr>" +
-                "   <td align=\"center\">" +
-                "       <p style=\"font-family:courier;\">" +
-                        name +
-                "       </p>" +
-                        (price == null || price.isEmpty() ? "" :
-                                "<p style=\"font-family:courier;\">" +
-                                "cena: " + price +
-                                "</p>") +
-                "   </td>" +
-                "</tr>";
     }
 
     @Override

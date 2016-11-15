@@ -11,6 +11,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -107,4 +112,26 @@ public class LunchBitchApplication {
     public HttpEntity<String> httpZomatoEntity(@Qualifier("zomato") HttpHeaders headers){
         return new HttpEntity<>("parameters", headers);
     }
+
+    @Bean
+    public TemplateEngine templateEngine(ITemplateResolver templateResolver){
+        final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.addTemplateResolver(templateResolver);
+        return templateEngine;
+    }
+
+
+    @Bean
+    public ITemplateResolver templateResolver(){
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setOrder(Integer.valueOf(1));
+        templateResolver.setResolvablePatterns(Collections.singleton("html/*"));
+        templateResolver.setPrefix("/mail/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setCacheable(false);
+        return templateResolver;
+    }
+
 }
