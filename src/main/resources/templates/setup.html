@@ -16,13 +16,18 @@
             <h2>Upravujte seznam restaurací</h2>
 
             <form action="#" th:action="@{/setup}" th:object="${setupWebPage}" method="post">
-                    <table class="table">
-                        <tr th:each="restaurant : ${selectedRestaurants}">
-                            <td><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}" /></td>
-                            <td th:text="${restaurant.name}">Restaurant name</td>
-                            <td th:text="${restaurant.location.city}">City</td>
-                        </tr>
-                    </table>
+                <div class="restaurantList">
+                    <th:block th:each="restaurant : ${selectedRestaurants}">
+                        <div class="restBlock">
+                            <dl class="highlightRestaurant">
+                                <dt class="restName" th:text="${restaurant.name}">Restaurant name</dt>
+                                <dd><input class="hiddenCheckbox" type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}"/></dd>
+                                <dt th:text="${restaurant.location.address}">Restaurant address</dt>
+                                <dt th:text="${restaurant.location.city}">Restaurant city</dt>
+                            </dl>
+                        </div>
+                    </th:block>
+                </div>
                 <p><input class="submitBtn" type="submit" value="Aktualizovat seznam"/></p>
             </form>
 
