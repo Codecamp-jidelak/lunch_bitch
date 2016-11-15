@@ -3,7 +3,7 @@ package cz.codecamp.lunchbitch.services.restaurantSearchService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cz.codecamp.lunchbitch.models.DataModel;
+import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Location;
 import cz.codecamp.lunchbitch.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,19 +31,19 @@ public class RestaurantSearchServiceImpl implements RestaurantSearchService{
         this.restTemplate = restTemplate;
     }
 
-    public DataModel searchForRestaurants(String keyword) throws IOException {
+    public LunchMenuDemand searchForRestaurants(String keyword) throws IOException {
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, keyword);
-        return createDataModel(responseEntity);
+        return createLunchMenuDemand(responseEntity);
     }
 
     /**
-     * Map JSON response to DataModel object
-     * @return DataModel object
+     * Map JSON response to LunchMenuDemand object
+     * @return LunchMenuDemand object
      * @throws IOException from reading JSON
      */
-    private DataModel createDataModel(ResponseEntity responseEntity) throws IOException {
+    private LunchMenuDemand createLunchMenuDemand(ResponseEntity responseEntity) throws IOException {
 
-        DataModel dataModel = new DataModel();
+        LunchMenuDemand dataModel = new LunchMenuDemand();
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -58,7 +58,7 @@ public class RestaurantSearchServiceImpl implements RestaurantSearchService{
                 JsonNode restaurantNode = jsonNode.path("restaurant");
 
                 restaurant
-                        .setRes_id(restaurantNode.path("id").textValue())
+                        .setId(restaurantNode.path("id").textValue())
                         .setName(restaurantNode.path("name").textValue());
 
                 JsonNode location = restaurantNode.path("location");
@@ -66,7 +66,7 @@ public class RestaurantSearchServiceImpl implements RestaurantSearchService{
                 restaurant.setLocation(new Location()
                         .setAddress(location.path("address").asText())
                         .setCity(location.path("city").textValue())
-                        .setCountry_id(location.path("country_id").textValue())
+                        .setCountryId(location.path("country_id").textValue())
                         .setLatitude(location.path("latitude").textValue())
                         .setLongitude(location.path("longitude").textValue())
                         .setLocality(location.path("locality").textValue())

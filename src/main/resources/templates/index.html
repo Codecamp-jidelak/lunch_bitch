@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="layout/head::frag('Pošli jídelák :: hlavní strana')"/>
+</head>
+<body>
+<div class="flex-container">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
+                <h1>Najděte svou oblíbenou restauraci a dostávej její jídelák každý den!</h1>
+
+                <a class="aLikeBtn" href="/search">Najít mé oblíbené restaurace</a>
+
+                <h2>Šetříme váš čas</h2>
+
+                <p>
+                    Pošli jídelák vám ušetří drahocenný čas. Posbíráme za vás denní menu vašich oblíbených restaurací
+                    a doručíme vám je každý den na váš e-mai.
+                </p>
+
+                <h2>Jak to funguje?</h2>
+
+                <p><img src="/images/howto.png" alt="Popis procesu"/></p>
+    </main>
+    <footer th:replace="layout/footer"></footer>
+</div>
+</body>
+</html>
+

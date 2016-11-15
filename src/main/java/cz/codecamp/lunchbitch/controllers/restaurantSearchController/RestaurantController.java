@@ -1,6 +1,6 @@
 package cz.codecamp.lunchbitch.controllers.restaurantSearchController;
 
-import cz.codecamp.lunchbitch.models.DataModel;
+import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,7 +21,8 @@ public class RestaurantController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody DataModel searchRestaurant(@RequestParam String keyword) throws IOException {
+    public @ResponseBody
+    LunchMenuDemand searchRestaurant(@RequestParam String keyword) throws IOException {
         return service.searchForRestaurants(keyword);
     }
 

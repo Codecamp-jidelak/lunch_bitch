@@ -3,7 +3,7 @@ package cz.codecamp.lunchbitch.models;
 @SuppressWarnings("unused")
 public class Restaurant {
 
-    private String res_id;
+    private String id;
 
     private String name;
 
@@ -11,21 +11,21 @@ public class Restaurant {
 
     private LunchMenu lunchmenu;
 
-    public String getRes_id() {
-        return res_id;
+    public String getId() {
+        return id;
     }
 
     public LunchMenu getLunchmenu() {
         return lunchmenu;
     }
 
-    public Restaurant setLunchmenu(LunchMenu lunchmenu) {
-        this.lunchmenu = lunchmenu;
+    public Restaurant setLunchmenu(LunchMenu lunchmenus) {
+        this.lunchmenu = lunchmenus;
         return this;
     }
 
-    public Restaurant setRes_id(String res_id) {
-        this.res_id = res_id;
+    public Restaurant setId(String id) {
+        this.id = id;
         return this;
     }
 
@@ -54,7 +54,7 @@ public class Restaurant {
 
         Restaurant that = (Restaurant) o;
 
-        return res_id != null ? res_id.equals(that.res_id) : that.res_id == null
+        return id != null ? id.equals(that.id) : that.id == null
                 && (name != null ? name.equals(that.name) : that.name == null
                 && (location != null ? location.equals(that.location) : that.location == null
                 && (lunchmenu != null ? lunchmenu.equals(that.lunchmenu) : that.lunchmenu == null)));
@@ -63,7 +63,7 @@ public class Restaurant {
 
     @Override
     public int hashCode() {
-        int result = res_id != null ? res_id.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
         result = 31 * result + (lunchmenu != null ? lunchmenu.hashCode() : 0);
@@ -72,11 +72,12 @@ public class Restaurant {
 
     @Override
     public String toString() {
-        return "Restaurant{" +
-                "res_id='" + res_id + '\'' +
-                ", name='" + name + '\'' +
-                ", location=" + location +
-                ", lunchmenu=" + lunchmenu +
-                '}';
+        return " <tr>\n" +
+                "  <td bgcolor=\"#696969\">\n" +
+                "<h2 style=\"color:white; text-align:center;\"><strong>" + getName() + "</strong></h2>" +
+                "<p style=\"color:white; text-align:center;\">" + (location != null ? location.toString() : "Adresa není k dispozici") + "</p>" +
+                "  </td>\n" +
+                " </tr>\n" +
+                 (lunchmenu != null && !lunchmenu.isEmpty() ? lunchmenu.toString() : "<p style=\"text-align:center;\">Denní menu není k dispozici</p>");
     }
 }

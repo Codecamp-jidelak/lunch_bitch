@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="layout/head::frag('Vybrané restaurace')"/>
+</head>
+<body>
+<div class="flex-container">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
+            <h1>Vybrané restaurace</h1>
+
+            <h2>Hledejte další restaurace</h2>
+            <div th:replace="searchForm :: search-form"></div>
+
+            <h2>Upravujte seznam restaurací</h2>
+
+            <form action="#" th:action="@{/setup}" th:object="${setupWebPage}" method="post">
+                    <table class="table">
+                        <tr th:each="restaurant : ${selectedRestaurants}">
+                            <td><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}" /></td>
+                            <td th:text="${restaurant.name}">Restaurant name</td>
+                            <td th:text="${restaurant.location.city}">City</td>
+                        </tr>
+                    </table>
+                <p><input class="submitBtn" type="submit" value="Aktualizovat seznam"/></p>
+            </form>
+
+            <h2>Kam máme posílát jídeláky?</h2>
+
+            <form action="" th:action="@{/success}" method="post">
+                <p><input class="inputText" type="text"  th:name="email" value="e-mail" onblur="onBlur(this)" onfocus="onFocus(this)" /></p>
+                <p><input class="sendEmailBtn"  type="submit" value="Odeslat"/></p>
+            </form>
+    </main>
+    <div th:replace="layout/footer"></div>
+</div>
+</body>
+</html>

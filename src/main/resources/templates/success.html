@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="layout/head::frag('Úspěšně uloženo')"/>
+</head>
+<body>
+<div class="flex-container">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
+            <h1>Úspěšně uloženo</h1>
+            <p>
+                <span th:each="email : ${emailAddress}">
+                    Jídeláky se budou posílat na e-mail: <span class="highlight" th:text="${email}">test@email.com</span>
+                </span>
+            </p>
+            <a class="aLikeBtnSimple" href="/">Návrat na úvodní stránku</a>
+    </main>
+    <div th:replace="layout/footer"></div>
+</div>
+</body>
+</html>
