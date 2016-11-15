@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LunchMenuDemandServiceImpl implements LunchMenuDemandService{
+public class LunchMenuDemandServiceImpl implements LunchMenuDemandService {
 
     private final LunchMenuDemandStorageService lunchMenuDemandStorageService;
-
-    private LunchMenuDemand lunchMenuDemand;
 
     @Autowired
     public LunchMenuDemandServiceImpl(LunchMenuDemandStorageService lunchMenuDemandStorageService) {
@@ -21,28 +19,17 @@ public class LunchMenuDemandServiceImpl implements LunchMenuDemandService{
 
     @Override
     public void saveLunchMenuPreferences(LunchMenuDemand lunchMenuDemand) {
-        this.lunchMenuDemand = lunchMenuDemand;
-        new Thread(new SaveLunchDemandServiceRunnable()).start();
+        new Thread(() -> lunchMenuDemandStorageService.saveLunchDemandAndTriggerAllSending(lunchMenuDemand)).start();
 
     }
 
     @Override
     public void unsubscribeMenuPreferences(String email) {
-        lunchMenuDemandStorageService.deleteLunchMenuDemand(email);
+        new Thread(() -> lunchMenuDemandStorageService.deleteLunchMenuDemand(email)).start();
     }
 
     @Override
     public void getLunchMenuPreferences(String email) {
         lunchMenuDemandStorageService.getLunchMenuDemand(email);
     }
-
-
-    private class SaveLunchDemandServiceRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            lunchMenuDemandStorageService.saveLunchDemandAndTriggerAllSending(lunchMenuDemand);
-        }
-    }
-
 }
