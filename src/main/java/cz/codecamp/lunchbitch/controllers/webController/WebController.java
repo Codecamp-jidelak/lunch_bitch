@@ -1,25 +1,31 @@
 package cz.codecamp.lunchbitch.controllers.webController;
 
+import cz.codecamp.lunchbitch.models.Location;
 import cz.codecamp.lunchbitch.models.Restaurant;
+import cz.codecamp.lunchbitch.services.geocodingService.GeocodingService;
 import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
 import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearchService;
 import cz.codecamp.lunchbitch.services.webService.WebService;
 import cz.codecamp.lunchbitch.webPageMappers.ResultsWebPage;
+import cz.codecamp.lunchbitch.webPageMappers.SearchForm;
 import cz.codecamp.lunchbitch.webPageMappers.SetupWebPage;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Controller
 public class WebController {
@@ -27,12 +33,15 @@ public class WebController {
     private final WebService webService;
     private final RestaurantSearchService restaurantSearchService;
     private final LunchMenuDemandService lunchMenuDemandService;
+    private final GeocodingService geocodingService;
 
     @Autowired
-    public WebController(WebService webService, RestaurantSearchService restaurantSearchService, LunchMenuDemandService lunchMenuDemandService) {
+    public WebController(WebService webService, RestaurantSearchService restaurantSearchService,
+                         LunchMenuDemandService lunchMenuDemandService, GeocodingService geocodingService) {
         this.webService = webService;
         this.restaurantSearchService = restaurantSearchService;
         this.lunchMenuDemandService = lunchMenuDemandService;
+        this.geocodingService = geocodingService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -40,18 +49,44 @@ public class WebController {
         return new ModelAndView("index");
     }
 
+
+    @ModelAttribute(value = "rbOptions")
+    public List<String> getRadioButtonOptions() {
+        List<String> options = new ArrayList<>();
+        options.add("keyword");
+        options.add("address");
+        return options;
+    }
+
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView startSearching() {
+    public ModelAndView startSearching(Model model) {
+        SearchForm searchForm = new SearchForm();
+        searchForm.setType("keyword");
+        model.addAttribute("searchForm", searchForm);
         return new ModelAndView("search");
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String searchKeyword(@Valid String keyword) {
+    public String searchKeyword(@Valid SearchForm searchForm, BindingResult bindingResult) {
 
-        if(keyword != null && !keyword.trim().isEmpty()) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/search";
+        }
+
+        String formTextInput = searchForm.getKeyword();
+        String type = searchForm.getType();
+
+        if(formTextInput != null && !formTextInput.trim().isEmpty()) {
 
             try {
-                webService.saveSearchResult(restaurantSearchService.searchForRestaurants(keyword));
+                if (type.equals("keyword")) {
+                    webService.saveSearchResult(restaurantSearchService.searchForRestaurants(formTextInput));
+                }
+                else if (type.equals("address")) {
+                    Location location = geocodingService.getCoordinates(formTextInput);
+                    webService.saveSearchResult(restaurantSearchService.searchForRestaurants(location));
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -92,6 +127,7 @@ public class WebController {
     public ModelAndView showSelectedRestaurants(Model model) {
         Map<String, Object> mapModel = new HashMap<>();
         mapModel.put("selectedRestaurant", new Restaurant());
+        model.addAttribute("searchForm", new SearchForm());
         model.addAttribute("setupWebPage", new SetupWebPage(webService.getSelectedRestaurants()));
         return new ModelAndView("setup", mapModel);
     }

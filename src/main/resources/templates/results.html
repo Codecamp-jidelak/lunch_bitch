@@ -8,25 +8,21 @@
     <header th:replace="layout/header"></header>
     <nav th:replace="layout/navigationBar"></nav>
     <main id="content">
-            <h1>Nalezeny tyto restaurace</h1>
+            <h1>Nalezené restaurace</h1>
 
             <form action="#" th:action="@{/results}" th:object="${resultsWebPage}" method="post">
-                <table class="table">
-                    <tr th:each="restaurant : ${foundRestaurants}">
-                        <td><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}" /></td>
-                        <td th:text="${restaurant.name}">Restaurant name</td>
-                        <td th:text="${restaurant.location.city}">City</td>
-                    </tr>
-                </table>
-
-                <!--<div class="restaurantList">
-                    <dl th:each="restaurant : ${foundRestaurants}">
-                        <dd th:text="${restaurant.name}">Restaurant name</dd>
-                        <dd><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}" /></dd>
-                        <dt th:text="${restaurant.location.city}">Restaurant name</dt>
-                    </dl>
-                </div>-->
-
+                <div class="restaurantList">
+                    <th:block th:each="restaurant : ${foundRestaurants}">
+                        <div class="restBlock">
+                            <dl>
+                                <dt class="restName" th:text="${restaurant.name}">Restaurant name</dt>
+                                <dd><input class="hiddenCheckbox" type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}"/></dd>
+                                <dt th:text="${restaurant.location.address}">Restaurant address</dt>
+                                <dt th:text="${restaurant.location.city}">Restaurant city</dt>
+                            </dl>
+                        </div>
+                    </th:block>
+                </div>
                 <input class="submitBtn"  type="submit" value="Vložit vybrané restaurace"/>
             </form>
     </main>
