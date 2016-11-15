@@ -6,10 +6,18 @@
 <body>
     <div class="flex-container">
         <div th:fragment="search-form">
-            <form action="#" th:action="@{/search}" method="post">
-                <p>
-                    <input class="inputText" type="text" th:name="keyword"/>
-                </p>
+            <form action="#" th:action="@{/search}" th:object="${searchForm}" method="post">
+                <div class="rbOptions">
+                    <ul>
+                        <li th:each="rb : ${rbOptions}">
+                            <input type="radio" th:field="*{type}" th:value="${rb}" />
+                            <label th:for="${#ids.prev('type')}" th:text="${searchForm.typeDescription.get(rb)}">Wireframe</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <input class="inputText" type="text" th:field="*{keyword}" />
+
                 <p><input class="submitBtn" type="submit" value="Hledat"/></p>
             </form>
         </div>
