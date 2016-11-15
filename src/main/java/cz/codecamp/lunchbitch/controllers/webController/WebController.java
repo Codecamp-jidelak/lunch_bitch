@@ -1,5 +1,6 @@
 package cz.codecamp.lunchbitch.controllers.webController;
 
+import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
 import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
 import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearchService;
@@ -48,7 +49,7 @@ public class WebController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String searchKeyword(@Valid String keyword) {
 
-        if(keyword != null && !keyword.trim().isEmpty()) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
 
             try {
                 webService.saveSearchResult(restaurantSearchService.searchForRestaurants(keyword));
@@ -111,7 +112,7 @@ public class WebController {
     public String sendAway(@Valid String email) {
 
         // to do proper email validation
-        if(email != null && !email.trim().isEmpty()) {
+        if (email != null && !email.trim().isEmpty()) {
 
             webService.setLunchMenuDemandEmail(email);
             lunchMenuDemandService.saveLunchMenuPreferences(webService.getLunchMenuDemandPreferences());
@@ -136,8 +137,10 @@ public class WebController {
     public String unsubscribeEmail(@Valid String email) {
 
         // to do proper email validation
-        if(email != null && !email.trim().isEmpty()) {
-            //to do - missing appropriate method of lunchMenuDemandService
+        if (email != null && !email.trim().isEmpty()) {
+            LunchMenuDemand lunchMenuDemand = new LunchMenuDemand();
+            lunchMenuDemand.setEmail(email);
+            lunchMenuDemandService.unsubscribeMenuPreferences(lunchMenuDemand);
             return "redirect:/success";
         }
         return "redirect:/unsubscribe";

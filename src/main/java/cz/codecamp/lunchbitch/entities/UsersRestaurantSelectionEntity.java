@@ -1,21 +1,21 @@
-package cz.codecamp.lunchbitch.services.triggerAndStorageService.storage.entities;
+package cz.codecamp.lunchbitch.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "RestaurantSelection")
-public class UsersRestaurantSelectionEntity {
+@Table(name = "restaurant_selection")
+public class UsersRestaurantSelectionEntity implements Serializable {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Column
+	@Column(name = "email", nullable = false)
 	private String email;
 
-	@Column
+
+	@Column(name = "zomato_restaurant_id", nullable = false)
 	private String zomatoRestaurantId;
 
 	public long getId() {
