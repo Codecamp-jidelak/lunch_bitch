@@ -11,6 +11,8 @@ public class LunchMenuDemandServiceImpl implements LunchMenuDemandService{
 
     private final LunchMenuDemandStorageService lunchMenuDemandStorageService;
 
+    private LunchMenuDemand lunchMenuDemand;
+
     @Autowired
     public LunchMenuDemandServiceImpl(LunchMenuDemandStorageService lunchMenuDemandStorageService) {
         this.lunchMenuDemandStorageService = lunchMenuDemandStorageService;
@@ -19,16 +21,37 @@ public class LunchMenuDemandServiceImpl implements LunchMenuDemandService{
 
     @Override
     public void saveLunchMenuPreferences(LunchMenuDemand lunchMenuDemand) {
-        lunchMenuDemandStorageService.saveLunchDemandAndTriggerAllSending(lunchMenuDemand);
+        this.lunchMenuDemand = lunchMenuDemand;
+        new Thread(new SaveLunchDemandServiceRunnable()).start();
+
     }
 
     @Override
     public void unsubscribeMenuPreferences(LunchMenuDemand lunchMenuDemand) {
-        lunchMenuDemandStorageService.deleteLunchMenuDemand(lunchMenuDemand);
+        this.lunchMenuDemand = lunchMenuDemand;
+        new Thread(new UnsubscribeMenuPreferencesRunnable()).start();
     }
 
     @Override
     public void getLunchMenuPreferences(String email) {
         lunchMenuDemandStorageService.getLunchMenuDemand(email);
     }
+
+
+    private class SaveLunchDemandServiceRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            lunchMenuDemandStorageService.saveLunchDemandAndTriggerAllSending(lunchMenuDemand);
+        }
+    }
+
+    private class UnsubscribeMenuPreferencesRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            lunchMenuDemandStorageService.deleteLunchMenuDemand(lunchMenuDemand);
+        }
+    }
+
 }
