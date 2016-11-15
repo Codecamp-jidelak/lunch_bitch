@@ -3,16 +3,18 @@ package cz.codecamp.lunchbitch.services.restaurantSearchService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Location;
+import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 
 @Service
@@ -20,19 +22,29 @@ public class RestaurantSearchServiceImpl implements RestaurantSearchService{
 
     private final RestTemplate restTemplate;
 
+    @Qualifier("zomato")
     private final HttpEntity<String> entity;
 
-    @Value("${search.url}")
-    private String url;
+    @Value("${search.url.id}")
+    private String searchById;
+
+    @Value("${search.url.location}")
+    private String searchByLocation;
 
     @Autowired
-    public RestaurantSearchServiceImpl(HttpEntity<String> entity, RestTemplate restTemplate) {
+    public RestaurantSearchServiceImpl(@Qualifier("zomato") HttpEntity<String> entity, RestTemplate restTemplate) {
         this.entity = entity;
         this.restTemplate = restTemplate;
     }
 
     public LunchMenuDemand searchForRestaurants(String keyword) throws IOException {
-        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, keyword);
+        ResponseEntity responseEntity = restTemplate.exchange(searchById, HttpMethod.GET, entity, String.class, keyword);
+        return createLunchMenuDemand(responseEntity);
+    }
+
+    @Override
+    public LunchMenuDemand searchForRestaurants(Location location) throws IOException {
+        ResponseEntity responseEntity = restTemplate.exchange(searchByLocation, HttpMethod.GET, entity, String.class, location.getLatitude(), location.getLongitude(), "1000");
         return createLunchMenuDemand(responseEntity);
     }
 

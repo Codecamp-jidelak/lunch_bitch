@@ -8,6 +8,7 @@ import cz.codecamp.lunchbitch.models.LunchMenu;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.services.mergerService.MergerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -38,11 +39,11 @@ public class LunchMenuServiceImpl implements LunchMenuService {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
 
-    @Value("${lunchMenu.url}")
+    @Value("${lunchmenu.search}")
     private String url;
 
     @Autowired
-    public LunchMenuServiceImpl(HttpEntity<String> entity, RestTemplate restTemplate, Logger logger, MergerService mergerService) {
+    public LunchMenuServiceImpl(@Qualifier("zomato")HttpEntity<String> entity, RestTemplate restTemplate, Logger logger, MergerService mergerService) {
         this.entity = entity;
         this.restTemplate = restTemplate;
         this.logger = logger;
