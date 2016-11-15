@@ -8,7 +8,6 @@ import cz.codecamp.lunchbitch.models.Restaurant;
 import cz.codecamp.lunchbitch.repositories.RestaurantInfoRepository;
 import cz.codecamp.lunchbitch.repositories.UsersRestaurantSelectionRepository;
 import cz.codecamp.lunchbitch.services.lunchMenuService.LunchMenuService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +16,8 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
@@ -49,7 +50,7 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
         try {
             return lunchMenuService.lunchMenuDownload(restaurantIds, lunchMenuDemands);
         } catch (IOException | MessagingException e) {
-            LOGGER.warn("Solving this is not this service's responsibility.");
+            LOGGER.warning(e.getMessage());
             return lunchMenuDemands;
         }
     }
