@@ -42,7 +42,7 @@
                    th:each="dish : ${restaurant.getLunchmenu().getDishes()}">
                     <p th:text="${dish.getName()}"></p>
                     <div th:if="${dish.hasPrice()}">
-                       <div th:text="${dish.getPrice()}"></div>
+                       <div th:text="'Cena: ' + ${dish.getPrice()}"></div>
                     </div>
                 </div>
             </td>
