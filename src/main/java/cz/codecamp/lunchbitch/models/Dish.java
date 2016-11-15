@@ -25,7 +25,7 @@ public class Dish {
     }
 
     public String getPrice() {
-        return "Cena: " + price;
+        return price;
     }
 
     public Dish setPrice(String price) {
