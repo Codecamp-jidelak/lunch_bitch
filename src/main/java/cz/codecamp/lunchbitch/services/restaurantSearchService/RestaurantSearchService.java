@@ -1,5 +1,6 @@
 package cz.codecamp.lunchbitch.services.restaurantSearchService;
 
+import cz.codecamp.lunchbitch.models.Location;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import org.springframework.stereotype.Service;
 
@@ -15,4 +16,6 @@ public interface RestaurantSearchService  {
      * @throws IOException
      */
     LunchMenuDemand searchForRestaurants(String keyword) throws IOException;
+
+    LunchMenuDemand searchForRestaurants(Location location) throws IOException;
 }
