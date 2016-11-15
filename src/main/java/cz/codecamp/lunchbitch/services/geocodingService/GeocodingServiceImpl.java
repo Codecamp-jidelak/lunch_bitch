@@ -11,7 +11,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -36,8 +35,7 @@ public class GeocodingServiceImpl implements GeocodingService{
     }
 
     @Override
-    public @ResponseBody
-    Location getCoordinates(String address) throws IOException {
+    public Location getCoordinates(String address) throws IOException {
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class, address, key);
         return createLocation(responseEntity);
     }

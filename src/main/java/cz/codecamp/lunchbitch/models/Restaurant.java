@@ -47,6 +47,14 @@ public class Restaurant {
         return this;
     }
 
+    public boolean hasLocation(){
+        return location != null;
+    }
+
+    public boolean hasLunchMenu(){
+        return lunchmenu != null && !lunchmenu.isEmpty();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,16 +76,5 @@ public class Restaurant {
         result = 31 * result + (location != null ? location.hashCode() : 0);
         result = 31 * result + (lunchmenu != null ? lunchmenu.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return " <tr>\n" +
-                "  <td bgcolor=\"#696969\">\n" +
-                "<h2 style=\"color:white; text-align:center;\"><strong>" + getName() + "</strong></h2>" +
-                "<p style=\"color:white; text-align:center;\">" + (location != null ? location.toString() : "Adresa není k dispozici") + "</p>" +
-                "  </td>\n" +
-                " </tr>\n" +
-                 (lunchmenu != null && !lunchmenu.isEmpty() ? lunchmenu.toString() : "<p style=\"text-align:center;\">Denní menu není k dispozici</p>");
     }
 }

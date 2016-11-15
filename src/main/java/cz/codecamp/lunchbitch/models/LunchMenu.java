@@ -47,16 +47,11 @@ public class LunchMenu {
         dishes.add(dish);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for(Dish dish: dishes){
-            builder.append(dish.toString());
-        }
-        return builder.toString();
-    }
-
     public boolean isEmpty(){
         return startDate == null || startDate.isEmpty();
+    }
+
+    public boolean hasDishes(){
+        return dishes != null && dishes.size() != 0;
     }
 }
