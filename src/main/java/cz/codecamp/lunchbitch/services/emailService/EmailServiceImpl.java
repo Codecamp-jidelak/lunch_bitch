@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final TemplateEngine templateEngine;
 
-    private Context context = new Context(Locale.getDefault());
+    private Context context = new Context(new Locale("cs", "cz"));
 
     @Autowired
     public EmailServiceImpl(Message message, TemplateEngine templateEngine) {

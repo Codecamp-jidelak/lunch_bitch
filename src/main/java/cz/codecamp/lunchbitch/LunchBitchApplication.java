@@ -23,8 +23,10 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -40,6 +42,8 @@ public class LunchBitchApplication {
 
     @Value("${zomato.key}")
     private String zomatoId;
+
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd. MMMM YYYY", new Locale("cs", "cz"));
 
     public static void main(String[] args) {
         SpringApplication.run(LunchBitchApplication.class, args);
@@ -70,7 +74,7 @@ public class LunchBitchApplication {
     public Message getMessage(Session session) throws MessagingException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(email));
-        message.setSubject("Pošli jídelák: " + new Date());
+        message.setSubject("Pošli jídelák: " + LocalDate.now().format(timeFormatter));
         return message;
     }
 
@@ -125,7 +129,7 @@ public class LunchBitchApplication {
     @Bean
     public ITemplateResolver templateResolver(){
         final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setOrder(Integer.valueOf(1));
+        templateResolver.setOrder(1);
         templateResolver.setResolvablePatterns(Collections.singleton("html/*"));
         templateResolver.setPrefix("/mail/");
         templateResolver.setSuffix(".html");

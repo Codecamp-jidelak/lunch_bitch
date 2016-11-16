@@ -9,7 +9,7 @@
     <tr>
         <td align="center" bgcolor="#ffffff" style="padding: 20px 0 20px 0;">
             <h1 th:text="${name}" style="color:black;">Name</h1>
-            <p th:text="${#dates.format(date)}">Datum</p>
+            <p th:text="${#dates.format(date, 'dd. MMMMMMMMMMMM yyyy')}">Datum</p>
             <img src="https://pbs.twimg.com/profile_images/668088709875499008/eLZTn7_S.jpg" alt="Pošli jídelák"
                  style="display: block;"/>
         </td>
