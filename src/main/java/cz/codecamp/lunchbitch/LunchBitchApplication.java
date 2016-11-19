@@ -1,5 +1,8 @@
 package cz.codecamp.lunchbitch;
 
+import cz.codecamp.lunchbitch.models.LunchMenuDemand;
+import cz.codecamp.lunchbitch.services.webService.WebService;
+import cz.codecamp.lunchbitch.services.webService.WebServiceImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -134,4 +137,8 @@ public class LunchBitchApplication {
         return templateResolver;
     }
 
+    @Bean
+    public WebService webService() {
+        return new WebServiceImpl(new LunchMenuDemand(), new LunchMenuDemand());
+    }
 }

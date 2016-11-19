@@ -72,6 +72,11 @@ public class WebServiceImpl implements WebService {
 		return selectedRestaurants.getEmail();
 	}
 
+	@Override
+	public boolean isEmptySelectedRestaurantsList() {
+		return expectedRestaurants.isEmpty();
+	}
+
 	public void setSelectedRestaurants(LunchMenuDemand selectedRestaurants) {
 		this.selectedRestaurants = selectedRestaurants;
 	}

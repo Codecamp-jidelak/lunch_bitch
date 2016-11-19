@@ -14,4 +14,5 @@ public interface WebService {
     void setLunchMenuDemandEmail(String email);
     LunchMenuDemand getLunchMenuDemandPreferences();
     String getEmail();
+    boolean isEmptySelectedRestaurantsList();
 }
