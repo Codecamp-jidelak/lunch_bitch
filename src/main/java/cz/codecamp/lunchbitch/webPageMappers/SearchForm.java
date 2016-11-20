@@ -1,5 +1,8 @@
 package cz.codecamp.lunchbitch.webPageMappers;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashMap;
@@ -11,10 +14,10 @@ import java.util.Map;
 public class SearchForm {
 
     @NotNull
-    @Size(min = 1)
+    @NotBlank
     private String keyword;
-
     private String type;
+    private String calledFrom;
 
     private Map<String, String> typeDescription;
 
@@ -46,5 +49,13 @@ public class SearchForm {
 
     public void setTypeDescription(Map<String, String> typeDescription) {
         this.typeDescription = typeDescription;
+    }
+
+    public String getCalledFrom() {
+        return calledFrom;
+    }
+
+    public void setCalledFrom(String calledFrom) {
+        this.calledFrom = calledFrom;
     }
 }

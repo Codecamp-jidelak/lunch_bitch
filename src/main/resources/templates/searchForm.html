@@ -5,7 +5,7 @@
 </head>
 <body>
     <div class="flex-container">
-        <div th:fragment="search-form">
+        <div class="searchForm" th:fragment="search-form(calledFrom)">
             <form action="#" th:action="@{/search}" th:object="${searchForm}" method="post">
                 <div class="rbOptions">
                     <ul>
@@ -15,9 +15,9 @@
                         </li>
                     </ul>
                 </div>
-
+                <input type="hidden" th:value="${calledFrom}"  th:attr="name='calledFrom'"/>
                 <input class="inputText" type="text" th:field="*{keyword}" />
-
+                <p><span class="error" th:if="${#fields.hasErrors('keyword')}" th:errors="*{keyword}">Keyword error</span></p>
                 <p><input class="submitBtn" type="submit" value="Hledat"/></p>
             </form>
         </div>
