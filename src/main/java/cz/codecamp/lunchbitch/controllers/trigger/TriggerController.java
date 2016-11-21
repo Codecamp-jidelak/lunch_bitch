@@ -12,7 +12,7 @@ public class TriggerController {
     private LunchMenuSendingTrigger trigger;
 
     @RequestMapping(method = RequestMethod.POST)
-    public void trigger(@RequestParam String password) {
+    public void trigger(@RequestBody String password) {
         trigger.triggerSending(password);
     }
 }
