@@ -94,7 +94,7 @@ public class LunchBitchApplication {
 
     @Bean
     @Qualifier("google")
-    public HttpHeaders httpGoogleHeaders(){
+    public HttpHeaders httpGoogleHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         return headers;
@@ -102,13 +102,13 @@ public class LunchBitchApplication {
 
     @Bean
     @Qualifier("google")
-    public HttpEntity<String> httpGoogleEntity(@Qualifier("google") HttpHeaders headers){
+    public HttpEntity<String> httpGoogleEntity(@Qualifier("google") HttpHeaders headers) {
         return new HttpEntity<>("parameters", headers);
     }
 
     @Bean
     @Qualifier("zomato")
-    public HttpHeaders httpZomatoHeaders(){
+    public HttpHeaders httpZomatoHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.set("user-key", zomatoId);
@@ -117,12 +117,12 @@ public class LunchBitchApplication {
 
     @Bean
     @Qualifier("zomato")
-    public HttpEntity<String> httpZomatoEntity(@Qualifier("zomato") HttpHeaders headers){
+    public HttpEntity<String> httpZomatoEntity(@Qualifier("zomato") HttpHeaders headers) {
         return new HttpEntity<>("parameters", headers);
     }
 
     @Bean
-    public TemplateEngine templateEngine(ITemplateResolver templateResolver){
+    public TemplateEngine templateEngine(ITemplateResolver templateResolver) {
         final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.addTemplateResolver(templateResolver);
         return templateEngine;
@@ -130,7 +130,7 @@ public class LunchBitchApplication {
 
 
     @Bean
-    public ITemplateResolver templateResolver(){
+    public ITemplateResolver templateResolver() {
         final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setOrder(1);
         templateResolver.setResolvablePatterns(Collections.singleton("html/*"));

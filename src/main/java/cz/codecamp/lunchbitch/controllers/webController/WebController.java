@@ -1,6 +1,7 @@
 package cz.codecamp.lunchbitch.controllers.webController;
 
 import cz.codecamp.lunchbitch.models.Location;
+import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
 import cz.codecamp.lunchbitch.services.geocodingService.GeocodingService;
 import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
@@ -63,7 +64,7 @@ public class WebController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ModelAndView startSearching(Model model) {
-        if(!model.containsAttribute("searchForm")) {
+        if (!model.containsAttribute("searchForm")) {
             model.addAttribute("searchForm", searchForm);
         }
         return new ModelAndView("search");
@@ -83,19 +84,18 @@ public class WebController {
             attr.addFlashAttribute("org.springframework.validation.BindingResult.searchForm", bindingResult);
             attr.addFlashAttribute("searchForm", searchForm);
 
-            return "redirect:/"+calledFrom;
+            return "redirect:/" + calledFrom;
         }
 
         String formTextInput = searchForm.getKeyword();
         String type = searchForm.getType();
 
-        if(formTextInput != null && !formTextInput.trim().isEmpty()) {
+        if (formTextInput != null && !formTextInput.trim().isEmpty()) {
 
             try {
                 if ("keyword".equals(type)) {
                     webService.saveSearchResult(restaurantSearchService.searchForRestaurants(formTextInput));
-                }
-                else if ("address".equals(type)) {
+                } else if ("address".equals(type)) {
                     Location location = geocodingService.getCoordinates(formTextInput);
                     webService.saveSearchResult(restaurantSearchService.searchForRestaurants(location));
                 }
@@ -117,10 +117,10 @@ public class WebController {
     public ModelAndView getResults(Model model) {
         Map<String, Object> mapModel = new HashMap<>();
         mapModel.put("foundRestaurant", new Restaurant());
-        if(!model.containsAttribute("resultsWebPage")) {
+        if (!model.containsAttribute("resultsWebPage")) {
             model.addAttribute("resultsWebPage", new ResultsWebPage());
         }
-        if(!model.containsAttribute("searchForm")) {
+        if (!model.containsAttribute("searchForm")) {
             model.addAttribute("searchForm", searchForm);
         }
         return new ModelAndView("results", mapModel);
@@ -154,10 +154,10 @@ public class WebController {
         Map<String, Object> mapModel = new HashMap<>();
         mapModel.put("selectedRestaurant", new Restaurant());
         model.addAttribute("setupWebPage", new SetupWebPage(webService.getSelectedRestaurants()));
-        if(!model.containsAttribute("emailForm")) {
+        if (!model.containsAttribute("emailForm")) {
             model.addAttribute("emailForm", new EmailForm());
         }
-        if(!model.containsAttribute("searchForm")) {
+        if (!model.containsAttribute("searchForm")) {
             model.addAttribute("searchForm", searchForm);
         }
         return new ModelAndView("setup", mapModel);
@@ -183,7 +183,7 @@ public class WebController {
     @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String sendAway(@Valid EmailForm emailForm, BindingResult bindingResult, RedirectAttributes attr) {
 
-        if(webService.isEmptySelectedRestaurantsList()) {
+        if (webService.isEmptySelectedRestaurantsList()) {
             bindingResult.rejectValue("email", "messageCode", "Musí být vybraná restaurace");
         }
 
@@ -202,7 +202,7 @@ public class WebController {
 
     @RequestMapping(value = "/unsubscribe", method = RequestMethod.GET)
     public ModelAndView showUnsubscribe(Model model) {
-        if(!model.containsAttribute("emailForm")) {
+        if (!model.containsAttribute("emailForm")) {
             model.addAttribute("emailForm", new EmailForm());
         }
         return new ModelAndView("unsubscribe");
@@ -215,8 +215,9 @@ public class WebController {
             System.out.println(bindingResult.getAllErrors());
             return "unsubscribe";
         }
-        //TODO uncomment when implemented in lunchMenuDemandService
-        //lunchMenuDemandService.unsubscribeMenuPreferences(emailForm.getEmail());
+        LunchMenuDemand lunchMenuDemand = new LunchMenuDemand();
+        lunchMenuDemand.setEmail(emailForm.getEmail());
+        lunchMenuDemandService.unsubscribeMenuPreferences(lunchMenuDemand);
         attr.addFlashAttribute("org.springframework.validation.BindingResult.emailForm", bindingResult);
         attr.addFlashAttribute("emailForm", emailForm);
 
