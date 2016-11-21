@@ -32,12 +32,6 @@ public class LunchDemandStorageServiceImpl implements LunchMenuDemandStorageServ
     }
 
     @Override
-    public List<LunchMenuDemand> saveLunchDemandAndTriggerAllSending(LunchMenuDemand demand) {
-        saveLunchDemand(demand);
-        return lunchMenuSendingTrigger.onTrigger();
-    }
-
-    @Override
     public LunchMenuDemand getLunchMenuDemand(String email) {
         return null;
     }

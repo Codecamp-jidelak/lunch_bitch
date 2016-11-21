@@ -19,7 +19,7 @@ public class LunchMenuDemandServiceImpl implements LunchMenuDemandService {
 
     @Override
     public void saveLunchMenuPreferences(LunchMenuDemand lunchMenuDemand) {
-        new Thread(() -> lunchMenuDemandStorageService.saveLunchDemandAndTriggerAllSending(lunchMenuDemand)).start();
+        new Thread(() -> lunchMenuDemandStorageService.saveLunchDemand(lunchMenuDemand)).start();
 
     }
 

@@ -11,11 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class LunchMenuTriggerServiceImplTest {
 
 
-	@Autowired
-	LunchMenuSendingTrigger lunchMenuSendingTrigger;
+    @Autowired
+    LunchMenuSendingTrigger lunchMenuSendingTrigger;
 
-	@Test
-	public void stuff() {
-		lunchMenuSendingTrigger.onTrigger();
-	}
+    @Test
+    public void stuff() {
+    }
 }
