@@ -45,7 +45,6 @@ public class LunchDemandStorageServiceImpl implements LunchMenuDemandStorageServ
     @Override
     @Transactional
     public void deleteLunchMenuDemand(LunchMenuDemand lunchMenuDemand) {
-        System.out.println("DELETING");
         restaurantSelectionRepository.deleteByEmail(lunchMenuDemand.getEmail());
     }
 

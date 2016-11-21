@@ -6,30 +6,51 @@
 <body>
 <div class="flex-container">
     <header th:replace="layout/header"></header>
-    <nav th:replace="layout/navigationBar"></nav>
+    <nav>
+        <ul>
+            <li><a href="/">Domů</a></li>
+            <li><a href="/search">Hledat</a></li>
+            <li><a href="/results">Vybrat restaurace</a></li>
+            <li>Zadat email</li>
+            <li class="rightNav"><a href="/unsubscribe">Odhlásit odběr</a></li>
+        </ul>
+    </nav>
     <main id="content">
             <h1>Vybrané restaurace</h1>
 
             <h2>Hledejte další restaurace</h2>
-            <div th:replace="searchForm :: search-form"></div>
+            <div th:replace="searchForm :: search-form('setup')"></div>
 
             <h2>Upravujte seznam restaurací</h2>
 
             <form action="#" th:action="@{/setup}" th:object="${setupWebPage}" method="post">
-                    <table class="table">
-                        <tr th:each="restaurant : ${selectedRestaurants}">
-                            <td><input type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}" /></td>
-                            <td th:text="${restaurant.name}">Restaurant name</td>
-                            <td th:text="${restaurant.location.city}">City</td>
-                        </tr>
-                    </table>
-                <p><input class="submitBtn" type="submit" value="Aktualizovat seznam"/></p>
+                <div class="restaurantList">
+                    <th:block th:each="restaurant : ${selectedRestaurants}">
+                        <div class="restBlock">
+                            <dl class="highlightRestaurant">
+                                <dt class="restName" th:text="${restaurant.name}">Restaurant name</dt>
+                                <dd><input class="hiddenCheckbox" type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}"/></dd>
+                                <dt th:text="${restaurant.location.address}">Restaurant address</dt>
+                            </dl>
+                        </div>
+                    </th:block>
+                    <div th:if="${#lists.isEmpty(selectedRestaurants)}">
+                        <p class="error">Nejsou vybrané žádné restaurace</p>
+                    </div>
+                </div>
+
+                <div th:if="${not #lists.isEmpty(selectedRestaurants)}">
+                    <input class="submitBtn" type="submit" value="Aktualizovat seznam"/>
+                </div>
             </form>
 
-            <h2>Kam máme posílát jídeláky?</h2>
+            <h2 id="send">Kam máme posílát jídeláky?</h2>
 
-            <form action="" th:action="@{/success}" method="post">
-                <p><input class="inputText" type="text"  th:name="email" value="e-mail" onblur="onBlur(this)" onfocus="onFocus(this)" /></p>
+            <form action="" th:action="@{/success}" th:object="${emailForm}" method="post">
+                <p>
+                    <input class="inputText" type="text"  th:field="*{email}" onblur="onBlur(this)" onfocus="onFocus(this)" />
+                    <p><span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span></p>
+                </p>
                 <p><input class="sendEmailBtn"  type="submit" value="Odeslat"/></p>
             </form>
     </main>

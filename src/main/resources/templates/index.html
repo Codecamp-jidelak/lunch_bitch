@@ -6,9 +6,14 @@
 <body>
 <div class="flex-container">
     <header th:replace="layout/header"></header>
-    <nav th:replace="layout/navigationBar"></nav>
+    <nav>
+        <ul>
+            <li>Domů</li>
+            <li class="rightNav"><a href="/unsubscribe">Odhlásit odběr</a></li>
+        </ul>
+    </nav>
     <main id="content">
-                <h1>Najděte svou oblíbenou restauraci a dostávej její jídelák každý den!</h1>
+                <h1>Najděte svou oblíbenou restauraci a dostávejte její jídelák každý den!</h1>
 
                 <a class="aLikeBtn" href="/search">Najít mé oblíbené restaurace</a>
 
@@ -16,12 +21,12 @@
 
                 <p>
                     Pošli jídelák vám ušetří drahocenný čas. Posbíráme za vás denní menu vašich oblíbených restaurací
-                    a doručíme vám je každý den na váš e-mai.
+                    a doručíme vám je každý den na váš e-mail.
                 </p>
 
                 <h2>Jak to funguje?</h2>
 
-                <p><img src="/images/howto.png" alt="Popis procesu"/></p>
+                <p><img src="/images/howto.svg" alt="Popis procesu"/></p>
     </main>
     <footer th:replace="layout/footer"></footer>
 </div>

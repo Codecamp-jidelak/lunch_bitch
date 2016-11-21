@@ -1,5 +1,8 @@
 package cz.codecamp.lunchbitch;
 
+import cz.codecamp.lunchbitch.models.LunchMenuDemand;
+import cz.codecamp.lunchbitch.services.webService.WebService;
+import cz.codecamp.lunchbitch.services.webService.WebServiceImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +14,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,8 +26,10 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -35,6 +45,8 @@ public class LunchBitchApplication {
 
     @Value("${zomato.key}")
     private String zomatoId;
+
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd. MMMM YYYY", new Locale("cs", "cz"));
 
     public static void main(String[] args) {
         SpringApplication.run(LunchBitchApplication.class, args);
@@ -57,6 +69,7 @@ public class LunchBitchApplication {
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         return properties;
     }
 
@@ -64,7 +77,7 @@ public class LunchBitchApplication {
     public Message getMessage(Session session) throws MessagingException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(email));
-        message.setSubject("Pošli jídelák: " + new Date());
+        message.setSubject("Pošli jídelák: " + LocalDate.now().format(timeFormatter));
         return message;
     }
 
@@ -81,7 +94,7 @@ public class LunchBitchApplication {
 
     @Bean
     @Qualifier("google")
-    public HttpHeaders httpGoogleHeaders(){
+    public HttpHeaders httpGoogleHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         return headers;
@@ -89,13 +102,13 @@ public class LunchBitchApplication {
 
     @Bean
     @Qualifier("google")
-    public HttpEntity<String> httpGoogleEntity(@Qualifier("google") HttpHeaders headers){
+    public HttpEntity<String> httpGoogleEntity(@Qualifier("google") HttpHeaders headers) {
         return new HttpEntity<>("parameters", headers);
     }
 
     @Bean
     @Qualifier("zomato")
-    public HttpHeaders httpZomatoHeaders(){
+    public HttpHeaders httpZomatoHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.set("user-key", zomatoId);
@@ -104,7 +117,33 @@ public class LunchBitchApplication {
 
     @Bean
     @Qualifier("zomato")
-    public HttpEntity<String> httpZomatoEntity(@Qualifier("zomato") HttpHeaders headers){
+    public HttpEntity<String> httpZomatoEntity(@Qualifier("zomato") HttpHeaders headers) {
         return new HttpEntity<>("parameters", headers);
+    }
+
+    @Bean
+    public TemplateEngine templateEngine(ITemplateResolver templateResolver) {
+        final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.addTemplateResolver(templateResolver);
+        return templateEngine;
+    }
+
+
+    @Bean
+    public ITemplateResolver templateResolver() {
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setOrder(1);
+        templateResolver.setResolvablePatterns(Collections.singleton("html/*"));
+        templateResolver.setPrefix("/mail/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setCacheable(false);
+        return templateResolver;
+    }
+
+    @Bean
+    public WebService webService() {
+        return new WebServiceImpl(new LunchMenuDemand(), new LunchMenuDemand());
     }
 }

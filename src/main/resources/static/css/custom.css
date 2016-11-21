@@ -26,7 +26,6 @@ header h1 {
     color: #fff4e6;
 }
 
-
 nav {
     background: #fff;
 }
@@ -36,24 +35,40 @@ nav ul {
     margin: 0 auto;
     padding: 0;
     overflow: hidden;
-    /*background-color: #65737e;*/
     background: #be9b7b;
+    text-transform: uppercase;
 }
 
 nav li {
     float: left;
-}
-
-nav li a {
     display: block;
     color: white;
     text-align: center;
-    padding: 0.5em 0.8em;
+    padding: 0.6em 0.4em;
+
+}
+
+nav li a {
+    color: white;
     text-decoration: none;
+    padding: 0.6em 0.4em;
 }
 
 nav li a:hover {
     background-color: #a7adba;
+}
+
+nav li:before {
+    content: ">";
+    padding-right: 1em;
+}
+
+nav li:first-child:before {
+    content: "";
+}
+
+nav li:last-child:before {
+    content: "";
 }
 
 #content {
@@ -64,27 +79,23 @@ nav li a:hover {
 }
 
 footer{
-    /*background: #65737e;*/
     background: #be9b7b;
     color:white;
     padding: 2em;
 }
 
-#content table {
-    text-align: left;
-}
-
-#content table td{
-    padding: 5px 5px;
-}
-
-.table {
-    margin: 0 auto;
-}
-
 #content img {
     max-width: 100%;
     margin: 0.5em 0em;
+}
+
+#content h1, h2{
+    color: #4b3832;
+    font-size: 2em;
+}
+
+#content h1{
+    font-size: 3em;
 }
 
 .aLikeBtn{
@@ -168,4 +179,73 @@ footer{
 
 .rightNav {
     float: right;
+}
+/*Restaurants results*/
+
+dl {
+    width: 19em;
+    border: thin solid #000;
+    margin: 0;
+    display: inline-block;
+    padding: 1.5em 3em;
+}
+
+dt, dd {
+    float: left;
+}
+
+dt {
+    clear:both;
+}
+
+dd {
+    margin: 0em 0.5em;
+}
+
+.restName {
+    font-size: 2em;
+    color: #4b3832;
+    text-decoration: underline;
+    text-weight: bold;
+    padding-bottom: 0.3em;
+}
+
+input.hiddenCheckbox {
+    display: none;
+}
+
+.highlightRestaurant{
+    background-color: #be9b7b;
+}
+
+
+.restBlock {
+    display: inline-block;
+    padding: 0;
+    margin: 0.5em;
+}
+
+.rbOptions {
+    margin: 1em;
+}
+
+.rbOptions ul {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+.rbOptions li {
+    font-size: 1.5em;
+    padding-bottom: 0.3em;
+}
+
+input[type=radio] {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.error {
+    color: red;
 }
