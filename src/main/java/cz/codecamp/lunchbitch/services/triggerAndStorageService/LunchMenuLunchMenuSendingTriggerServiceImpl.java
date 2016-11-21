@@ -9,6 +9,7 @@ import cz.codecamp.lunchbitch.repositories.RestaurantInfoRepository;
 import cz.codecamp.lunchbitch.repositories.UsersRestaurantSelectionRepository;
 import cz.codecamp.lunchbitch.services.lunchMenuService.LunchMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,9 +40,10 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
     @Autowired
     private LunchMenuService lunchMenuService;
 
-    @Override
-    @Transactional
-    public List<LunchMenuDemand> onTrigger() {
+    @Value("${trigger.password")
+    String triggerPassword;
+
+    private List<LunchMenuDemand> onTrigger() {
         List<RestaurantInfoEntity> restaurantInfoEntities = retrieveAllRestaurantInfos();
         List<UsersRestaurantSelectionEntity> restaurantSelectionEntities = retrieveAllRestaurantSelections();
         List<Restaurant> restaurantDtos = convertToRestaurantDtos(restaurantInfoEntities);
@@ -52,6 +54,19 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
         } catch (IOException | MessagingException e) {
             LOGGER.warning(e.getMessage());
             return lunchMenuDemands;
+        }
+    }
+
+    @Transactional
+    @Override
+    public void triggerSending(String password) {
+        validatePassword(password);
+        onTrigger();
+    }
+
+    private void validatePassword(String password) {
+        if (!password.equals(triggerPassword)) {
+            throw new IllegalStateException("Wrong password");
         }
     }
 
