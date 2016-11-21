@@ -40,7 +40,7 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
     @Autowired
     private LunchMenuService lunchMenuService;
 
-    @Value("${trigger.password")
+    @Value("${trigger.password}")
     String triggerPassword;
 
     private List<LunchMenuDemand> onTrigger() {
