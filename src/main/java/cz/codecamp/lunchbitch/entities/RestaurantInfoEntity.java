@@ -1,37 +1,41 @@
-package cz.codecamp.lunchbitch.services.triggerAndStorageService.storage.entities;
+package cz.codecamp.lunchbitch.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity(name = "RestaurantInfo")
-public class RestaurantInfoEntity {
+@Table(name = "restaurant_info")
+public class RestaurantInfoEntity implements Serializable {
 
 	@Id
+	@Column(name = "zomato_id", nullable = false)
 	private String zomatoId;
 
-	@Column
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column
+	@Column(name = "address", nullable = true)
 	private String address;
 
-	@Column
+	@Column(name = "locality", nullable = true)
 	private String locality;
 
-	@Column
+	@Column(name = "city", nullable = true)
 	private String city;
 
-	@Column
+	@Column(name = "latitude", nullable = true)
 	private String latitude;
 
-	@Column
+	@Column(name = "longitude", nullable = true)
 	private String longitude;
 
-	@Column
+	@Column(name = "zipcode", nullable = true)
 	private String zipcode;
 
-	@Column
+	@Column(name = "country_id", nullable = true)
 	private String countryId;
 
 	public String getZomatoId() {

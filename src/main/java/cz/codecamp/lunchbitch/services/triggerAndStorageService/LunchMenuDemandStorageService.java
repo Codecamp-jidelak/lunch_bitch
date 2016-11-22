@@ -6,11 +6,9 @@ import java.util.List;
 
 public interface LunchMenuDemandStorageService {
 
-	void saveLunchDemand(LunchMenuDemand demand);
+    void saveLunchDemand(LunchMenuDemand demand);
 
-	List<LunchMenuDemand> saveLunchDemandAndTriggerAllSending(LunchMenuDemand demand);
-
-	LunchMenuDemand getLunchMenuDemand(String email);
+    LunchMenuDemand getLunchMenuDemand(String email);
 
 	void deleteLunchMenuDemand(String email);
 
