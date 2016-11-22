@@ -215,9 +215,7 @@ public class WebController {
             System.out.println(bindingResult.getAllErrors());
             return "unsubscribe";
         }
-        LunchMenuDemand lunchMenuDemand = new LunchMenuDemand();
-        lunchMenuDemand.setEmail(emailForm.getEmail());
-        lunchMenuDemandService.unsubscribeMenuPreferences(lunchMenuDemand);
+        lunchMenuDemandService.unsubscribeMenuPreferences(emailForm.getEmail());
         attr.addFlashAttribute("org.springframework.validation.BindingResult.emailForm", bindingResult);
         attr.addFlashAttribute("emailForm", emailForm);
 

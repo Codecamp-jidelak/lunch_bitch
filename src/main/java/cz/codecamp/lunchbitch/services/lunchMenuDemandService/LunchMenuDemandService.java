@@ -14,9 +14,9 @@ public interface LunchMenuDemandService {
 
     /**
      * Delete lunch menu preferences from DB
-     * @param lunchMenuDemand object which will be deleted from DB
+     * @param email for unsubscribe lunch menu preferences
      */
-    void unsubscribeMenuPreferences(LunchMenuDemand lunchMenuDemand);
+    void unsubscribeMenuPreferences(String email);
 
     /**
      * Get lunch menu settings from DB by email

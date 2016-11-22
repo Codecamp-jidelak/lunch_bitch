@@ -24,13 +24,12 @@ public class LunchMenuDemandServiceImpl implements LunchMenuDemandService {
     }
 
     @Override
-    public void unsubscribeMenuPreferences(LunchMenuDemand lunchMenuDemand) {
-        new Thread(() -> lunchMenuDemandStorageService.deleteLunchMenuDemand(lunchMenuDemand)).start();
+    public void unsubscribeMenuPreferences(String email) {
+        new Thread(() -> lunchMenuDemandStorageService.deleteLunchMenuDemand(email)).start();
     }
 
     @Override
     public void getLunchMenuPreferences(String email) {
         lunchMenuDemandStorageService.getLunchMenuDemand(email);
     }
-
 }

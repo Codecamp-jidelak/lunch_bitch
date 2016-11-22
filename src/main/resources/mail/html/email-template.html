@@ -30,19 +30,18 @@
         </tr>
         <tr th:if="${not restaurant.hasLunchMenu() or not restaurant.getLunchmenu().hasDishes()}">
             <td bgcolor="#ffffff">
-                <p style="color:black; text-align:center; font-family:courier;"
-                   th:if="${not restaurant.hasLunchMenu() or not restaurant.getLunchmenu().hasDishes()}">Denní menu není
-                    k dispozici
+                <p style="color:black; text-align:center; font-family:courier;">
+                    Denní menu není k dispozici
                 </p>
             </td>
         </tr>
         <tr th:if="${restaurant.hasLunchMenu() and restaurant.getLunchmenu().hasDishes()}">
             <td bgcolor="#ffffff">
-                <div style="color:black; text-align:center; font-family:courier; padding: 10px 10px 10px 10px;"
+                <div style="color:black; text-align:center; font-family:courier;"
                    th:each="dish : ${restaurant.getLunchmenu().getDishes()}">
-                    <p th:text="${dish.getName()}"></p>
+                    <p style="padding: 10px 10px 0px 10px;" th:text="${dish.getName()}"></p>
                     <div th:if="${dish.hasPrice()}">
-                       <div th:text="'Cena: ' + ${dish.getPrice()}"></div>
+                       <div style="padding: 0px 10px 20px 10px;" th:text="'Cena: ' + ${dish.getPrice()}"></div>
                     </div>
                 </div>
             </td>
