@@ -12,6 +12,6 @@ public interface LunchMenuDemandStorageService {
 
 	LunchMenuDemand getLunchMenuDemand(String email);
 
-	void deleteLunchMenuDemand(LunchMenuDemand lunchMenuDemand);
+	void deleteLunchMenuDemand(String email);
 
 }

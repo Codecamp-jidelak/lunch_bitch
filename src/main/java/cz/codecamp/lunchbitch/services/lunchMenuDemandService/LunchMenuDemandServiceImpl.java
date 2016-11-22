@@ -27,9 +27,8 @@ public class LunchMenuDemandServiceImpl implements LunchMenuDemandService{
     }
 
     @Override
-    public void unsubscribeMenuPreferences(LunchMenuDemand lunchMenuDemand) {
-        this.lunchMenuDemand = lunchMenuDemand;
-        new Thread(new UnsubscribeMenuPreferencesRunnable()).start();
+    public void unsubscribeMenuPreferences(String email) {
+        lunchMenuDemandStorageService.deleteLunchMenuDemand(email);
     }
 
     @Override
@@ -43,14 +42,6 @@ public class LunchMenuDemandServiceImpl implements LunchMenuDemandService{
         @Override
         public void run() {
             lunchMenuDemandStorageService.saveLunchDemandAndTriggerAllSending(lunchMenuDemand);
-        }
-    }
-
-    private class UnsubscribeMenuPreferencesRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            lunchMenuDemandStorageService.deleteLunchMenuDemand(lunchMenuDemand);
         }
     }
 

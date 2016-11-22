@@ -43,7 +43,7 @@ public class LunchDemandStorageServiceImpl implements LunchMenuDemandStorageServ
 	}
 
 	@Override
-	public void deleteLunchMenuDemand(LunchMenuDemand lunchMenuDemand) {
+	public void deleteLunchMenuDemand(String email) {
 
 	}
 
