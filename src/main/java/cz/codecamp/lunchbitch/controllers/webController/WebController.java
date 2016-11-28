@@ -1,11 +1,6 @@
 package cz.codecamp.lunchbitch.controllers.webController;
 
-import cz.codecamp.lunchbitch.models.Location;
-import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
-import cz.codecamp.lunchbitch.services.geocodingService.GeocodingService;
-import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
-import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearchService;
 import cz.codecamp.lunchbitch.services.webService.WebService;
 import cz.codecamp.lunchbitch.webPageMappers.EmailForm;
 import cz.codecamp.lunchbitch.webPageMappers.ResultsWebPage;
@@ -22,34 +17,40 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Controller
 public class WebController {
 
+    private final String SEARCH_FORM_ATTRIBUTE = "searchForm";
+    private final String RESULTS_WEB_PAGE_ATTRIBUTE = "resultsWebPage";
+    private final String SETUP_WEB_PAGE_ATTRIBUTE = "setupWebPage";
+    private final String EMAIL_FORM_ATTRIBUTE = "emailForm";
+
+    private final String ERROR_NO_RESTAURANT_MSG = "Musí být vybraná restaurace";
+
+    private final Logger logger;
+
     private final WebService webService;
-    private final RestaurantSearchService restaurantSearchService;
-    private final LunchMenuDemandService lunchMenuDemandService;
-    private final GeocodingService geocodingService;
     private final SearchForm searchForm;
 
     @Autowired
-    public WebController(WebService webService, RestaurantSearchService restaurantSearchService,
-                         LunchMenuDemandService lunchMenuDemandService, GeocodingService geocodingService) {
+    public WebController(Logger logger, WebService webService) {
+        this.logger = logger;
         this.webService = webService;
-        this.restaurantSearchService = restaurantSearchService;
-        this.lunchMenuDemandService = lunchMenuDemandService;
-        this.geocodingService = geocodingService;
         searchForm = new SearchForm();
         searchForm.setType("keyword");
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView getIndex() {
+    public ModelAndView getIndex(Model model) {
+        if (!webService.isEmptySelectedRestaurantsList()) {
+            model.addAttribute("selected", true);
+        }
         return new ModelAndView("index");
     }
 
@@ -64,8 +65,11 @@ public class WebController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ModelAndView startSearching(Model model) {
-        if (!model.containsAttribute("searchForm")) {
-            model.addAttribute("searchForm", searchForm);
+        if (!model.containsAttribute(SEARCH_FORM_ATTRIBUTE)) {
+            model.addAttribute(SEARCH_FORM_ATTRIBUTE, searchForm);
+        }
+        if (!webService.isEmptySelectedRestaurantsList()) {
+            model.addAttribute("selected", true);
         }
         return new ModelAndView("search");
     }
@@ -73,39 +77,31 @@ public class WebController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String searchKeyword(@Valid SearchForm searchForm, BindingResult bindingResult, RedirectAttributes attr) {
 
+        if ("adresa, město".equals(searchForm.getKeyword())) {
+            bindingResult.rejectValue("keyword", "messageCode", "Musíte zadat adresu");
+        }
+
+        if ("klíčové slovo".equals(searchForm.getKeyword())) {
+            bindingResult.rejectValue("keyword", "messageCode", "Musíte zadat klíčové slovo");
+        }
+
         String calledFrom = searchForm.getCalledFrom();
         if (calledFrom == null) {
             calledFrom = "search";
         }
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
-
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.searchForm", bindingResult);
-            attr.addFlashAttribute("searchForm", searchForm);
-
+            logger.warning(bindingResult.getAllErrors().toString());
+            attr.addFlashAttribute(getAttributeName(SEARCH_FORM_ATTRIBUTE), bindingResult);
+            attr.addFlashAttribute(SEARCH_FORM_ATTRIBUTE, searchForm);
             return "redirect:/" + calledFrom;
         }
 
-        String formTextInput = searchForm.getKeyword();
-        String type = searchForm.getType();
-
-        if (formTextInput != null && !formTextInput.trim().isEmpty()) {
-
-            try {
-                if ("keyword".equals(type)) {
-                    webService.saveSearchResult(restaurantSearchService.searchForRestaurants(formTextInput));
-                } else if ("address".equals(type)) {
-                    Location location = geocodingService.getCoordinates(formTextInput);
-                    webService.saveSearchResult(restaurantSearchService.searchForRestaurants(location));
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (webService.saveSearchResult(searchForm)) {
             return "redirect:/results";
         }
         return "redirect:/search";
+
     }
 
     @ModelAttribute(value = "foundRestaurants")
@@ -117,26 +113,29 @@ public class WebController {
     public ModelAndView getResults(Model model) {
         Map<String, Object> mapModel = new HashMap<>();
         mapModel.put("foundRestaurant", new Restaurant());
-        if (!model.containsAttribute("resultsWebPage")) {
-            model.addAttribute("resultsWebPage", new ResultsWebPage());
+        if (!webService.isEmptySelectedRestaurantsList()) {
+            model.addAttribute("selected", true);
         }
-        if (!model.containsAttribute("searchForm")) {
-            model.addAttribute("searchForm", searchForm);
+        if (!model.containsAttribute(RESULTS_WEB_PAGE_ATTRIBUTE)) {
+            model.addAttribute(RESULTS_WEB_PAGE_ATTRIBUTE, new ResultsWebPage());
+        }
+        if (!model.containsAttribute(SEARCH_FORM_ATTRIBUTE)) {
+            model.addAttribute(SEARCH_FORM_ATTRIBUTE, searchForm);
         }
         return new ModelAndView("results", mapModel);
     }
 
     @RequestMapping(value = "/results", method = RequestMethod.POST)
-    public String selectRestaurants(@ModelAttribute("resultsWebPage") ResultsWebPage resultsWebPage, BindingResult bindingResult, RedirectAttributes attr) {
+    public String selectFromFoundRestaurants(@ModelAttribute(RESULTS_WEB_PAGE_ATTRIBUTE) ResultsWebPage resultsWebPage, BindingResult bindingResult, RedirectAttributes attr) {
 
         if (resultsWebPage.getRestaurantIDs().isEmpty()) {
-            bindingResult.rejectValue("restaurantIDs", "messageCode", "Musí být vybraná restaurace");
+            bindingResult.rejectValue("restaurantIDs", "messageCode", ERROR_NO_RESTAURANT_MSG);
         }
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.resultsWebPage", bindingResult);
-            attr.addFlashAttribute("resultsWebPage", resultsWebPage);
+            logger.warning(bindingResult.getAllErrors().toString());
+            attr.addFlashAttribute(getAttributeName(RESULTS_WEB_PAGE_ATTRIBUTE), bindingResult);
+            attr.addFlashAttribute(RESULTS_WEB_PAGE_ATTRIBUTE, resultsWebPage);
             return "redirect:/results#results";
         }
 
@@ -153,20 +152,20 @@ public class WebController {
     public ModelAndView showSelectedRestaurants(Model model) {
         Map<String, Object> mapModel = new HashMap<>();
         mapModel.put("selectedRestaurant", new Restaurant());
-        model.addAttribute("setupWebPage", new SetupWebPage(webService.getSelectedRestaurants()));
-        if (!model.containsAttribute("emailForm")) {
-            model.addAttribute("emailForm", new EmailForm());
+        model.addAttribute(SETUP_WEB_PAGE_ATTRIBUTE, new SetupWebPage(webService.getSelectedRestaurants()));
+        if (!model.containsAttribute(EMAIL_FORM_ATTRIBUTE)) {
+            model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm());
         }
-        if (!model.containsAttribute("searchForm")) {
-            model.addAttribute("searchForm", searchForm);
+        if (!model.containsAttribute(SEARCH_FORM_ATTRIBUTE)) {
+            model.addAttribute(SEARCH_FORM_ATTRIBUTE, searchForm);
         }
         return new ModelAndView("setup", mapModel);
     }
 
     @RequestMapping(value = "/setup", method = RequestMethod.POST)
-    public String selectRestaurants(@ModelAttribute("setupWebPage") SetupWebPage setupWebPage, BindingResult bindingResult) {
+    public String updateSelectedRestaurants(@ModelAttribute(SETUP_WEB_PAGE_ATTRIBUTE) SetupWebPage setupWebPage, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
+            logger.warning(bindingResult.getAllErrors().toString());
             return "setup";
         }
         webService.updateSelectedRestaurantIDs(setupWebPage.getRestaurantIDs());
@@ -184,26 +183,26 @@ public class WebController {
     public String sendAway(@Valid EmailForm emailForm, BindingResult bindingResult, RedirectAttributes attr) {
 
         if (webService.isEmptySelectedRestaurantsList()) {
-            bindingResult.rejectValue("email", "messageCode", "Musí být vybraná restaurace");
+            bindingResult.rejectValue("email", "messageCode", ERROR_NO_RESTAURANT_MSG);
         }
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.emailForm", bindingResult);
-            attr.addFlashAttribute("emailForm", emailForm);
+            logger.warning(bindingResult.getAllErrors().toString());
+            attr.addFlashAttribute(getAttributeName(EMAIL_FORM_ATTRIBUTE), bindingResult);
+            attr.addFlashAttribute(EMAIL_FORM_ATTRIBUTE, emailForm);
             return "redirect:/setup#send";
         }
 
         webService.setLunchMenuDemandEmail(emailForm.getEmail());
-        lunchMenuDemandService.saveLunchMenuPreferences(webService.getLunchMenuDemandPreferences());
+        webService.saveLunchMenuPreferences();
 
         return "redirect:/success";
     }
 
     @RequestMapping(value = "/unsubscribe", method = RequestMethod.GET)
     public ModelAndView showUnsubscribe(Model model) {
-        if (!model.containsAttribute("emailForm")) {
-            model.addAttribute("emailForm", new EmailForm());
+        if (!model.containsAttribute(EMAIL_FORM_ATTRIBUTE)) {
+            model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm());
         }
         return new ModelAndView("unsubscribe");
     }
@@ -212,14 +211,17 @@ public class WebController {
     public String unsubscribeEmail(@Valid EmailForm emailForm, BindingResult bindingResult, RedirectAttributes attr) {
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
+            logger.warning(bindingResult.getAllErrors().toString());
             return "unsubscribe";
         }
-        lunchMenuDemandService.unsubscribeMenuPreferences(emailForm.getEmail());
-        attr.addFlashAttribute("org.springframework.validation.BindingResult.emailForm", bindingResult);
-        attr.addFlashAttribute("emailForm", emailForm);
-
+        webService.unsubscribeMenuPreferences(emailForm.getEmail());
+        attr.addFlashAttribute(getAttributeName(EMAIL_FORM_ATTRIBUTE), bindingResult);
+        attr.addFlashAttribute(EMAIL_FORM_ATTRIBUTE, emailForm);
         return "redirect:/unsubscribe?success=true";
+    }
+
+    private String getAttributeName(String attributeName) {
+        return "org.springframework.validation.BindingResult." + attributeName;
     }
 
 }

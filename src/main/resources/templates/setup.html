@@ -18,7 +18,7 @@
     <main id="content">
             <h1>Vybrané restaurace</h1>
 
-            <h2>Hledejte další restaurace</h2>
+            <a class="showForm" href="#searchForm">Hledat další restaurace &#9660;</a>
             <div th:replace="searchForm :: search-form('setup')"></div>
 
             <h2>Upravujte seznam restaurací</h2>
@@ -49,9 +49,9 @@
             <form action="" th:action="@{/success}" th:object="${emailForm}" method="post">
                 <p>
                     <input class="inputText" type="text"  th:field="*{email}" onblur="onBlur(this)" onfocus="onFocus(this)" />
-                    <p><span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span></p>
+                    <input class="sendEmailBtn"  type="submit" value="Odeslat"/>
+                    <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span>
                 </p>
-                <p><input class="sendEmailBtn"  type="submit" value="Odeslat"/></p>
             </form>
     </main>
     <div th:replace="layout/footer"></div>

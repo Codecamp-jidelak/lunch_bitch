@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="posli_jidelak_howto.svg">
+   sodipodi:docname="howto.svg">
   <defs
      id="defs4">
     <marker
@@ -55,15 +55,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="319.06354"
+     inkscape:cx="688.77937"
      inkscape:cy="358.64446"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1882"
-     inkscape:window-height="1062"
-     inkscape:window-x="38"
-     inkscape:window-y="18"
+     inkscape:window-width="1869"
+     inkscape:window-height="1056"
+     inkscape:window-x="51"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      units="px" />
   <metadata
@@ -74,7 +74,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -179,7 +179,7 @@
            y="-108.10634"
            x="-975.07184"
            id="tspan4568"
-           sodipodi:role="line">VYBERE OBLÍBENÉ</tspan></text>
+           sodipodi:role="line">VYBERTE OBLÍBENÉ</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4570"
