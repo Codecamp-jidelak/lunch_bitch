@@ -30,6 +30,7 @@ public class WebController {
     private final String RESULTS_WEB_PAGE_ATTRIBUTE = "resultsWebPage";
     private final String SETUP_WEB_PAGE_ATTRIBUTE = "setupWebPage";
     private final String EMAIL_FORM_ATTRIBUTE = "emailForm";
+
     private final String ERROR_NO_RESTAURANT_MSG = "Musí být vybraná restaurace";
 
     private final Logger logger;
@@ -46,7 +47,10 @@ public class WebController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView getIndex() {
+    public ModelAndView getIndex(Model model) {
+        if (!webService.isEmptySelectedRestaurantsList()) {
+            model.addAttribute("selected", true);
+        }
         return new ModelAndView("index");
     }
 
@@ -64,11 +68,22 @@ public class WebController {
         if (!model.containsAttribute(SEARCH_FORM_ATTRIBUTE)) {
             model.addAttribute(SEARCH_FORM_ATTRIBUTE, searchForm);
         }
+        if (!webService.isEmptySelectedRestaurantsList()) {
+            model.addAttribute("selected", true);
+        }
         return new ModelAndView("search");
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String searchKeyword(@Valid SearchForm searchForm, BindingResult bindingResult, RedirectAttributes attr) {
+
+        if ("adresa, město".equals(searchForm.getKeyword())) {
+            bindingResult.rejectValue("keyword", "messageCode", "Musíte zadat adresu");
+        }
+
+        if ("klíčové slovo".equals(searchForm.getKeyword())) {
+            bindingResult.rejectValue("keyword", "messageCode", "Musíte zadat klíčové slovo");
+        }
 
         String calledFrom = searchForm.getCalledFrom();
         if (calledFrom == null) {
@@ -98,6 +113,9 @@ public class WebController {
     public ModelAndView getResults(Model model) {
         Map<String, Object> mapModel = new HashMap<>();
         mapModel.put("foundRestaurant", new Restaurant());
+        if (!webService.isEmptySelectedRestaurantsList()) {
+            model.addAttribute("selected", true);
+        }
         if (!model.containsAttribute(RESULTS_WEB_PAGE_ATTRIBUTE)) {
             model.addAttribute(RESULTS_WEB_PAGE_ATTRIBUTE, new ResultsWebPage());
         }

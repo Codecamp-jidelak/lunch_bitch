@@ -9,6 +9,7 @@
     <nav>
         <ul>
             <li>Domů</li>
+            <li th:if="${selected == true}" class="skipInNav"><a href="/setup">Zadat email</a></li>
             <li class="rightNav"><a href="/unsubscribe">Odhlásit odběr</a></li>
         </ul>
     </nav>

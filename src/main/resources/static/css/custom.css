@@ -71,10 +71,14 @@ nav li:last-child:before {
     content: "";
 }
 
+.skipInNav::before  {
+    content: "> > >";
+}
+
 #content {
     flex: 1;
     margin: 0 auto;
-    max-width: 60em;
+    max-width: 80em;
     padding: 0.5em;
 }
 
@@ -96,6 +100,16 @@ footer{
 
 #content h1{
     font-size: 3em;
+}
+
+.showForm {
+    color: #4b3832;
+    /*text-decoration: none;*/
+    text-transform: uppercase;
+    font-weight: bold;
+    /*border: thin solid #4b3832;*/
+    /*padding: 1em 2em;*/
+    display: inline-block;
 }
 
 .aLikeBtn{
@@ -132,8 +146,11 @@ footer{
     font-weight: bold;
 }
 
+.inputText, .submitBtn, .submitBtn:hover, .sendEmailBtn {
+    font-size: 1.5em;
+}
+
 .inputText {
-    font-size: 2em;
     border: thin solid #000;
     padding: 0.5em 0.5em;
     color: #65737e;
@@ -144,35 +161,34 @@ footer{
     text-decoration: none;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 1em;
+    padding: 0.5em 2em;
     color: #000;
     border: thin solid #000;
-    padding: 1.2em 3.5em;
-    margin: 2em 0em;
+    margin: 1em;
 }
 
 .submitBtn:hover {
     color: #fff;
-    padding: 1.2em 3.5em;
+    padding: 0.5em 2em;
     background-color: #000;
     -webkit-transition-duration: 0.5s;
 }
+
 
 .sendEmailBtn {
     background: #3399ff;
     text-decoration: none;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 1em;
     color: #fff;
     border: thin solid #000;
-    padding: 1.2em 3.5em;
-    margin: 1em 0em;
+    padding: 0.5em 2em;
+    margin: 1em;
 }
 
 .sendEmailBtn:hover {
     color: #3399ff;
-    padding: 1.2em 3.5em;
+    padding: 0.5em 2em;
     background-color: #fff;
     -webkit-transition-duration: 0.5s;
 }
@@ -183,11 +199,13 @@ footer{
 /*Restaurants results*/
 
 dl {
-    width: 19em;
+    /*min-width: 19em;*/
+    /*max-width: 35em;*/
     border: thin solid #000;
     margin: 0;
     display: inline-block;
     padding: 1.5em 3em;
+    width: 30em;
 }
 
 dt, dd {
@@ -225,6 +243,10 @@ input.hiddenCheckbox {
     margin: 0.5em;
 }
 
+.error {
+    color: red;
+}
+
 .rbOptions {
     margin: 1em;
 }
@@ -232,20 +254,60 @@ input.hiddenCheckbox {
 .rbOptions ul {
     list-style-type: none;
     margin: 0 auto;
-    padding: 0;
     overflow: hidden;
 }
 
 .rbOptions li {
-    font-size: 1.5em;
-    padding-bottom: 0.3em;
+    font-size: 1em;
+    display: inline;
+    padding: 1em;
 }
 
-input[type=radio] {
-    width: 1.5em;
-    height: 1.5em;
+.address {
+    background-image: url("/images/map.svg");
 }
 
-.error {
-    color: red;
+.keyword {
+    background-image: url("/images/search.svg");
 }
+
+.rbPic {
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:5em;
+    height:5em;
+    padding-left: 5.5em;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+    filter: brightness(1.8) grayscale(1) opacity(.7);
+    vertical-align: middle;
+}
+
+.rbPic:hover {
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+    filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+.rbOptions input {
+    appearance:none;
+    -webkit-appearance:none;
+}
+
+.rbOptions input:active +.rbPic{
+    opacity: .9;
+}
+
+.rbOptions input:checked +.rbPic{
+    -webkit-filter: none;
+    filter: none;
+}
+
+.rbCont {
+    display: inline-block;
+}
+
+.js .searchForm {
+    display:none;
+}
+

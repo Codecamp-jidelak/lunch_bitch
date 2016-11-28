@@ -10,14 +10,13 @@
         <ul>
             <li><a href="/">Domů</a></li>
             <li>Hledat</li>
+            <li th:if="${selected == true}" class="skipInNav"><a href="/setup">Zadat email</a></li>
             <li class="rightNav"><a href="/unsubscribe">Odhlásit odběr</a></li>
         </ul>
     </nav>
     <main id="content">
             <h1>Najděte svou oblíbenou restauraci</h1>
-
-            <div th:replace="searchForm :: search-form('search')"></div>
-
+            <div th:include="searchForm :: search-form('search')"></div>
     </main>
     <div th:replace="layout/footer"></div>
 </div>

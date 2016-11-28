@@ -13,6 +13,8 @@ import java.util.Map;
  */
 public class SearchForm {
 
+    private String DEFAULT_SEARCH_FORM_VALUE = "klíčové slovo";
+
     @NotNull
     @NotBlank
     private String keyword;
@@ -41,6 +43,7 @@ public class SearchForm {
         this.typeDescription = new HashMap<>();
         typeDescription.put("keyword", "Vyhledat podle klíčového slova");
         typeDescription.put("address", "Vyhledat podle adresy");
+        this.keyword = DEFAULT_SEARCH_FORM_VALUE;
     }
 
     public Map<String, String> getTypeDescription() {
