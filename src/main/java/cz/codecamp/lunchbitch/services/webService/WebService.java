@@ -1,6 +1,5 @@
 package cz.codecamp.lunchbitch.services.webService;
 
-import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
 import cz.codecamp.lunchbitch.webPageMappers.SearchForm;
 

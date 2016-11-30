@@ -8,6 +8,8 @@ import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandSer
 import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearchService;
 import cz.codecamp.lunchbitch.webPageMappers.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,11 +20,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Scope(value = "session", proxyMode= ScopedProxyMode.TARGET_CLASS)
 public class WebServiceImpl implements WebService {
 
     private LunchMenuDemand searchResults;
     private LunchMenuDemand selectedRestaurants;
-	private Set<Restaurant> expectedRestaurants;
+    private Set<Restaurant> expectedRestaurants;
+    private String userHash;
 
     private RestaurantSearchService restaurantSearchService;
     private GeocodingService geocodingService;
@@ -44,10 +48,10 @@ public class WebServiceImpl implements WebService {
         return searchResults.getRestaurants();
     }
 
-	@Override
-	public List<Restaurant> getSelectedRestaurants() {
-		return new ArrayList<>(expectedRestaurants);
-	}
+    @Override
+    public List<Restaurant> getSelectedRestaurants() {
+        return new ArrayList<>(expectedRestaurants);
+    }
 
     @Override
     public boolean saveSearchResult(SearchForm searchForm) {
@@ -60,8 +64,7 @@ public class WebServiceImpl implements WebService {
                 if ("keyword".equals(type)) {
                     searchResults = restaurantSearchService.searchForRestaurants(formTextInput);
                 } else if ("address".equals(type)) {
-                    Location location = null;
-                    location = geocodingService.getCoordinates(formTextInput);
+                    Location location = geocodingService.getCoordinates(formTextInput);
                     searchResults = restaurantSearchService.searchForRestaurants(location);
                 }
             } catch (IOException e) {
@@ -73,38 +76,38 @@ public class WebServiceImpl implements WebService {
     }
 
     private Set<Restaurant> matchRestaurantsByIDs(List<String> selectedRestaurantIDs, List<Restaurant> sourceRestaurants) {
-		Set<Restaurant> matchedRestaurants = new HashSet<>();
-		for(String id : selectedRestaurantIDs) {
-			matchedRestaurants.addAll(sourceRestaurants.stream().filter(restaurant -> restaurant.getId().equals(id)).collect(Collectors.toList()));
-		}
-		return matchedRestaurants;
-	}
+        Set<Restaurant> matchedRestaurants = new HashSet<>();
+        for(String id : selectedRestaurantIDs) {
+            matchedRestaurants.addAll(sourceRestaurants.stream().filter(restaurant -> restaurant.getId().equals(id)).collect(Collectors.toList()));
+        }
+        return matchedRestaurants;
+    }
 
-	@Override
-	public void addSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
-		Set<Restaurant> newRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, searchResults.getRestaurants());
-		expectedRestaurants.addAll(newRestaurants);
-	}
+    @Override
+    public void addSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
+        Set<Restaurant> newRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, searchResults.getRestaurants());
+        expectedRestaurants.addAll(newRestaurants);
+    }
 
-	@Override
-	public void updateSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
-		expectedRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, new ArrayList<>(expectedRestaurants));
-	}
+    @Override
+    public void updateSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
+        expectedRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, new ArrayList<>(expectedRestaurants));
+    }
 
-	@Override
-	public void setLunchMenuDemandEmail(String email) {
-		selectedRestaurants.setEmail(email);
-	}
+    @Override
+    public void setLunchMenuDemandEmail(String email) {
+        selectedRestaurants.setEmail(email);
+    }
 
-	@Override
-	public String getEmail() {
-		return selectedRestaurants.getEmail();
-	}
+    @Override
+    public String getEmail() {
+        return selectedRestaurants.getEmail();
+    }
 
-	@Override
-	public boolean isEmptySelectedRestaurantsList() {
-		return expectedRestaurants.isEmpty();
-	}
+    @Override
+    public boolean isEmptySelectedRestaurantsList() {
+        return expectedRestaurants.isEmpty();
+    }
 
     @Override
     public void saveLunchMenuPreferences() {
@@ -117,8 +120,4 @@ public class WebServiceImpl implements WebService {
     public void unsubscribeMenuPreferences(String email) {
         lunchMenuDemandService.unsubscribeMenuPreferences(email);
     }
-
-    public void setSelectedRestaurants(LunchMenuDemand selectedRestaurants) {
-		this.selectedRestaurants = selectedRestaurants;
-	}
 }

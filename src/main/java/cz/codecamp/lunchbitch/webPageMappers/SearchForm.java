@@ -1,10 +1,10 @@
 package cz.codecamp.lunchbitch.webPageMappers;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +13,8 @@ import java.util.Map;
  */
 public class SearchForm {
 
-    private String DEFAULT_SEARCH_FORM_VALUE = "klíčové slovo";
+    private String OPTIONS_DESCRIPTION_KEYWORD = "Vyhledat podle klíčového slova";
+    private String OPTIONS_DESCRIPTION_ADDRESS = "Vyhledat podle adresy";
 
     @NotNull
     @NotBlank
@@ -41,9 +42,8 @@ public class SearchForm {
 
     public SearchForm() {
         this.typeDescription = new HashMap<>();
-        typeDescription.put("keyword", "Vyhledat podle klíčového slova");
-        typeDescription.put("address", "Vyhledat podle adresy");
-        this.keyword = DEFAULT_SEARCH_FORM_VALUE;
+        typeDescription.put("keyword", OPTIONS_DESCRIPTION_KEYWORD);
+        typeDescription.put("address", OPTIONS_DESCRIPTION_ADDRESS);
     }
 
     public Map<String, String> getTypeDescription() {

@@ -9,8 +9,6 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class EmailForm {
 
-    String DEFAULT_EMAIL_VALUE = "Zadejte e-mail";
-
     @Email
     @NotEmpty
     private String email;
@@ -24,6 +22,9 @@ public class EmailForm {
     }
 
     public EmailForm() {
-        this.email = DEFAULT_EMAIL_VALUE;
+    }
+
+    public EmailForm(String email) {
+        this.email = email;
     }
 }
