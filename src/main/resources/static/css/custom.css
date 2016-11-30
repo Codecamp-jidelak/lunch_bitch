@@ -292,6 +292,8 @@ input.hiddenCheckbox {
 .rbOptions input {
     appearance:none;
     -webkit-appearance:none;
+    -moz-appearance:none;
+    opacity: 0;
 }
 
 .rbOptions input:active +.rbPic{
@@ -307,7 +309,7 @@ input.hiddenCheckbox {
     display: inline-block;
 }
 
-.js .searchForm {
+#searchForm {
     display:none;
 }
 

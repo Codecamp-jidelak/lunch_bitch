@@ -7,6 +7,8 @@ import cz.codecamp.lunchbitch.webPageMappers.ResultsWebPage;
 import cz.codecamp.lunchbitch.webPageMappers.SearchForm;
 import cz.codecamp.lunchbitch.webPageMappers.SetupWebPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
+@PropertySource(value = "/message.properties", encoding="UTF-8")
 public class WebController {
 
     private final String SEARCH_FORM_ATTRIBUTE = "searchForm";
@@ -31,7 +34,8 @@ public class WebController {
     private final String SETUP_WEB_PAGE_ATTRIBUTE = "setupWebPage";
     private final String EMAIL_FORM_ATTRIBUTE = "emailForm";
 
-    private final String ERROR_NO_RESTAURANT_MSG = "Musí být vybraná restaurace";
+    @Value("${error.no.restaurant}")
+    private String ERROR_NO_RESTAURANT_MSG;
 
     private final Logger logger;
 
@@ -76,15 +80,6 @@ public class WebController {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String searchKeyword(@Valid SearchForm searchForm, BindingResult bindingResult, RedirectAttributes attr) {
-
-        if ("adresa, město".equals(searchForm.getKeyword())) {
-            bindingResult.rejectValue("keyword", "messageCode", "Musíte zadat adresu");
-        }
-
-        if ("klíčové slovo".equals(searchForm.getKeyword())) {
-            bindingResult.rejectValue("keyword", "messageCode", "Musíte zadat klíčové slovo");
-        }
-
         String calledFrom = searchForm.getCalledFrom();
         if (calledFrom == null) {
             calledFrom = "search";
@@ -101,7 +96,6 @@ public class WebController {
             return "redirect:/results";
         }
         return "redirect:/search";
-
     }
 
     @ModelAttribute(value = "foundRestaurants")
@@ -195,7 +189,7 @@ public class WebController {
 
         webService.setLunchMenuDemandEmail(emailForm.getEmail());
         webService.saveLunchMenuPreferences();
-
+        logger.info("Created new LunchMenuPreferences for e-mail: " + emailForm.getEmail());
         return "redirect:/success";
     }
 
@@ -217,6 +211,7 @@ public class WebController {
         webService.unsubscribeMenuPreferences(emailForm.getEmail());
         attr.addFlashAttribute(getAttributeName(EMAIL_FORM_ATTRIBUTE), bindingResult);
         attr.addFlashAttribute(EMAIL_FORM_ATTRIBUTE, emailForm);
+        logger.info("Unsubscribed e-mail: " + emailForm.getEmail());
         return "redirect:/unsubscribe?success=true";
     }
 

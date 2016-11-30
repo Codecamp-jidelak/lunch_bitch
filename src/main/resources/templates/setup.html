@@ -23,6 +23,8 @@
 
             <h2>Upravujte seznam restaurací</h2>
 
+            <p>Upravte svůj výběr, pokud vám některá restaurace nevyhovuje, můžete ji snadno vyřadit z výběru.
+                Stačí zrušit označení u požadované restaurace a pak aktualizovat seznam.</p>
             <form action="#" th:action="@{/setup}" th:object="${setupWebPage}" method="post">
                 <div class="restaurantList">
                     <th:block th:each="restaurant : ${selectedRestaurants}">
@@ -47,11 +49,9 @@
             <h2 id="send">Kam máme posílát jídeláky?</h2>
 
             <form action="" th:action="@{/success}" th:object="${emailForm}" method="post">
-                <p>
-                    <input class="inputText" type="text"  th:field="*{email}" onblur="onBlur(this)" onfocus="onFocus(this)" />
-                    <input class="sendEmailBtn"  type="submit" value="Odeslat"/>
-                    <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span>
-                </p>
+                <input class="inputText" type="text"  th:field="*{email}" placeholder="Zadejte e-mail" />
+                <input class="sendEmailBtn"  type="submit" value="Odeslat"/>
+                <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span>
             </form>
     </main>
     <div th:replace="layout/footer"></div>

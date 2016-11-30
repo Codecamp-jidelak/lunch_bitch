@@ -5,20 +5,19 @@
 </head>
 <body>
     <div class="flex-container">
-        <div id="searchForm" class="searchForm" th:fragment="search-form(calledFrom)">
+        <div id="searchForm" th:fragment="search-form(calledFrom)">
             <form action="#" th:action="@{/search}" th:object="${searchForm}" method="post">
                 <div class="rbOptions">
                     <ul>
-                        <li th:each="rb : ${rbOptions}">
-                            <div class="rbCont">
-                                <input type="radio" th:field="*{type}" th:value="${rb}" />
-                                <label th:for="${#ids.prev('type')}" th:text="${searchForm.typeDescription.get(rb)}" class="rbPic" th:attrappend="class=' ' + ${rb}" >Wireframe</label>
-                            </div>
+                        <li class="rbCont" th:each="rb : ${rbOptions}">
+                            <input type="radio" th:field="*{type}" th:value="${rb}" />
+                            <label th:for="${#ids.prev('type')}" th:text="${searchForm.typeDescription.get(rb)}" class="rbPic" th:attrappend="class=' ' + ${rb}" >Wireframe</label>
                         </li>
                     </ul>
                 </div>
                 <input type="hidden" th:value="${calledFrom}"  th:attr="name='calledFrom'"/>
-                <input class="inputText" type="text" th:field="*{keyword}" onblur="onBlurSearch(this)" onfocus="onFocusSearch(this)"/>
+                <!--<input class="inputText" type="text" th:field="*{keyword}" onblur="onBlurSearch(this)" onfocus="onFocusSearch(this)"/>-->
+                <input class="inputText" type="text" th:field="*{keyword}" th:placeholder="#{searchForm.input.keyword}"/>
                 <input class="submitBtn" type="submit" value="Hledat"/>
                 <span class="error" th:if="${#fields.hasErrors('keyword')}" th:errors="*{keyword}">Keyword error</span>
 
