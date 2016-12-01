@@ -10,8 +10,12 @@ public interface AuthorizationService {
 
     AuthToken requestChangeAccess(Email email);
 
+    AuthToken requestUnsubscribeAccess(Email email);
+
     LunchMenuDemand authorizeRegistration(AuthToken registationToken);
 
     Email authorizeChange(AuthToken changeToken);
+
+    Email authorizeUnsubscription(AuthToken unsubscribeToken);
 
 }

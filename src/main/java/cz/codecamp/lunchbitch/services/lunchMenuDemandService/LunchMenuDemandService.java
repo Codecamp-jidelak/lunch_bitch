@@ -1,7 +1,6 @@
 package cz.codecamp.lunchbitch.services.lunchMenuDemandService;
 
 
-import cz.codecamp.lunchbitch.models.AuthToken;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 
 

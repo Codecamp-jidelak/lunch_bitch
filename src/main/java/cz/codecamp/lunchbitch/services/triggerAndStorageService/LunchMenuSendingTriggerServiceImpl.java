@@ -27,7 +27,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 @Service
-public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSendingTrigger {
+public class LunchMenuSendingTriggerServiceImpl implements LunchMenuSendingTrigger {
 
     @Autowired
     private Logger LOGGER;

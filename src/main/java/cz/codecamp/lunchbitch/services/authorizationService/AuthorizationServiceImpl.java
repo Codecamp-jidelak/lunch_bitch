@@ -21,7 +21,7 @@ import static cz.codecamp.lunchbitch.models.UserAction.CHANGE;
 import static cz.codecamp.lunchbitch.models.UserAction.REGISTRATION;
 
 @Service
-public class AuthorizationServiceServiceImpl implements AuthorizationService {
+public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Autowired
     private UserActionRequestRepository userActionRequestRepository;
@@ -42,6 +42,11 @@ public class AuthorizationServiceServiceImpl implements AuthorizationService {
     }
 
     @Override
+    public AuthToken requestUnsubscribeAccess(Email email) {
+        return null;
+    }
+
+    @Override
     public LunchMenuDemand authorizeRegistration(AuthToken registrationToken) {
         Email authorizedEmail = verifyToken(registrationToken);
         return getTemporaryRegistration(authorizedEmail);
@@ -50,6 +55,11 @@ public class AuthorizationServiceServiceImpl implements AuthorizationService {
     @Override
     public Email authorizeChange(AuthToken changeToken) {
         return verifyToken(changeToken);
+    }
+
+    @Override
+    public Email authorizeUnsubscription(AuthToken unsubscribeToken) {
+        return null;
     }
 
     private void storeUnconfirmedRegistration(LunchMenuDemand lunchMenuDemand) {
