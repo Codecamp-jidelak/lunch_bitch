@@ -1,6 +1,7 @@
 package cz.codecamp.lunchbitch.services.lunchMenuDemandService;
 
 
+import cz.codecamp.lunchbitch.models.AuthToken;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 
 
@@ -23,5 +24,4 @@ public interface LunchMenuDemandService {
      * @param email of subscriber
      */
     void getLunchMenuPreferences(String email);
-
 }

@@ -31,7 +31,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
 
-    public void sendEmailsToSubscribers(List<LunchMenuDemand> lunchMenuDemandList) throws MessagingException {
+    public void sendDailyLunchMenusToSubscribers(List<LunchMenuDemand> lunchMenuDemandList) throws MessagingException {
         for(LunchMenuDemand lunchMenu : lunchMenuDemandList){
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(lunchMenu.getEmail()));

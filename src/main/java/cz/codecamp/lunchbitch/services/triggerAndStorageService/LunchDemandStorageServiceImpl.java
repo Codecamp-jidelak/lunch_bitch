@@ -1,5 +1,6 @@
 package cz.codecamp.lunchbitch.services.triggerAndStorageService;
 
+import cz.codecamp.lunchbitch.converters.RestaurantConverters;
 import cz.codecamp.lunchbitch.entities.RestaurantInfoEntity;
 import cz.codecamp.lunchbitch.entities.UsersRestaurantSelectionEntity;
 import cz.codecamp.lunchbitch.models.Location;
@@ -36,11 +37,11 @@ public class LunchDemandStorageServiceImpl implements LunchMenuDemandStorageServ
         return null;
     }
 
-	@Override
+    @Override
     @Transactional
-	public void deleteLunchMenuDemand(String email) {
+    public void deleteLunchMenuDemand(String email) {
         restaurantSelectionRepository.deleteByEmail(email);
-	}
+    }
 
     @Override
     @Transactional
@@ -54,29 +55,13 @@ public class LunchDemandStorageServiceImpl implements LunchMenuDemandStorageServ
         List<RestaurantInfoEntity> newRestaurantInfoEntities = restaurants
                 .stream()
                 .filter(this::restaurantNotPresentInDatabaseYet)
-                .map(this::convertToRestaurantInfoEntity)
+                .map(RestaurantConverters::convertToRestaurantInfoEntity)
                 .collect(toList());
         restaurantInfoRepository.save(newRestaurantInfoEntities);
     }
 
     private boolean restaurantNotPresentInDatabaseYet(Restaurant restaurant) {
         return !restaurantInfoRepository.exists(restaurant.getId());
-    }
-
-    private RestaurantInfoEntity convertToRestaurantInfoEntity(Restaurant restaurant) {
-        Location restaurantsLocation = restaurant.getLocation();
-
-        RestaurantInfoEntity restaurantInfoEntity = new RestaurantInfoEntity();
-        restaurantInfoEntity.setZomatoId(restaurant.getId());
-        restaurantInfoEntity.setName(restaurant.getName());
-        restaurantInfoEntity.setAddress(restaurantsLocation.getAddress());
-        restaurantInfoEntity.setLocality(restaurantsLocation.getLocality());
-        restaurantInfoEntity.setCity(restaurantsLocation.getCity());
-        restaurantInfoEntity.setLatitude(restaurantsLocation.getLatitude());
-        restaurantInfoEntity.setLongitude(restaurantsLocation.getLongitude());
-        restaurantInfoEntity.setZipcode(restaurantsLocation.getZipcode());
-        restaurantInfoEntity.setCountryId(restaurantsLocation.getCountryId());
-        return restaurantInfoEntity;
     }
 
     private void storeUsersRestaurantSelections(String email, List<Restaurant> restaurants) {

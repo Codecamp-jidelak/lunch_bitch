@@ -1,5 +1,6 @@
 package cz.codecamp.lunchbitch.services.triggerAndStorageService;
 
+import cz.codecamp.lunchbitch.converters.RestaurantConverters;
 import cz.codecamp.lunchbitch.entities.RestaurantInfoEntity;
 import cz.codecamp.lunchbitch.entities.UsersRestaurantSelectionEntity;
 import cz.codecamp.lunchbitch.models.Location;
@@ -84,7 +85,7 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
     }
 
     private List<Restaurant> convertToRestaurantDtos(List<RestaurantInfoEntity> restaurantInfoEntities) {
-        return restaurantInfoEntities.stream().map(this::convertToRestaurantDto).collect(toList());
+        return restaurantInfoEntities.stream().map(RestaurantConverters::convertToRestaurantDto).collect(toList());
     }
 
     private List<LunchMenuDemand> convertToLunchMenuDemands(List<UsersRestaurantSelectionEntity> restaurantSelections, List<Restaurant> restaurantDtos) {
@@ -104,24 +105,6 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
             demands.add(lunchMenuDemand);
         }
         return demands;
-    }
-
-    private Restaurant convertToRestaurantDto(RestaurantInfoEntity restaurantInfoEntity) {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setId(restaurantInfoEntity.getZomatoId());
-        restaurant.setName(restaurantInfoEntity.getName());
-
-        Location location = new Location();
-        location.setAddress(restaurantInfoEntity.getAddress());
-        location.setLocality(restaurantInfoEntity.getLocality());
-        location.setCity(restaurantInfoEntity.getCity());
-        location.setLatitude(restaurantInfoEntity.getLatitude());
-        location.setLongitude(restaurantInfoEntity.getLongitude());
-        location.setZipcode(restaurantInfoEntity.getZipcode());
-        location.setCountryId(restaurantInfoEntity.getCountryId());
-
-        restaurant.setLocation(location);
-        return restaurant;
     }
 
     private <T> List<T> iterableToList(Iterable<T> iterable) {
