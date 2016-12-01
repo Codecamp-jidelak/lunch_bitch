@@ -34,7 +34,7 @@ public class MergerServiceImpl implements MergerService {
             }
 
         }
-        emailService.sendEmailsToSubscribers(demands);
+        emailService.sendDailyLunchMenusToSubscribers(demands);
         return demands;
     }
 }

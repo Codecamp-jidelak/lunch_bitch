@@ -1,5 +1,7 @@
 package cz.codecamp.lunchbitch.services.emailService;
 
+import cz.codecamp.lunchbitch.models.AuthToken;
+import cz.codecamp.lunchbitch.models.Email;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +33,19 @@ public class EmailServiceImpl implements EmailService {
     }
 
 
-    public void sendEmailsToSubscribers(List<LunchMenuDemand> lunchMenuDemandList) throws MessagingException {
-        for(LunchMenuDemand lunchMenu : lunchMenuDemandList){
+    @Override
+    public void sendDailyLunchMenusToSubscribers(List<LunchMenuDemand> lunchMenuDemandList) throws MessagingException {
+        for (LunchMenuDemand lunchMenu : lunchMenuDemandList) {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(lunchMenu.getEmail()));
             message.setContent(buildLunchMenuList(lunchMenu.getRestaurants()), "text/html; charset=utf-8");
             Transport.send(message);
         }
+    }
+
+    @Override
+    public void sendUserActionRequestEmail(AuthToken token, Email usersEmail) {
+
     }
 
     private String buildLunchMenuList(List<Restaurant> restaurants) throws MessagingException {
@@ -46,5 +54,6 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("restaurants", restaurants);
         return templateEngine.process("html/email-template", context);
     }
+
 
 }
