@@ -21,7 +21,7 @@ public class EmailController {
 
     @RequestMapping(method = RequestMethod.GET)
     public void sendUserActionEmail() throws MessagingException {
-        emailService.sendUserActionRequestEmail(new AuthToken("dfadfs565adf8as", UserAction.UPDATE), new Email("hornych.h@gmail.com"));
+        emailService.sendUserActionRequestEmail(new AuthToken("dfadfs565adf8as", UserAction.UNSUBSCRIPTION), new Email("hornych.h@gmail.com"));
     }
 
 }

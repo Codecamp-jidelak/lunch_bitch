@@ -72,25 +72,21 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("email", usersEmail.getEmailAdress());
 
         String link = "";
-        String action = "";
 
         switch (token.getAction()){
             case REGISTRATION:
-                action = UserAction.REGISTRATION.getAction();
                 link = "/activate/" + token.getAuthKey();
                 break;
             case UPDATE:
-                action = UserAction.UPDATE.getAction();
                 link = "/settings/" + token.getAuthKey();
                 break;
             case UNSUBSCRIPTION:
-                action = UserAction.UNSUBSCRIPTION.getAction();
                 link = "/unsubscribe/" + token.getAuthKey();
                 break;
         }
         context.setVariable("activationLink", link);
         context.setVariable("applicationLink", applicationLink);
-        context.setVariable("action", action);
+        context.setVariable("action", token.getAction());
         context.setVariable("date", LocalDate.now().format(timeFormatter));
         return templateEngine.process("html/user-action-template", context);
     }

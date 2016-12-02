@@ -8,15 +8,21 @@
 <table border="2" cellpadding="2" cellspacing="0" align="center" style="max-width: 60em;">
     <tr>
         <td align="center" bgcolor="#696969" style="padding: 0px 10px 0px 10px;">
-            <h2 th:text="${action}" style="color:white;">Aktivace účtu</h2>
+            <h2 th:text="${action.getAction()}" style="color:white;">Aktivace účtu</h2>
         </td>
     </tr>
     <tr>
         <td align="center">
-            <p style="padding: 0px 10px 10px 10px;" th:text="'Pro aktivaci účtu ' + ${email} + ' klikněte prosím na následující odkaz:'">
-                Pro aktivaci účtu klikněte prosím na následující odkaz:
+            <p th:if="${action.equals(action.REGISTRATION)}" style="padding: 0px 10px 10px 10px;" th:text="'Pro aktivaci účtu ' + ${email} + ' klikněte prosím na následující odkaz:'">
+                Pro aktivaci účtu email@email.cz klikněte prosím na následující odkaz:
             </p>
-            <a style="padding: 0px 10px 10px 10px;" th:href="${applicationLink} + ${activationLink}" th:text="${action}">Aktivace účtu</a>
+            <p th:if="${action.equals(action.UPDATE)}" style="padding: 0px 10px 10px 10px;" th:text="'Pro změnu na účtě ' + ${email} + ' klikněte prosím na následující odkaz:'">
+                Pro změmu na účtě email@email.cz klikněte prosím na následující odkaz:
+            </p>
+            <p th:if="${action.equals(action.UNSUBSCRIPTION)}" style="padding: 0px 10px 10px 10px;" th:text="'Pro odhlášení odběru pro účet ' + ${email} + ' klikněte prosím na následující odkaz:'">
+                Pro odhlášení odběru pro účet email@email.cz klikněte prosím na následující odkaz:
+            </p>
+            <a style="padding: 0px 10px 10px 10px;" th:href="${applicationLink} + ${activationLink}" th:text="${action.getAction()}">Aktivace účtu</a>
             <p style="font-size: small;" th:text="'Odkaz je platný do 23:59:59 dne ' + ${date}">Odkaz je platný do 23:59:59 dne 31. 12. 2016</p>
         </td>
     </tr>
