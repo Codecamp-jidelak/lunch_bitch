@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-import static cz.codecamp.lunchbitch.models.UserAction.CHANGE;
+import static cz.codecamp.lunchbitch.models.UserAction.UPDATE;
 import static cz.codecamp.lunchbitch.models.UserAction.REGISTRATION;
 
 @Service
@@ -38,7 +38,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     public AuthToken requestChangeAccess(Email email) {
-        return generateAndSaveAuthToken(email.getEmailAdress(), CHANGE);
+        return generateAndSaveAuthToken(email.getEmailAdress(), UPDATE);
     }
 
     @Override

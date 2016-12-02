@@ -31,7 +31,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 @SpringBootApplication
@@ -75,10 +74,20 @@ public class LunchBitchApplication {
     }
 
     @Bean
+    @Qualifier("lunch")
     public Message getMessage(Session session) throws MessagingException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(email));
-        message.setSubject("Pošli jídelák: " + LocalDate.now().format(timeFormatter));
+        message.setSubject("Pošli jídelák. Denní menu " + LocalDate.now().format(timeFormatter));
+        return message;
+    }
+
+    @Bean
+    @Qualifier("activation")
+    public Message getActivationMessage(Session session) throws MessagingException {
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(email));
+        message.setSubject("Pošli jídelák: Autorizace");
         return message;
     }
 

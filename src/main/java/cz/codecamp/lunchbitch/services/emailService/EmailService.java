@@ -13,6 +13,6 @@ public interface EmailService {
 
     void sendDailyLunchMenusToSubscribers(List<LunchMenuDemand> lunchMenuDemandList) throws MessagingException;
 
-    void sendUserActionRequestEmail(AuthToken token, Email usersEmail);
+    void sendUserActionRequestEmail(AuthToken token, Email usersEmail) throws MessagingException;
 
 }
