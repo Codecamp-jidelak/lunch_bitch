@@ -15,15 +15,15 @@
             <h1>Nepodařilo se uložit nastavení</h1>
 
             <div th:if="${submitState == 'alreadyExists'}">
-                <p>Nastavení odběru pro e- mail <span class="highlight" th:text="${emailAddress}">test@email.com</span>
-                nelze dokončit. Pro tento e-mail je již aktivní odběr jídeláků, prosím pro úpravu poračujte do <a href="/settings">nastavení</a>.</p>
+                <p>Nastavení odběru pro e-mail <span class="highlight" th:text="${emailAddress}">test@email.com</span>
+                nelze dokončit. Tento e-mail má již aktivní odběr jídeláků, prosím pro úpravu poračujte do <a href="/settings">nastavení</a>.</p>
             </div>
             <div th:if="${submitState == 'notActivated'}">
-                <p>Nastavení odběru pro e- mail <span class="highlight" th:text="${emailAddress}">test@email.com</span>
+                <p>Nastavení odběru pro e-mail <span class="highlight" th:text="${emailAddress}">test@email.com</span>
                     nelze dokončit. K tomuto e-mailu se váže neaktivovaný účet, prosím nejdříve jej aktivujte podle instrukcí obdržených v e-mailu při registraci odběru.</p>
             </div>
             <div th:if="${submitState == 'illegal'}">
-                <p>Nastavení odběru pro e- mail <span class="highlight" th:text="${emailAddress}">test@email.com</span>
+                <p>Nastavení odběru pro e-mail <span class="highlight" th:text="${emailAddress}">test@email.com</span>
                     nelze dokončit. Prosíme zopakujte svůj pokus, za komplikace se omlouváme.</p>
             </div>
         </div>
