@@ -11,6 +11,7 @@ import static java.time.LocalDateTime.now;
 @Entity
 public class UserActionRequestEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private Long id;
 

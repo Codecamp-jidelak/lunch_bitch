@@ -12,6 +12,7 @@ import cz.codecamp.lunchbitch.models.exceptions.InvalidAuthKeyException;
 import cz.codecamp.lunchbitch.repositories.UnconfirmedLunchDemandRepository;
 import cz.codecamp.lunchbitch.repositories.UserActionRequestRepository;
 import cz.codecamp.lunchbitch.services.authorizationService.crypto.AuthKeyGenerator;
+import cz.codecamp.lunchbitch.services.authorizationService.crypto.AuthKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Autowired
     private UnconfirmedLunchDemandRepository unconfirmedLunchDemandRepository;
+
+    @Autowired
+    private AuthKeyProvider authKeyProvider;
 
 
     @Override
@@ -77,7 +81,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     private AuthToken generateAndSaveAuthToken(String email, UserAction userAction) {
-        String authKey = new AuthKeyGenerator().generateNextRandomAuthKey();
+        String authKey = authKeyProvider.generateNextRandomAuthKey();
         userActionRequestRepository.save(UserActionRequestEntity.activateNew(email, authKey, userAction));
         return AuthToken.of(authKey, userAction);
     }
