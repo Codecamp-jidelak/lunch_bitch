@@ -2,8 +2,8 @@ package cz.codecamp.lunchbitch.controllers.verificationController;
 
 import cz.codecamp.lunchbitch.models.*;
 import cz.codecamp.lunchbitch.models.exceptions.AccountDoesNotExistException;
+import cz.codecamp.lunchbitch.models.exceptions.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.models.exceptions.InvalidTokenException;
-import cz.codecamp.lunchbitch.services.userActionService.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.services.userActionService.UserActionService;
 import cz.codecamp.lunchbitch.services.webService.WebService;
 import cz.codecamp.lunchbitch.webPageMappers.EmailForm;
@@ -54,12 +54,12 @@ public class VerificationController {
         try {
             email = userActionService.authorizeDeleteAccount(authToken);
         } catch (InvalidTokenException e) {
-            logger.info("Unsubscribe - invalid authKey: " + authToken.getAuthKey());
+            logger.info("Unsubscribe - invalid authKey: " + authKey);
         }
 
         if (email != null) {
             model.addAttribute("recognized", true);
-            model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm(email.getEmailAdress()));
+            model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm(email.getEmailAddress()));
         }
 
         return new ModelAndView("unsubscribe");
@@ -87,7 +87,7 @@ public class VerificationController {
             response.addCookie(deleteCookie(authKey));
         }
 
-        logger.info("Unsubscribed e-mail: " + email.getEmailAdress());
+        logger.info("Unsubscribed e-mail: " + email.getEmailAddress());
 
         return "redirect:/unsubscribe?success=true";
     }
@@ -110,15 +110,15 @@ public class VerificationController {
         try {
             email = userActionService.activateRegistration(authToken);
         } catch (InvalidTokenException e) {
-            logger.info("Activate - invalid authKey: " + authToken.getAuthKey());
+            logger.info("Activate - invalid authKey: " + authKey);
         } catch (IllegalStateException e) {
             logger.log(Level.WARNING, "Activate - illegalStateException", e);
         }
 
         if (email != null) {
             model.addAttribute("activated", true);
-            model.addAttribute("emailAddress", email.getEmailAdress());
-            logger.info("Activated registration for e-mail: " + email.getEmailAdress());
+            model.addAttribute("emailAddress", email.getEmailAddress());
+            logger.info("Activated registration for e-mail: " + email.getEmailAddress());
         }
 
         return new ModelAndView("activate");
@@ -128,16 +128,8 @@ public class VerificationController {
     public ModelAndView showSettingsNoToken(@CookieValue(name = "userAuthKey", required = false) String authKey, Model model) {
 
         if (authKey != null) {
-            
-            AuthToken authToken = new AuthToken(authKey, UserAction.REGISTRATION);
-            
-            LunchMenuDemand lunchMenuDemand = null;
-            try {
-                lunchMenuDemand = userActionService.authorizeUpdateDemand(authToken);
-            } catch (InvalidTokenException e) {
-                logger.info("Settings - invalid authKey: " + authToken.getAuthKey());
-            }
-            
+            LunchMenuDemand lunchMenuDemand = webService.getUserSettings();
+
             if (lunchMenuDemand != null) {
                 model.addAttribute("recognized", true);
                 model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm(lunchMenuDemand.getEmail()));
@@ -161,7 +153,7 @@ public class VerificationController {
         try {
             lunchMenuDemand = userActionService.authorizeUpdateDemand(authToken);
         } catch (InvalidTokenException e) {
-            logger.info("Settings - invalid authKey: " + authToken.getAuthKey());
+            logger.info("Settings - invalid authKey: " + authKey);
         }
 
         if (lunchMenuDemand != null) {

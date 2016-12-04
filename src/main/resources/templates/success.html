@@ -15,7 +15,8 @@
             <h1>Úspěšně uloženo</h1>
 
                 <div th:if="${type == 'new'}">
-                    <p>Jídeláky se budou posílat na e-mail: <span class="highlight" th:text="${emailAddress}">test@email.com</span></p>
+                    <p>Odesílání jídeláku na e-mail: <span class="highlight" th:text="${emailAddress}">test@email.com</span>
+                    je připravené. Aktivujte si odběr aktivačním odkazem, který vám byl doručen do vaší e-mailové schránky.</p>
                 </div>
 
                 <div th:if="${type == 'update'}">

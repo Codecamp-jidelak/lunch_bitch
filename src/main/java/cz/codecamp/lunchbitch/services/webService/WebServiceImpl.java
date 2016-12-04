@@ -5,10 +5,9 @@ import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
 import cz.codecamp.lunchbitch.models.SubmitState;
 import cz.codecamp.lunchbitch.models.exceptions.AccountAlreadyExistsException;
+import cz.codecamp.lunchbitch.models.exceptions.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.services.geocodingService.GeocodingService;
-import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
 import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearchService;
-import cz.codecamp.lunchbitch.services.userActionService.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.services.userActionService.UserActionService;
 import cz.codecamp.lunchbitch.webPageMappers.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,22 +29,21 @@ import java.util.stream.Collectors;
 public class WebServiceImpl implements WebService {
 
     private LunchMenuDemand searchResults;
+    private LunchMenuDemand savedDemand;
     private Set<Restaurant> selectedRestaurants;
     private String userEmail;
 
     private RestaurantSearchService restaurantSearchService;
     private GeocodingService geocodingService;
-    private LunchMenuDemandService lunchMenuDemandService;
     private UserActionService userActionService;
     private final Logger logger;
 
     @Autowired
     public WebServiceImpl(LunchMenuDemand lunchMenuDemand, RestaurantSearchService restaurantSearchService, GeocodingService geocodingService,
-                          LunchMenuDemandService lunchMenuDemandService, UserActionService userActionService, Logger logger) {
+                          UserActionService userActionService, Logger logger) {
         this.searchResults = lunchMenuDemand;
         this.restaurantSearchService = restaurantSearchService;
         this.geocodingService = geocodingService;
-        this.lunchMenuDemandService = lunchMenuDemandService;
         this.userActionService = userActionService;
         this.logger = logger;
         selectedRestaurants = new HashSet<>();
@@ -114,11 +112,8 @@ public class WebServiceImpl implements WebService {
 
     @Override
     public SubmitState submitLunchMenuPreferences(String email) {
-        // TODO: remove when UserActionService is implemented
-        lunchMenuDemandService.saveLunchMenuPreferences(preparePreferences(email));
 
         SubmitState submitState;
-
         try {
             userActionService.submitRegistration(preparePreferences(email));
             submitState = SubmitState.SUCCESS;
@@ -149,6 +144,12 @@ public class WebServiceImpl implements WebService {
         userEmail = lunchMenuDemand.getEmail();
         selectedRestaurants.clear();
         selectedRestaurants.addAll(lunchMenuDemand.getRestaurants());
+        savedDemand = lunchMenuDemand;
+    }
+
+    @Override
+    public LunchMenuDemand getUserSettings() {
+        return savedDemand;
     }
 
     @Override
@@ -165,6 +166,7 @@ public class WebServiceImpl implements WebService {
         LunchMenuDemand rest = new LunchMenuDemand();
         rest.setEmail(email);
         rest.setRestaurants(new ArrayList<>(selectedRestaurants));
+        savedDemand = rest;
         return rest;
     }
 }

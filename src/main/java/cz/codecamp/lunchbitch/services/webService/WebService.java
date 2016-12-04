@@ -18,5 +18,6 @@ public interface WebService {
     void saveLunchMenuPreferences();
     SubmitState submitLunchMenuPreferences(String email);
     void loadUsersSettings(LunchMenuDemand lunchMenuDemand);
+    LunchMenuDemand getUserSettings();
     void clearCurrentProgress();
 }
