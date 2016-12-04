@@ -10,11 +10,11 @@
         <td align="center" bgcolor="#ffffff" style="padding: 20px 0 20px 0;">
             <h1 th:text="${name}" style="color:black;">Name</h1>
             <p th:text="${#dates.format(date, 'dd. MMMMMMMMMMMM yyyy')}">Datum</p>
-            <img src="https://pbs.twimg.com/profile_images/668088709875499008/eLZTn7_S.jpg" alt="Pošli jídelák"
+            <img src="/images/foodporn.jpg" alt="Pošli jídelák"
                  style="display: block;"/>
         </td>
     </tr>
-    <div th:each="restaurant : ${restaurants}">
+    <div th:each="restaurant : ${restaurantsWithLunchMenu}">
         <tr>
             <td bgcolor="#696969">
                 <h2 style="color:white; text-align:center;" th:text="${restaurant.getName()}">
@@ -28,25 +28,34 @@
                 </p>
             </td>
         </tr>
-        <tr th:if="${not restaurant.hasLunchMenu() or not restaurant.getLunchmenu().hasDishes()}">
-            <td bgcolor="#ffffff">
-                <p style="color:black; text-align:center; font-family:courier;">
-                    Denní menu není k dispozici
-                </p>
-            </td>
-        </tr>
-        <tr th:if="${restaurant.hasLunchMenu() and restaurant.getLunchmenu().hasDishes()}">
+        <tr>
             <td bgcolor="#ffffff">
                 <div style="color:black; text-align:center; font-family:courier;"
-                   th:each="dish : ${restaurant.getLunchmenu().getDishes()}">
+                     th:each="dish : ${restaurant.getLunchmenu().getDishes()}">
                     <p style="padding: 1em 1em 0em 1em;" th:text="${dish.getName()}"></p>
                     <div th:if="${dish.hasPrice()}">
-                       <div style="padding: 0px 10px 20px 10px;" th:text="'Cena: ' + ${dish.getPrice()}"></div>
+                        <div style="padding: 0px 10px 20px 10px;" th:text="'Cena: ' + ${dish.getPrice()}"></div>
                     </div>
                 </div>
             </td>
         </tr>
     </div>
+    <tr>
+        <td bgcolor="#696969">
+            <h3 style="color:white; text-align:center;">
+                Pro tyto restaurace nejsou k dispozici jídelní lístky
+            </h3>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#ffffff">
+            <div th:each="restaurant : ${restaurantsWithoutLunchMenu}">
+                <div style="color:black; text-align:center; font-family:courier; padding: 1em 1em 1em 1em;"
+                     th:text="${restaurant.getName()}">
+                </div>
+            </div>
+        </td>
+    </tr>
 </table>
 </body>
 </html>
