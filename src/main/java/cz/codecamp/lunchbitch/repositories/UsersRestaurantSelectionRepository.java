@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface UsersRestaurantSelectionRepository extends CrudRepository<UsersRestaurantSelectionEntity, Long> {
 
 
@@ -12,4 +14,7 @@ public interface UsersRestaurantSelectionRepository extends CrudRepository<Users
     boolean selectionExists(@Param("email") String email, @Param("zomatoId") String zomatoRestaurantId);
 
     void deleteByEmail(String email);
+    
+    @Query("SELECT s.zomatoRestaurantId FROM RestaurantSelection s WHERE s.email = :email")
+    List<Long> findZomatoRestaurantIdsByEmail(@Param("email") String email);
 }

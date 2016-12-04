@@ -1,5 +1,8 @@
 package cz.codecamp.lunchbitch.services.authorizationService.crypto;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -11,6 +14,7 @@ import java.util.Random;
  * @link http//www.stackoverflow.com/questions/7111651/how-to-generate-a-secure-random-alphanumeric-string-in-java
  * -efficiently
  */
+
 public class AuthKeyGenerator {
 
     private static final int AUTH_KEY_LENGTH = 16;

@@ -34,7 +34,13 @@ public class LunchDemandStorageServiceImpl implements LunchMenuDemandStorageServ
 
     @Override
     public LunchMenuDemand getLunchMenuDemand(String email) {
-        return null;
+        List<Long> selectedRestaurantIds = restaurantSelectionRepository.findZomatoRestaurantIdsByEmail(email);
+        List<RestaurantInfoEntity> selectedRestaurantEntities = restaurantInfoRepository.findByZomatoIdIn(selectedRestaurantIds);
+        List<Restaurant> selectedRestaurants = selectedRestaurantEntities.stream().map(RestaurantConverters::convertToRestaurantDto).collect(toList());
+        LunchMenuDemand lunchMenuDemand = new LunchMenuDemand();
+        lunchMenuDemand.setEmail(email);
+        lunchMenuDemand.setRestaurants(selectedRestaurants);
+        return lunchMenuDemand;
     }
 
     @Override

@@ -18,4 +18,6 @@ public interface AuthorizationService {
 
     Email authorizeUnsubscription(AuthToken unsubscribeToken);
 
+    void removeAllUserActionRequestRecordsForUnsubscribedAccount(Email email);
+
 }
