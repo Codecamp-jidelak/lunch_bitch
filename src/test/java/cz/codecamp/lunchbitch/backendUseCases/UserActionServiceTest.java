@@ -9,7 +9,7 @@ import cz.codecamp.lunchbitch.models.exceptions.InvalidTokenException;
 import cz.codecamp.lunchbitch.repositories.UserActionRequestRepository;
 import cz.codecamp.lunchbitch.services.authorizationService.crypto.AuthKeyProvider;
 import cz.codecamp.lunchbitch.services.emailService.EmailService;
-import cz.codecamp.lunchbitch.services.userActionService.AccountNotActivatedException;
+import cz.codecamp.lunchbitch.models.exceptions.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.services.userActionService.UserActionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

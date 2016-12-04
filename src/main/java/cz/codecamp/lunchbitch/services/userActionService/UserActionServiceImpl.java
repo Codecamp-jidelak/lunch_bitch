@@ -5,6 +5,7 @@ import cz.codecamp.lunchbitch.models.Email;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.exceptions.AccountAlreadyExistsException;
 import cz.codecamp.lunchbitch.models.exceptions.AccountDoesNotExistException;
+import cz.codecamp.lunchbitch.models.exceptions.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.models.exceptions.InvalidTokenException;
 import cz.codecamp.lunchbitch.services.authorizationService.AuthorizationService;
 import cz.codecamp.lunchbitch.services.emailService.EmailService;
@@ -28,9 +29,9 @@ public class UserActionServiceImpl implements UserActionService {
     private EmailService emailService;
 
     @Override
-    public void submitRegistration(LunchMenuDemand menu) throws AccountAlreadyExistsException, AccountNotActivatedException, IllegalStateException, MessagingException {
+    public void submitRegistration(LunchMenuDemand menu) throws AccountAlreadyExistsException, AccountNotActivatedException, IllegalStateException {
         AuthToken authToken = authorizationService.requestRegistrationConfirmation(menu);
-        emailService.sendUserActionRequestEmail(authToken, Email.of(menu.getEmail()));
+        sendUserActionRequestEmail(Email.of(menu.getEmail()), authToken);
     }
 
     @Override
@@ -41,9 +42,17 @@ public class UserActionServiceImpl implements UserActionService {
     }
 
     @Override
-    public void submitUpdateOrDeleteRequest(Email email) throws AccountNotActivatedException, AccountDoesNotExistException, MessagingException {
+    public void submitUpdateOrDeleteRequest(Email email) throws AccountNotActivatedException, AccountDoesNotExistException {
         AuthToken authToken = authorizationService.requestChangeAccess(email);
-        emailService.sendUserActionRequestEmail(authToken, email);
+        sendUserActionRequestEmail(email, authToken);
+    }
+
+    private void sendUserActionRequestEmail(Email email, AuthToken authToken) {
+        try {
+            emailService.sendUserActionRequestEmail(authToken, email);
+        } catch (MessagingException me) {
+            throw new IllegalStateException();
+        }
     }
 
     @Override
