@@ -8,21 +8,29 @@
     <header th:replace="layout/header"></header>
     <nav th:replace="layout/navigationBar"></nav>
     <main id="content">
-        <h1>Odhlásit odběr</h1>
-        <div th:if="${(param.success==null)}">
-            Pro odhlášení odběru jídeláků vyplňte váši e-mailovou adresu a odešlete.
+        <h1>Odhlášení odběru</h1>
 
-            <form action="" th:action="@{/unsubscribe}" th:object="${emailForm}" method="post">
-                <p>
-                    <input class="inputText" type="text" th:field="*{email}" onblur="onBlur(this)" onfocus="onFocus(this)" />
-                    <p><span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span></p>
-                </p>
-                <p><input class="sendEmailBtn"  type="submit" value="Odhlásit odběr"/></p>
-            </form>
+        <div th:if="${recognized==null}">
+            <p>Neplatný odkaz, nebyl odhlášen odběr ze žádného účetu</p>
+            <a class="aLikeBtnSimple" href="/">Pokračovat na úvodní stránku</a>
         </div>
-        <div th:if="${(param.success!=null) and (param.success[0] == 'true')}">
-            <p>Odběr z <span class="highlight" th:text="${emailForm.email}">test@email.com</span> byl úspěšně odhlášen.</p>
+
+        <div th:if="${(recognized!=null) and (recognized == true)}">
+            <div th:if="${(param.success==null)}">
+                <p>Potvrďte prosím odhlášení odběru jídeláků. <span class="highlight">Pozor! Akce je nevratná.</span></p>
+
+                <form action="" th:action="@{/unsubscribe}" th:object="${emailForm}" method="post">
+                    <input type="hidden" th:field="*{email}" />
+                    <input class="unsubscribeBtn"  type="submit" value="Odhlásit odběr"/>
+                </form>
+            </div>
+
+            <div th:if="${(param.success!=null) and (param.success[0] == 'true')}">
+                <p>Odběr z <span class="highlight" th:text="${emailForm.email}">test@email.com</span> byl úspěšně odhlášen.</p>
+                <a class="aLikeBtnSimple" href="/">Návrat na úvodní stránku</a>
+            </div>
         </div>
+
     </main>
     <div th:replace="layout/footer"></div>
 </div>

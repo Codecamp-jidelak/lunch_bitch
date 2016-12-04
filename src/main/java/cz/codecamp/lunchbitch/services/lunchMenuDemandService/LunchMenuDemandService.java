@@ -23,5 +23,4 @@ public interface LunchMenuDemandService {
      * @param email of subscriber
      */
     void getLunchMenuPreferences(String email);
-
 }

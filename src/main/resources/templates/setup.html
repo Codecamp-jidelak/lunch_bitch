@@ -12,22 +12,24 @@
             <li><a href="/search">Hledat</a></li>
             <li><a href="/results">Vybrat restaurace</a></li>
             <li>Zadat email</li>
-            <li class="rightNav"><a href="/unsubscribe">Odhlásit odběr</a></li>
+            <li class="rightNav"><a href="/settings">Nastavení</a></li>
         </ul>
     </nav>
     <main id="content">
             <h1>Vybrané restaurace</h1>
 
-            <h2>Hledejte další restaurace</h2>
+            <a class="showForm" href="#searchForm">Hledat další restaurace &#9660;</a>
             <div th:replace="searchForm :: search-form('setup')"></div>
 
             <h2>Upravujte seznam restaurací</h2>
 
+            <p>Upravte svůj výběr, pokud vám některá restaurace nevyhovuje, můžete ji snadno vyřadit z výběru.
+                Stačí zrušit označení u požadované restaurace a pak aktualizovat seznam.</p>
             <form action="#" th:action="@{/setup}" th:object="${setupWebPage}" method="post">
                 <div class="restaurantList">
                     <th:block th:each="restaurant : ${selectedRestaurants}">
                         <div class="restBlock">
-                            <dl class="highlightRestaurant">
+                            <dl class="restDl highlightRestaurant">
                                 <dt class="restName" th:text="${restaurant.name}">Restaurant name</dt>
                                 <dd><input class="hiddenCheckbox" type="checkbox" th:field="*{restaurantIDs}" th:value="${restaurant.id}"/></dd>
                                 <dt th:text="${restaurant.location.address}">Restaurant address</dt>
@@ -44,15 +46,23 @@
                 </div>
             </form>
 
-            <h2 id="send">Kam máme posílát jídeláky?</h2>
+            <div th:if="${emailKnown==null}">
+                <h2 id="send">Kam máme posílát jídeláky?</h2>
 
-            <form action="" th:action="@{/success}" th:object="${emailForm}" method="post">
-                <p>
-                    <input class="inputText" type="text"  th:field="*{email}" onblur="onBlur(this)" onfocus="onFocus(this)" />
-                    <p><span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span></p>
-                </p>
-                <p><input class="sendEmailBtn"  type="submit" value="Odeslat"/></p>
-            </form>
+                <form action="" th:action="@{/success}" th:object="${emailForm}" method="post">
+                    <input class="inputText" type="text"  th:field="*{email}" placeholder="Zadejte e-mail" />
+                    <input class="sendEmailBtn"  type="submit" value="Odeslat"/>
+                    <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span>
+                </form>
+            </div>
+
+            <div th:if="${(emailKnown!=null) and (emailKnown == true)}">
+                <form action="" th:action="@{/success}" th:object="${emailForm}" method="post">
+                    <input type="hidden" th:field="*{email}" />
+                    <input class="sendEmailBtn"  type="submit" value="Uložit změny"/>
+                </form>
+            </div>
+
     </main>
     <div th:replace="layout/footer"></div>
 </div>

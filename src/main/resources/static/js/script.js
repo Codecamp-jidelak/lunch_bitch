@@ -1,15 +1,3 @@
-function onBlur(el) {
-    if (el.value == "") {
-        el.value = el.defaultValue;
-    }
-}
-
-function onFocus(el) {
-    if (el.value == el.defaultValue) {
-        el.value = "";
-    }
-}
-
 $(document).ready(function() {
     $('.restBlock').click(function () {
         var checkboxObject = $(this).find('input[type=checkbox]');
@@ -18,14 +6,45 @@ $(document).ready(function() {
     });
 });
 
-/*
 $(document).ready(function() {
     $('input:radio[name=type]').change(function() {
+        var placeholder = "";
+
         if (this.value == 'address') {
-            document.getElementById("keyword").value = "adresa, město";
+            placeholder = "adresa, město";
         }
         else if (this.value == 'keyword') {
-            document.getElementById("keyword").value = "";
+            placeholder = "klíčové slovo";
         }
+        document.getElementById("keyword").setAttribute("placeholder", placeholder);
     });
-});*/
+});
+
+document.documentElement.className = 'js';
+
+$(document).ready(function(){
+    $(".showForm").click(function(){
+        if($("#searchForm").is(":visible")){
+            $("#searchForm").hide();
+        } else {
+            $("#searchForm").show();
+        }
+        return false;
+    });
+});
+
+
+$(document).ready(function() {
+    var maxHeight = -1;
+
+    $('.restDl').each(function() {
+        maxHeight = maxHeight > $(this).height() ? maxHeight : $(this).height();
+    });
+
+    $('.restDl').each(function() {
+        $(this).height(maxHeight);
+    });
+});
+
+
+

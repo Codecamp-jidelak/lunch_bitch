@@ -1,11 +1,12 @@
 package cz.codecamp.lunchbitch.services.triggerAndStorageService;
 
+import cz.codecamp.lunchbitch.converters.RestaurantConverters;
 import cz.codecamp.lunchbitch.entities.RestaurantInfoEntity;
+import cz.codecamp.lunchbitch.entities.UserActionRequestEntity;
 import cz.codecamp.lunchbitch.entities.UsersRestaurantSelectionEntity;
-import cz.codecamp.lunchbitch.models.Location;
-import cz.codecamp.lunchbitch.models.LunchMenuDemand;
-import cz.codecamp.lunchbitch.models.Restaurant;
+import cz.codecamp.lunchbitch.models.*;
 import cz.codecamp.lunchbitch.repositories.RestaurantInfoRepository;
+import cz.codecamp.lunchbitch.repositories.UserActionRequestRepository;
 import cz.codecamp.lunchbitch.repositories.UsersRestaurantSelectionRepository;
 import cz.codecamp.lunchbitch.services.lunchMenuService.LunchMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 @Service
-public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSendingTrigger {
+public class LunchMenuSendingTriggerServiceImpl implements LunchMenuSendingTrigger {
 
     @Autowired
     private Logger LOGGER;
@@ -38,24 +38,13 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
     private RestaurantInfoRepository restaurantInfoRepository;
 
     @Autowired
+    private UserActionRequestRepository userActionRequestRepository;
+
+    @Autowired
     private LunchMenuService lunchMenuService;
 
     @Value("${trigger.password}")
     String triggerPassword;
-
-    private List<LunchMenuDemand> onTrigger() {
-        List<RestaurantInfoEntity> restaurantInfoEntities = retrieveAllRestaurantInfos();
-        List<UsersRestaurantSelectionEntity> restaurantSelectionEntities = retrieveAllRestaurantSelections();
-        List<Restaurant> restaurantDtos = convertToRestaurantDtos(restaurantInfoEntities);
-        List<LunchMenuDemand> lunchMenuDemands = convertToLunchMenuDemands(restaurantSelectionEntities, restaurantDtos);
-        List<String> restaurantIds = extractRestaurantIds(restaurantDtos);
-        try {
-            return lunchMenuService.lunchMenuDownload(restaurantIds, lunchMenuDemands);
-        } catch (IOException | MessagingException e) {
-            LOGGER.warning(e.getMessage());
-            return lunchMenuDemands;
-        }
-    }
 
     @Transactional
     @Override
@@ -68,6 +57,33 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
         if (!password.equals(triggerPassword)) {
             throw new IllegalStateException("Wrong password");
         }
+    }
+
+    private List<LunchMenuDemand> onTrigger() {
+        List<RestaurantInfoEntity> restaurantInfoEntities = retrieveAllRestaurantInfos();
+        List<UsersRestaurantSelectionEntity> restaurantSelectionEntities = retrieveAllRestaurantSelections();
+        List<Restaurant> restaurantDtos = convertToRestaurantDtos(restaurantInfoEntities);
+        List<LunchMenuDemand> lunchMenuDemands = convertToLunchMenuDemands(restaurantSelectionEntities, restaurantDtos);
+        List<String> restaurantIds = extractRestaurantIds(restaurantDtos);
+
+        Map<String, AuthToken> unsubscribeTokens = retrieveUnsubscribeTokens();
+
+
+        try {
+            return lunchMenuService.lunchMenuDownload(restaurantIds, lunchMenuDemands, unsubscribeTokens);
+        } catch (IOException | MessagingException e) {
+            LOGGER.warning(e.getMessage());
+            return lunchMenuDemands;
+        }
+    }
+
+    private Map<String, AuthToken> retrieveUnsubscribeTokens() {
+        List<UserActionRequestEntity> allUnsubscribeTokens = userActionRequestRepository.findByAction(UserAction.UNSUBSCRIPTION);
+        return allUnsubscribeTokens.stream().collect(Collectors.toMap(UserActionRequestEntity::getEmail, this::convertToAuthToken));
+    }
+
+    private AuthToken convertToAuthToken(UserActionRequestEntity entity) {
+        return new AuthToken(entity.getKey(), entity.getAction());
     }
 
 
@@ -84,7 +100,7 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
     }
 
     private List<Restaurant> convertToRestaurantDtos(List<RestaurantInfoEntity> restaurantInfoEntities) {
-        return restaurantInfoEntities.stream().map(this::convertToRestaurantDto).collect(toList());
+        return restaurantInfoEntities.stream().map(RestaurantConverters::convertToRestaurantDto).collect(toList());
     }
 
     private List<LunchMenuDemand> convertToLunchMenuDemands(List<UsersRestaurantSelectionEntity> restaurantSelections, List<Restaurant> restaurantDtos) {
@@ -104,24 +120,6 @@ public class LunchMenuLunchMenuSendingTriggerServiceImpl implements LunchMenuSen
             demands.add(lunchMenuDemand);
         }
         return demands;
-    }
-
-    private Restaurant convertToRestaurantDto(RestaurantInfoEntity restaurantInfoEntity) {
-        Restaurant restaurant = new Restaurant();
-        restaurant.setId(restaurantInfoEntity.getZomatoId());
-        restaurant.setName(restaurantInfoEntity.getName());
-
-        Location location = new Location();
-        location.setAddress(restaurantInfoEntity.getAddress());
-        location.setLocality(restaurantInfoEntity.getLocality());
-        location.setCity(restaurantInfoEntity.getCity());
-        location.setLatitude(restaurantInfoEntity.getLatitude());
-        location.setLongitude(restaurantInfoEntity.getLongitude());
-        location.setZipcode(restaurantInfoEntity.getZipcode());
-        location.setCountryId(restaurantInfoEntity.getCountryId());
-
-        restaurant.setLocation(location);
-        return restaurant;
     }
 
     private <T> List<T> iterableToList(Iterable<T> iterable) {

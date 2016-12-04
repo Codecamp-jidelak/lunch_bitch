@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="layout/head::frag('Úspěšně odhlášeno')"/>
+</head>
+<body>
+<div class="flex-container">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
+        <h1>Úspěšně odhlášeno</h1>
+
+        <a class="aLikeBtnSimple" href="/">Návrat na úvodní stránku</a>
+    </main>
+    <div th:replace="layout/footer"></div>
+</div>
+</body>
+</html>

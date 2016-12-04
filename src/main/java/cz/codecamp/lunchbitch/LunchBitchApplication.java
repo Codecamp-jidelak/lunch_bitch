@@ -1,15 +1,15 @@
 package cz.codecamp.lunchbitch;
 
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
-import cz.codecamp.lunchbitch.services.webService.WebService;
-import cz.codecamp.lunchbitch.services.webService.WebServiceImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -74,10 +74,20 @@ public class LunchBitchApplication {
     }
 
     @Bean
+    @Qualifier("lunch")
     public Message getMessage(Session session) throws MessagingException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(email));
-        message.setSubject("Pošli jídelák: " + LocalDate.now().format(timeFormatter));
+        message.setSubject("Pošli jídelák. Denní menu " + LocalDate.now().format(timeFormatter));
+        return message;
+    }
+
+    @Bean
+    @Qualifier("activation")
+    public Message getActivationMessage(Session session) throws MessagingException {
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(email));
+        message.setSubject("Pošli jídelák: Autorizace");
         return message;
     }
 
@@ -143,7 +153,15 @@ public class LunchBitchApplication {
     }
 
     @Bean
-    public WebService webService() {
-        return new WebServiceImpl(new LunchMenuDemand(), new LunchMenuDemand());
+    public LunchMenuDemand lunchMenuDemand() {
+        return new LunchMenuDemand();
+    }
+
+    @Bean
+    public MessageSource messageSource(){
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("message");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 }
