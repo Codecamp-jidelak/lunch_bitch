@@ -8,10 +8,21 @@
     <header th:replace="layout/header"></header>
     <nav th:replace="layout/navigationBar"></nav>
     <main id="content">
+            <div th:if="${emailAddress == null}">
+                <h1>Neidentifikovaný přístup</h1>
+            </div>
+            <div th:if="${emailAddress != null}">
             <h1>Úspěšně uloženo</h1>
-            <p>
-                <span>Jídeláky se budou posílat na e-mail: <span class="highlight" th:text="${emailAddress}">test@email.com</span></span>
-            </p>
+
+                <div th:if="${type == 'new'}">
+                    <p>Odesílání jídeláku na e-mail: <span class="highlight" th:text="${emailAddress}">test@email.com</span>
+                    je připravené. Aktivujte si odběr aktivačním odkazem, který vám byl doručen do vaší e-mailové schránky.</p>
+                </div>
+
+                <div th:if="${type == 'update'}">
+                    <p>Nastavení jídeláků pro e-mail: <span class="highlight" th:text="${emailAddress}">test@email.com</span> bylo změněno.</p>
+                </div>
+            </div>
             <a class="aLikeBtnSimple" href="/">Návrat na úvodní stránku</a>
     </main>
     <div th:replace="layout/footer"></div>

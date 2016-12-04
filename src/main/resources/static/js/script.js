@@ -34,3 +34,17 @@ $(document).ready(function(){
 });
 
 
+$(document).ready(function() {
+    var maxHeight = -1;
+
+    $('.restDl').each(function() {
+        maxHeight = maxHeight > $(this).height() ? maxHeight : $(this).height();
+    });
+
+    $('.restDl').each(function() {
+        $(this).height(maxHeight);
+    });
+});
+
+
+

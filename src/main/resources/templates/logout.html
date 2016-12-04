@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="layout/head::frag('Stránka nenalezena')"/>
+    <th:block th:include="layout/head::frag('Úspěšně odhlášeno')"/>
 </head>
 <body>
 <div class="flex-container">
     <header th:replace="layout/header"></header>
     <nav th:replace="layout/navigationBar"></nav>
     <main id="content">
-        <h1>Litujeme, tato stránka neexistuje.</h1>
+        <h1>Úspěšně odhlášeno</h1>
 
-        <p>Dáte si místo toho třeba tento hamburger?</p>
-
-        <img class="errorImg" src="/images/hambruger.png" alt="Hamburger" />
-
+        <a class="aLikeBtnSimple" href="/">Návrat na úvodní stránku</a>
     </main>
     <div th:replace="layout/footer"></div>
 </div>
