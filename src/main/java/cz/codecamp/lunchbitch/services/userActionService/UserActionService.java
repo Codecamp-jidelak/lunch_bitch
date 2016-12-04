@@ -5,17 +5,18 @@ import cz.codecamp.lunchbitch.models.Email;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.exceptions.AccountAlreadyExistsException;
 import cz.codecamp.lunchbitch.models.exceptions.AccountDoesNotExistException;
+import cz.codecamp.lunchbitch.models.exceptions.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.models.exceptions.InvalidTokenException;
 
 import javax.mail.MessagingException;
 
 public interface UserActionService {
 
-    void submitRegistration(LunchMenuDemand menu) throws AccountAlreadyExistsException, AccountNotActivatedException, IllegalStateException, MessagingException;
+    void submitRegistration(LunchMenuDemand menu) throws AccountAlreadyExistsException, AccountNotActivatedException, IllegalStateException;
 
     Email activateRegistration(AuthToken token) throws InvalidTokenException, IllegalStateException;
 
-    void submitUpdateOrDeleteRequest(Email email) throws AccountNotActivatedException, AccountDoesNotExistException, MessagingException;
+    void submitUpdateOrDeleteRequest(Email email) throws AccountNotActivatedException, AccountDoesNotExistException;
 
     LunchMenuDemand authorizeUpdateDemand(AuthToken token) throws InvalidTokenException;
 
