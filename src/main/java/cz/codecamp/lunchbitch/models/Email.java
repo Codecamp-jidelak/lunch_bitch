@@ -12,7 +12,7 @@ public class Email {
         return new Email(emailAddress);
     }
 
-    public String getEmailAdress() {
+    public String getEmailAddress() {
         return emailAddress;
     }
 

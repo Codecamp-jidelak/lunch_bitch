@@ -19,7 +19,7 @@ header {
 
 header h1 {
     padding: 0.5em 2em;
-    font-size: 4em;
+    font-size: 3em;
     font-family: 'Righteous', sans-serif;
     text-transform: uppercase;
     text-align: left;
@@ -78,7 +78,7 @@ nav li:last-child:before {
 #content {
     flex: 1;
     margin: 0 auto;
-    max-width: 80em;
+    max-width: 70em;
     padding: 0.5em;
 }
 
@@ -104,11 +104,8 @@ footer{
 
 .showForm {
     color: #4b3832;
-    /*text-decoration: none;*/
     text-transform: uppercase;
     font-weight: bold;
-    /*border: thin solid #4b3832;*/
-    /*padding: 1em 2em;*/
     display: inline-block;
 }
 
@@ -117,29 +114,28 @@ footer{
     text-transform: uppercase;
     font-weight: bold;
     font-size: 1.5em;
-    color: #000;
-    border: medium solid #000;
+    color: #4b3832;
+    border: thin solid #4b3832;
     padding: 1em 2em;
     display: inline-block;
-    margin: 2em 0em;
+    margin: 1em 0em;
 }
 
 .aLikeBtn:hover {
     color: #fff;
     padding: 1em 2em;
-    background-color: #000;
+    background-color: #4b3832;
     -webkit-transition-duration: 0.5s;
 }
 
 .aLikeBtnSimple{
-    text-decoration: none;
     text-transform: uppercase;
     font-weight: bold;
     color: #000;
-    border: medium solid #000;
-    padding: 1em 2em;
+    padding: 0.5em 2em;
     display: inline-block;
-    margin: 3em 0em;
+    margin: 1em 0em;
+    color: #3399ff;
 }
 
 .highlight {
@@ -162,15 +158,15 @@ footer{
     text-transform: uppercase;
     font-weight: bold;
     padding: 0.5em 2em;
-    color: #000;
-    border: thin solid #000;
+    color: #4b3832;
+    border: thin solid #4b3832;
     margin: 1em;
 }
 
 .submitBtn:hover {
     color: #fff;
     padding: 0.5em 2em;
-    background-color: #000;
+    background-color: #4b3832;
     -webkit-transition-duration: 0.5s;
 }
 
@@ -193,6 +189,37 @@ footer{
     -webkit-transition-duration: 0.5s;
 }
 
+.unsubscribeBtn {
+    background: #990f02;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+    border: thin solid #000;
+    padding: 0.5em 0.8em;
+    margin: 1em;
+}
+
+.unsubscribeBtn:hover {
+    color: #990f02;
+    padding: 0.5em 0.8em;
+    background-color: #fff;
+    -webkit-transition-duration: 0.5s;
+}
+
+.logOutBtn {
+    text-decoration: underline;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #3399ff;
+}
+.settingsTop form {
+    display: inline;
+}
+
 .rightNav {
     float: right;
 }
@@ -205,7 +232,7 @@ dl {
     margin: 0;
     display: inline-block;
     padding: 1.5em 3em;
-    width: 30em;
+    width: 22em;
 }
 
 dt, dd {
@@ -236,15 +263,19 @@ input.hiddenCheckbox {
     background-color: #be9b7b;
 }
 
-
 .restBlock {
     display: inline-block;
     padding: 0;
     margin: 0.5em;
+    text-align: left;
 }
 
 .error {
     color: red;
+}
+
+.errorImg {
+    width: 20em;
 }
 
 .rbOptions {
@@ -313,3 +344,6 @@ input.hiddenCheckbox {
     display:none;
 }
 
+#content p {
+    font-size: 1.2em;
+}

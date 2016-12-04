@@ -5,7 +5,10 @@ import cz.codecamp.lunchbitch.models.Email;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.exceptions.AccountAlreadyExistsException;
 import cz.codecamp.lunchbitch.models.exceptions.AccountDoesNotExistException;
+import cz.codecamp.lunchbitch.models.exceptions.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.models.exceptions.InvalidTokenException;
+
+import javax.mail.MessagingException;
 
 public interface UserActionService {
 

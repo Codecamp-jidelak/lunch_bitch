@@ -56,7 +56,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendUserActionRequestEmail(AuthToken token, Email usersEmail) throws MessagingException {
         activationMessage.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(usersEmail.getEmailAdress()));
+                InternetAddress.parse(usersEmail.getEmailAddress()));
         activationMessage.setContent(buildUserActionRequestEmail(token, usersEmail), "text/html; charset=utf-8");
         Transport.send(activationMessage);
     }
@@ -83,7 +83,7 @@ public class EmailServiceImpl implements EmailService {
 
     private String buildUserActionRequestEmail(AuthToken token, Email usersEmail){
 
-        context.setVariable("email", usersEmail.getEmailAdress());
+        context.setVariable("email", usersEmail.getEmailAddress());
 
         String link = "";
 
