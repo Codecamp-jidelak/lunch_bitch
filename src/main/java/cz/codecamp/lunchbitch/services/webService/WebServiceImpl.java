@@ -3,9 +3,13 @@ package cz.codecamp.lunchbitch.services.webService;
 import cz.codecamp.lunchbitch.models.Location;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
+import cz.codecamp.lunchbitch.models.SubmitState;
+import cz.codecamp.lunchbitch.models.exceptions.AccountAlreadyExistsException;
 import cz.codecamp.lunchbitch.services.geocodingService.GeocodingService;
 import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
 import cz.codecamp.lunchbitch.services.restaurantSearchService.RestaurantSearchService;
+import cz.codecamp.lunchbitch.services.userActionService.AccountNotActivatedException;
+import cz.codecamp.lunchbitch.services.userActionService.UserActionService;
 import cz.codecamp.lunchbitch.webPageMappers.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -17,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,23 +30,25 @@ import java.util.stream.Collectors;
 public class WebServiceImpl implements WebService {
 
     private LunchMenuDemand searchResults;
-    private LunchMenuDemand selectedRestaurants;
-    private Set<Restaurant> expectedRestaurants;
-    private String userHash;
+    private Set<Restaurant> selectedRestaurants;
+    private String userEmail;
 
     private RestaurantSearchService restaurantSearchService;
     private GeocodingService geocodingService;
     private LunchMenuDemandService lunchMenuDemandService;
+    private UserActionService userActionService;
+    private final Logger logger;
 
     @Autowired
-    public WebServiceImpl(LunchMenuDemand lunchMenuDemand, LunchMenuDemand selectedRestaurants,
-                          RestaurantSearchService restaurantSearchService, GeocodingService geocodingService, LunchMenuDemandService lunchMenuDemandService) {
+    public WebServiceImpl(LunchMenuDemand lunchMenuDemand, RestaurantSearchService restaurantSearchService, GeocodingService geocodingService,
+                          LunchMenuDemandService lunchMenuDemandService, UserActionService userActionService, Logger logger) {
         this.searchResults = lunchMenuDemand;
-        this.selectedRestaurants = selectedRestaurants;
         this.restaurantSearchService = restaurantSearchService;
         this.geocodingService = geocodingService;
         this.lunchMenuDemandService = lunchMenuDemandService;
-        expectedRestaurants = new HashSet<>();
+        this.userActionService = userActionService;
+        this.logger = logger;
+        selectedRestaurants = new HashSet<>();
     }
 
     @Override
@@ -50,7 +58,7 @@ public class WebServiceImpl implements WebService {
 
     @Override
     public List<Restaurant> getSelectedRestaurants() {
-        return new ArrayList<>(expectedRestaurants);
+        return new ArrayList<>(selectedRestaurants);
     }
 
     @Override
@@ -86,38 +94,77 @@ public class WebServiceImpl implements WebService {
     @Override
     public void addSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
         Set<Restaurant> newRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, searchResults.getRestaurants());
-        expectedRestaurants.addAll(newRestaurants);
+        selectedRestaurants.addAll(newRestaurants);
     }
 
     @Override
     public void updateSelectedRestaurantIDs(List<String> selectedRestaurantIDs) {
-        expectedRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, new ArrayList<>(expectedRestaurants));
-    }
-
-    @Override
-    public void setLunchMenuDemandEmail(String email) {
-        selectedRestaurants.setEmail(email);
+        selectedRestaurants = matchRestaurantsByIDs(selectedRestaurantIDs, new ArrayList<>(selectedRestaurants));
     }
 
     @Override
     public String getEmail() {
-        return selectedRestaurants.getEmail();
+        return userEmail;
     }
 
     @Override
     public boolean isEmptySelectedRestaurantsList() {
-        return expectedRestaurants.isEmpty();
+        return selectedRestaurants.isEmpty();
+    }
+
+    @Override
+    public SubmitState submitLunchMenuPreferences(String email) {
+        // TODO: remove when UserActionService is implemented
+        lunchMenuDemandService.saveLunchMenuPreferences(preparePreferences(email));
+
+        SubmitState submitState;
+
+        try {
+            userActionService.submitRegistration(preparePreferences(email));
+            submitState = SubmitState.SUCCESS;
+        } catch (AccountAlreadyExistsException e) {
+            logger.log(Level.WARNING, "submitLMP - account already exist for e-mail: " + email, e);
+            submitState = SubmitState.ALREADYEXISTS;
+        } catch (AccountNotActivatedException e) {
+            logger.log(Level.WARNING, "submitLMP - account not activated for e-mail: " + email, e);
+            submitState = SubmitState.NOTACTIVATED;
+        } catch (IllegalStateException e) {
+            logger.log(Level.WARNING, "submitLMP - IllegalStateException for e-mail: " + email, e);
+            submitState = SubmitState.ILLEGAL;
+        }
+
+        preparePreferences(email);
+        deleteUserActivity();
+        return submitState;
     }
 
     @Override
     public void saveLunchMenuPreferences() {
-        selectedRestaurants.setRestaurants(new ArrayList<>(expectedRestaurants));
-        expectedRestaurants.clear();
-        lunchMenuDemandService.saveLunchMenuPreferences(selectedRestaurants);
+        userActionService.storeUpdatedDemand(preparePreferences(userEmail));
+        deleteUserActivity();
     }
 
     @Override
-    public void unsubscribeMenuPreferences(String email) {
-        lunchMenuDemandService.unsubscribeMenuPreferences(email);
+    public void loadUsersSettings(LunchMenuDemand lunchMenuDemand) {
+        userEmail = lunchMenuDemand.getEmail();
+        selectedRestaurants.clear();
+        selectedRestaurants.addAll(lunchMenuDemand.getRestaurants());
+    }
+
+    @Override
+    public void clearCurrentProgress() {
+        deleteUserActivity();
+    }
+
+    private void deleteUserActivity() {
+        selectedRestaurants.clear();
+        userEmail = null;
+    }
+
+    private LunchMenuDemand preparePreferences(String email) {
+        LunchMenuDemand rest = new LunchMenuDemand();
+        rest.setEmail(email);
+        rest.setRestaurants(new ArrayList<>(selectedRestaurants));
+        return rest;
     }
 }

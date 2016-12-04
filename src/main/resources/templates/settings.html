@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="layout/head::frag('Nastavení odběru jídeláků')"/>
+</head>
+<body>
+<div class="flex-container">
+    <header th:replace="layout/header"></header>
+    <nav th:replace="layout/navigationBar"></nav>
+    <main id="content">
+        <h1>Nastavení odběru jídeláků</h1>
+
+        <div th:if="${recognized==null}">
+            <div th:if="${registrationState == 'succcess'}">
+                <p>Na vaši e-mailovou adresu <span class="highlight" th:text="${emailForm.email}">test@email.com</span> byl zaslán odkaz pro přístup do nastavení.</p>
+            </div>
+            <div th:if="${registrationState == 'inactive'}">
+                <p>Účet spojený s e-mailovou adresou <span class="highlight" th:text="${emailForm.email}">test@email.com</span>
+                    nebyl doposud aktivován. Prosím dokončete aktivaci podle instrukcí obdržených v e-mailu při registraci odběru.</p>
+            </div>
+            <div th:if="${registrationState == 'notexists'}">
+                <p>Neznámý uživatel s e-mailem: <span class="highlight" th:text="${emailForm.email}">test@email.com</span>.
+                    Zkuste prosím zadat vaši e-mailovou adresu znovu a ujistěte se, že je správná.</p>
+            </div>
+            <div th:if="${registrationState == null}">
+                <p>Sekce nastavení slouží k úpravě výběru restaurací, případně k odhlášení odběru.</p>
+                <p>Pro nastavení odběru jídeláků vyplňte váši e-mailovou adresu a odešlete.</p>
+            </div>
+            <div th:if="${(registrationState == null) or (registrationState == 'notexists')}">
+                <form action="" th:action="@{/settings}" th:object="${emailForm}" method="post">
+                    <input class="inputText" type="text" th:field="*{email}" onblur="onBlur(this)" onfocus="onFocus(this)" />
+                    <input class="sendEmailBtn"  type="submit" value="Odeslat"/></p>
+                    <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</span>
+                </form>
+            </div>
+
+        </div>
+        <div th:if="${(recognized!=null) and (recognized == true)}">
+            <div class="settingsTop">
+            Nastavení pro účet <span class="highlight" th:text="${emailForm.email}">test@email.com</span>.
+            Po dokončení úprav se můžete
+            <form action="" th:action="@{/logout}" method="post">
+                <input class="logOutBtn"  type="submit" value="Odhlásit"/>
+            </form>
+            </div>
+            <h2>Upravte seznam vybraných restaurací</h2>
+
+            <p>Primárním účelem nastavení je upravit seznam restaurací, jichž jídeláky chcete dostávat.</p>
+
+            <p>Postup už znáte, je to jako, když si chcete vytvořit nový požadavek na zasílání jídeláků.
+                Proces je úplně stejný, jen nemusíte vyplňovat váš e-mail, pouze uložíte provedené změny a máte hotovo.
+                Vše je pro vás v tuto chvíli připraveno a můžete zažít upravovat.
+            </p>
+
+            <a href="/setup" class="aLikeBtnSimple">Pustit se do úprav</a>
+
+            <h2>Odhlásit odběr</h2>
+            <p>Nebezpečná zóna, po odhlášení odběru vám již nebudou chodit jídeláky vašich oblíbených restaurací.
+                <span class="highlight">Pozor! Akce je nevratná.</span>
+            </p>
+
+            <div>
+                <form action="" th:action="@{/unsubscribe}" th:object="${emailForm}" method="post">
+                    <input type="hidden" th:field="*{email}" />
+                    <input class="unsubscribeBtn"  type="submit" value="Odhlásit odběr"/>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+    <div th:replace="layout/footer"></div>
+</div>
+</body>
+</html>

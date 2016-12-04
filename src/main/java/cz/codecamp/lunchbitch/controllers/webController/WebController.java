@@ -1,6 +1,7 @@
 package cz.codecamp.lunchbitch.controllers.webController;
 
 import cz.codecamp.lunchbitch.models.Restaurant;
+import cz.codecamp.lunchbitch.models.SubmitState;
 import cz.codecamp.lunchbitch.services.webService.WebService;
 import cz.codecamp.lunchbitch.webPageMappers.EmailForm;
 import cz.codecamp.lunchbitch.webPageMappers.ResultsWebPage;
@@ -147,9 +148,15 @@ public class WebController {
         Map<String, Object> mapModel = new HashMap<>();
         mapModel.put("selectedRestaurant", new Restaurant());
         model.addAttribute(SETUP_WEB_PAGE_ATTRIBUTE, new SetupWebPage(webService.getSelectedRestaurants()));
-        if (!model.containsAttribute(EMAIL_FORM_ATTRIBUTE)) {
+
+        String email = webService.getEmail();
+        if (email != null && !email.isEmpty()) {
+            model.addAttribute("emailKnown", true);
+            model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm(email));
+        } else {
             model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm());
         }
+
         if (!model.containsAttribute(SEARCH_FORM_ATTRIBUTE)) {
             model.addAttribute(SEARCH_FORM_ATTRIBUTE, searchForm);
         }
@@ -168,9 +175,7 @@ public class WebController {
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public ModelAndView confirm() {
-        Map<String, String> model = new HashMap<>();
-        model.put("emailAddress", webService.getEmail());
-        return new ModelAndView("success", model);
+        return new ModelAndView("success");
     }
 
     @RequestMapping(value = "/success", method = RequestMethod.POST)
@@ -187,36 +192,34 @@ public class WebController {
             return "redirect:/setup#send";
         }
 
-        webService.setLunchMenuDemandEmail(emailForm.getEmail());
-        webService.saveLunchMenuPreferences();
-        logger.info("Created new LunchMenuPreferences for e-mail: " + emailForm.getEmail());
-        return "redirect:/success";
+        attr.addFlashAttribute("emailAddress", emailForm.getEmail());
+
+        if (webService.getEmail() != null) {
+            logger.info("Updated lunchMenuPreferences for e-mail: " + webService.getEmail());
+            webService.saveLunchMenuPreferences();
+            attr.addFlashAttribute("type", "update");
+            return "redirect:/success";
+        }
+        else {
+            SubmitState submitState = webService.submitLunchMenuPreferences(emailForm.getEmail());
+            if (SubmitState.SUCCESS.equals(submitState)) {
+                logger.info("Created new lunchMenuPreferences for e-mail: " + emailForm.getEmail());
+                attr.addFlashAttribute("type", "new");
+                return "redirect:/success";
+            }
+            else {
+                attr.addFlashAttribute("submitState", submitState.getState());
+                return "redirect:/failure";
+            }
+        }
     }
 
-    @RequestMapping(value = "/unsubscribe", method = RequestMethod.GET)
-    public ModelAndView showUnsubscribe(Model model) {
-        if (!model.containsAttribute(EMAIL_FORM_ATTRIBUTE)) {
-            model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm());
-        }
-        return new ModelAndView("unsubscribe");
-    }
-
-    @RequestMapping(value = "/unsubscribe", method = RequestMethod.POST)
-    public String unsubscribeEmail(@Valid EmailForm emailForm, BindingResult bindingResult, RedirectAttributes attr) {
-
-        if (bindingResult.hasErrors()) {
-            logger.warning(bindingResult.getAllErrors().toString());
-            return "unsubscribe";
-        }
-        webService.unsubscribeMenuPreferences(emailForm.getEmail());
-        attr.addFlashAttribute(getAttributeName(EMAIL_FORM_ATTRIBUTE), bindingResult);
-        attr.addFlashAttribute(EMAIL_FORM_ATTRIBUTE, emailForm);
-        logger.info("Unsubscribed e-mail: " + emailForm.getEmail());
-        return "redirect:/unsubscribe?success=true";
+    @RequestMapping(value = "/failure", method = RequestMethod.GET)
+    public ModelAndView failure() {
+        return new ModelAndView("failure");
     }
 
     private String getAttributeName(String attributeName) {
         return "org.springframework.validation.BindingResult." + attributeName;
     }
-
 }
