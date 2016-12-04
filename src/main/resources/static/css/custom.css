@@ -344,3 +344,6 @@ input.hiddenCheckbox {
     display:none;
 }
 
+#content p {
+    font-size: 1.2em;
+}
