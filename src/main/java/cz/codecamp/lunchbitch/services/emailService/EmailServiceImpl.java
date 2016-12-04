@@ -14,6 +14,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -61,9 +62,22 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private String buildLunchMenuList(List<Restaurant> restaurants) throws MessagingException {
+        List<Restaurant> restaurantsWithLunchMenu = new ArrayList<>();
+        List<Restaurant> restaurantsWithoutLunchMenu = new ArrayList<>();
+
+        for(Restaurant restaurant : restaurants){
+
+            if(!restaurant.hasLunchMenu() || !restaurant.getLunchmenu().hasDishes()){
+                restaurantsWithoutLunchMenu.add(restaurant);
+            }else{
+                restaurantsWithLunchMenu.add(restaurant);
+            }
+        }
+
         context.setVariable("name", "Pošli jídelák ;-)");
         context.setVariable("date", new Date());
-        context.setVariable("restaurants", restaurants);
+        context.setVariable("restaurantsWithLunchMenu", restaurantsWithLunchMenu);
+        context.setVariable("restaurantsWithoutLunchMenu", restaurantsWithoutLunchMenu);
         return templateEngine.process("html/lunch-menu-template", context);
     }
 
