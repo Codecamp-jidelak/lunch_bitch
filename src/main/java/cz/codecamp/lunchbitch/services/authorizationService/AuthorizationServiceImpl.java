@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static cz.codecamp.lunchbitch.models.UserAction.*;
+import static cz.codecamp.lunchbitch.models.UserActionRequestState.EXPIRED;
 
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {
@@ -48,9 +49,13 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     private void verifyThereIsCompletedRegistration(String email) {
-        userActionRequestRepository
-                .findByEmailAndActionAndState(email, REGISTRATION, UserActionRequestState.COMPLETED)
+        UserActionRequestEntity registrationRequest = userActionRequestRepository
+                .findByEmailAndAction(email, REGISTRATION)
+                .filter(e -> e.getState() != EXPIRED)
                 .orElseThrow(AccountDoesNotExistException::new);
+        if (registrationRequest.isActive()) {
+            throw new AccountNotActivatedException();
+        }
     }
 
     @Override
