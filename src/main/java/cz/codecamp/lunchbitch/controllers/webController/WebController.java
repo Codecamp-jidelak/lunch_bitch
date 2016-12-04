@@ -154,7 +154,9 @@ public class WebController {
             model.addAttribute("emailKnown", true);
             model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm(email));
         } else {
-            model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm());
+            if (!model.containsAttribute(EMAIL_FORM_ATTRIBUTE)) {
+                model.addAttribute(EMAIL_FORM_ATTRIBUTE, new EmailForm());
+            }
         }
 
         if (!model.containsAttribute(SEARCH_FORM_ATTRIBUTE)) {
