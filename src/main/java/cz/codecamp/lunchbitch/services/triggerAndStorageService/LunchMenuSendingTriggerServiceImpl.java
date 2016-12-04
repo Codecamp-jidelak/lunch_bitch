@@ -44,6 +44,19 @@ public class LunchMenuSendingTriggerServiceImpl implements LunchMenuSendingTrigg
     @Value("${trigger.password}")
     String triggerPassword;
 
+    @Transactional
+    @Override
+    public void triggerSending(String password) {
+        validatePassword(password);
+        onTrigger();
+    }
+
+    private void validatePassword(String password) {
+        if (!password.equals(triggerPassword)) {
+            throw new IllegalStateException("Wrong password");
+        }
+    }
+
     private List<LunchMenuDemand> onTrigger() {
         List<RestaurantInfoEntity> restaurantInfoEntities = retrieveAllRestaurantInfos();
         List<UsersRestaurantSelectionEntity> restaurantSelectionEntities = retrieveAllRestaurantSelections();
@@ -55,19 +68,6 @@ public class LunchMenuSendingTriggerServiceImpl implements LunchMenuSendingTrigg
         } catch (IOException | MessagingException e) {
             LOGGER.warning(e.getMessage());
             return lunchMenuDemands;
-        }
-    }
-
-    @Transactional
-    @Override
-    public void triggerSending(String password) {
-        validatePassword(password);
-        onTrigger();
-    }
-
-    private void validatePassword(String password) {
-        if (!password.equals(triggerPassword)) {
-            throw new IllegalStateException("Wrong password");
         }
     }
 

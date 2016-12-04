@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+import static cz.codecamp.lunchbitch.models.UserAction.UNSUBSCRIPTION;
 import static cz.codecamp.lunchbitch.models.UserAction.UPDATE;
 import static cz.codecamp.lunchbitch.models.UserAction.REGISTRATION;
 
@@ -43,7 +44,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     public AuthToken requestUnsubscribeAccess(Email email) {
-        return null;
+        return generateAndSaveAuthToken(email.getEmailAdress(), UNSUBSCRIPTION);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     public Email authorizeUnsubscription(AuthToken unsubscribeToken) {
-        return null;
+        return verifyToken(unsubscribeToken);
     }
 
     private void storeUnconfirmedRegistration(LunchMenuDemand lunchMenuDemand) {
@@ -81,8 +82,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         return AuthToken.of(authKey, userAction);
     }
 
-    private Email verifyToken(AuthToken registrationToken) {
-        UserActionRequestEntity activeRequest = userActionRequestRepository.findByKey(registrationToken.getAuthKey())
+    private Email verifyToken(AuthToken token) {
+        UserActionRequestEntity activeRequest = userActionRequestRepository.findByKey(token.getAuthKey())
                 .filter(UserActionRequestEntity::isActive)
                 .orElseThrow(InvalidAuthKeyException::new);
         UserActionRequestEntity completedRequest = activeRequest.complete();
