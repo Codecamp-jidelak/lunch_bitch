@@ -2,11 +2,11 @@ package cz.codecamp.lunchbitch.services.triggerAndStorageService;
 
 import cz.codecamp.lunchbitch.converters.RestaurantConverters;
 import cz.codecamp.lunchbitch.entities.RestaurantInfoEntity;
+import cz.codecamp.lunchbitch.entities.UserActionRequestEntity;
 import cz.codecamp.lunchbitch.entities.UsersRestaurantSelectionEntity;
-import cz.codecamp.lunchbitch.models.Location;
-import cz.codecamp.lunchbitch.models.LunchMenuDemand;
-import cz.codecamp.lunchbitch.models.Restaurant;
+import cz.codecamp.lunchbitch.models.*;
 import cz.codecamp.lunchbitch.repositories.RestaurantInfoRepository;
+import cz.codecamp.lunchbitch.repositories.UserActionRequestRepository;
 import cz.codecamp.lunchbitch.repositories.UsersRestaurantSelectionRepository;
 import cz.codecamp.lunchbitch.services.lunchMenuService.LunchMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -37,6 +36,9 @@ public class LunchMenuSendingTriggerServiceImpl implements LunchMenuSendingTrigg
 
     @Autowired
     private RestaurantInfoRepository restaurantInfoRepository;
+
+    @Autowired
+    private UserActionRequestRepository userActionRequestRepository;
 
     @Autowired
     private LunchMenuService lunchMenuService;
@@ -63,12 +65,25 @@ public class LunchMenuSendingTriggerServiceImpl implements LunchMenuSendingTrigg
         List<Restaurant> restaurantDtos = convertToRestaurantDtos(restaurantInfoEntities);
         List<LunchMenuDemand> lunchMenuDemands = convertToLunchMenuDemands(restaurantSelectionEntities, restaurantDtos);
         List<String> restaurantIds = extractRestaurantIds(restaurantDtos);
+
+        Map<String, AuthToken> unsubscribeTokens = retrieveUnsubscribeTokens();
+
+
         try {
-            return lunchMenuService.lunchMenuDownload(restaurantIds, lunchMenuDemands);
+            return lunchMenuService.lunchMenuDownload(restaurantIds, lunchMenuDemands, unsubscribeTokens);
         } catch (IOException | MessagingException e) {
             LOGGER.warning(e.getMessage());
             return lunchMenuDemands;
         }
+    }
+
+    private Map<String, AuthToken> retrieveUnsubscribeTokens() {
+        List<UserActionRequestEntity> allUnsubscribeTokens = userActionRequestRepository.findByAction(UserAction.UNSUBSCRIPTION);
+        return allUnsubscribeTokens.stream().collect(Collectors.toMap(UserActionRequestEntity::getEmail, this::convertToAuthToken));
+    }
+
+    private AuthToken convertToAuthToken(UserActionRequestEntity entity) {
+        return new AuthToken(entity.getKey(), entity.getAction());
     }
 
 

@@ -1,4 +1,4 @@
 package cz.codecamp.lunchbitch.models.exceptions;
 
-public class AccountAlreadyExistsException extends Exception {
+public class AccountAlreadyExistsException extends RuntimeException {
 }

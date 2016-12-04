@@ -8,10 +8,10 @@ import cz.codecamp.lunchbitch.models.exceptions.AccountDoesNotExistException;
 import cz.codecamp.lunchbitch.models.exceptions.InvalidTokenException;
 import cz.codecamp.lunchbitch.services.authorizationService.AuthorizationService;
 import cz.codecamp.lunchbitch.services.emailService.EmailService;
-import cz.codecamp.lunchbitch.services.lunchMenuDemandService.LunchMenuDemandService;
 import cz.codecamp.lunchbitch.services.triggerAndStorageService.LunchMenuDemandStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 
@@ -49,7 +49,7 @@ public class UserActionServiceImpl implements UserActionService {
     @Override
     public LunchMenuDemand authorizeUpdateDemand(AuthToken token) throws InvalidTokenException {
         Email email = authorizationService.authorizeChange(token);
-        return storageService.getLunchMenuDemand(email.getEmailAdress());
+        return storageService.getLunchMenuDemand(email.getEmailAddress());
     }
 
     @Override
@@ -64,7 +64,9 @@ public class UserActionServiceImpl implements UserActionService {
     }
 
     @Override
+    @Transactional
     public void deleteUserAccount(Email email) {
-        storageService.deleteLunchMenuDemand(email.getEmailAdress());
+        storageService.deleteLunchMenuDemand(email.getEmailAddress());
+        authorizationService.removeAllUserActionRequestRecordsForUnsubscribedAccount(email);
     }
 }

@@ -94,7 +94,14 @@ public class UserActionRequestEntity {
     }
 
     public UserActionRequestEntity complete() {
-        return this;
+        UserActionRequestEntity userActionRequestEntity = new UserActionRequestEntity();
+        userActionRequestEntity.setId(id);
+        userActionRequestEntity.setState(UserActionRequestState.COMPLETED);
+        userActionRequestEntity.setEmail(email);
+        userActionRequestEntity.setKey(key);
+        userActionRequestEntity.setAction(action);
+        userActionRequestEntity.setTimeCreated(timeCreated);
+        return userActionRequestEntity;
     }
 
     public UserActionRequestEntity expire() {
@@ -103,5 +110,17 @@ public class UserActionRequestEntity {
 
     public boolean isActive() {
         return state == UserActionRequestState.ACTIVE;
+    }
+
+    @Override
+    public String toString() {
+        return "UserActionRequestEntity{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", key='" + key + '\'' +
+                ", action=" + action +
+                ", state=" + state +
+                ", timeCreated=" + timeCreated +
+                '}';
     }
 }
