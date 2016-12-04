@@ -6,6 +6,7 @@ import cz.codecamp.lunchbitch.entities.UnconfirmedLunchDemandEntity;
 import cz.codecamp.lunchbitch.entities.UserActionRequestEntity;
 import cz.codecamp.lunchbitch.models.*;
 import cz.codecamp.lunchbitch.models.exceptions.AccountAlreadyExistsException;
+import cz.codecamp.lunchbitch.models.exceptions.AccountDoesNotExistException;
 import cz.codecamp.lunchbitch.models.exceptions.AccountNotActivatedException;
 import cz.codecamp.lunchbitch.models.exceptions.InvalidTokenException;
 import cz.codecamp.lunchbitch.repositories.UnconfirmedLunchDemandRepository;
@@ -42,7 +43,14 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     public AuthToken requestChangeAccess(Email email) {
+        verifyThereIsCompletedRegistration(email.getEmailAddress());
         return generateAndSaveAuthToken(email.getEmailAddress(), UPDATE);
+    }
+
+    private void verifyThereIsCompletedRegistration(String email) {
+        userActionRequestRepository
+                .findByEmailAndActionAndState(email, REGISTRATION, UserActionRequestState.COMPLETED)
+                .orElseThrow(AccountDoesNotExistException::new);
     }
 
     @Override
@@ -87,6 +95,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             throw new AccountAlreadyExistsException();
         }
     }
+
 
     private AuthToken findUnsubscribeAccessToken(Email email) throws IllegalStateException {
         UserActionRequestEntity userActionRequest = userActionRequestRepository.findByEmailAndAction(email.getEmailAddress(), UNSUBSCRIPTION)
