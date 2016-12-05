@@ -11,7 +11,7 @@
         <h1>Odhlášení odběru</h1>
 
         <div th:if="${recognized==null}">
-            <p>Neplatný odkaz, nebyl odhlášen odběr ze žádného účetu</p>
+            <p>Neplatný odkaz, nebyl odhlášen odběr ze žádného účtu</p>
             <a class="aLikeBtnSimple" href="/">Pokračovat na úvodní stránku</a>
         </div>
 
@@ -26,7 +26,7 @@
             </div>
 
             <div th:if="${(param.success!=null) and (param.success[0] == 'true')}">
-                <p>Odběr z <span class="highlight" th:text="${emailForm.email}">test@email.com</span> byl úspěšně odhlášen.</p>
+                <p>Odběr pro <span class="highlight" th:text="${emailForm.email}">test@email.com</span> byl úspěšně odhlášen.</p>
                 <a class="aLikeBtnSimple" href="/">Návrat na úvodní stránku</a>
             </div>
         </div>
