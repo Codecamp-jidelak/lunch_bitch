@@ -65,19 +65,19 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     public LunchMenuDemand authorizeRegistration(AuthToken registrationToken) throws InvalidTokenException, IllegalStateException {
-        Email authorizedEmail = verifyToken(registrationToken);
+        Email authorizedEmail = verifyAndCompleteToken(registrationToken);
         generateAndSaveAuthToken(authorizedEmail.getEmailAddress(), UNSUBSCRIPTION);
         return getTemporaryRegistration(authorizedEmail);
     }
 
     @Override
     public Email authorizeChange(AuthToken changeToken) throws InvalidTokenException {
-        return verifyToken(changeToken);
+        return verifyAndCompleteToken(changeToken);
     }
 
     @Override
     public Email authorizeUnsubscription(AuthToken unsubscribeToken) throws InvalidTokenException {
-        return verifyToken(unsubscribeToken);
+        return Email.of(verifyToken(unsubscribeToken).getEmail());
     }
 
     @Override
@@ -127,13 +127,17 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         return AuthToken.of(authKey, userAction);
     }
 
-    private Email verifyToken(AuthToken token) throws InvalidTokenException {
-        UserActionRequestEntity activeRequest = userActionRequestRepository.findByKey(token.getAuthKey())
-                .filter(UserActionRequestEntity::isActive)
-                .orElseThrow(InvalidTokenException::new);
+    private Email verifyAndCompleteToken(AuthToken token) throws InvalidTokenException {
+        UserActionRequestEntity activeRequest = verifyToken(token);
         UserActionRequestEntity completedRequest = activeRequest.complete();
         userActionRequestRepository.save(completedRequest);
         return Email.of(completedRequest.getEmail());
+    }
+
+    private UserActionRequestEntity verifyToken(AuthToken token) throws InvalidTokenException {
+        return userActionRequestRepository.findByKey(token.getAuthKey())
+                .filter(UserActionRequestEntity::isActive)
+                .orElseThrow(InvalidTokenException::new);
     }
 
     private LunchMenuDemand getTemporaryRegistration(Email authorizedEmail) throws IllegalStateException {
