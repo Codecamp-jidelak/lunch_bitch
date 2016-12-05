@@ -1,8 +1,6 @@
 package cz.codecamp.lunchbitch.controllers.emailController;
 
-import cz.codecamp.lunchbitch.models.Location;
-import cz.codecamp.lunchbitch.models.LunchMenuDemand;
-import cz.codecamp.lunchbitch.models.Restaurant;
+import cz.codecamp.lunchbitch.models.*;
 import cz.codecamp.lunchbitch.services.emailService.EmailService;
 import cz.codecamp.lunchbitch.services.lunchMenuService.LunchMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 @RestController
@@ -35,26 +35,29 @@ public class EmailController {
         restaurant1.setId("16506954");
         restaurant1.setName("Kozlovna");
         restaurant1.setLocation(new Location().setAddress("Dlážděná 7, Nové Město, Praha 1"));
-        Restaurant restaurant2 = new Restaurant();
+       /* Restaurant restaurant2 = new Restaurant();
         restaurant2.setId("16511008");
         restaurant2.setName("Irish pub");
         Restaurant restaurant3 = new Restaurant();
         restaurant3.setId("16511008");
-        restaurant3.setName("Pizzeria Novato");
+        restaurant3.setName("Pizzeria Novato"); */
         list.add("16506954");
-        list.add("16506385");
-        list.add("16511008");
+       //list.add("16506385");
+        //list.add("16511008");
 
         LunchMenuDemand demand = new LunchMenuDemand();
         demand.setEmail("hornych.h@gmail.com");
         demand.addRestaurant(restaurant1);
-        demand.addRestaurant(restaurant2);
-        demand.addRestaurant(restaurant3);
+       // demand.addRestaurant(restaurant2);
+       // demand.addRestaurant(restaurant3);
 
         demands.add(demand);
 
+        Map<String, AuthToken> map = new HashMap<>();
+        map.put("hornych.h@gmail.com", new AuthToken("adfsdf18651", UserAction.UNSUBSCRIPTION));
 
-        emailService.sendDailyLunchMenusToSubscribers(lunchMenuService.lunchMenuDownload(list, demands));
+
+        emailService.sendDailyLunchMenusToSubscribers(lunchMenuService.lunchMenuDownload(list, demands, map));
     }
 
 }
