@@ -13,7 +13,7 @@ public class UnconfirmedLunchDemandEntity {
     @Column
     private String email;
 
-    @Column(length = 4000)
+    @Column(length = 20000)
     private String serializedLunchDemand;
 
     public UnconfirmedLunchDemandEntity() {
