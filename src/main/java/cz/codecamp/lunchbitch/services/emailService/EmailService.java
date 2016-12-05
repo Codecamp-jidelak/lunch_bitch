@@ -7,11 +7,12 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface EmailService {
 
-    void sendDailyLunchMenusToSubscribers(List<LunchMenuDemand> lunchMenuDemandList) throws MessagingException;
+    void sendDailyLunchMenusToSubscribers(List<LunchMenuDemand> lunchMenuDemandList, Map<String, AuthToken> unsubscribeTokensByEmails) throws MessagingException;
 
     void sendUserActionRequestEmail(AuthToken token, Email usersEmail) throws MessagingException;
 
