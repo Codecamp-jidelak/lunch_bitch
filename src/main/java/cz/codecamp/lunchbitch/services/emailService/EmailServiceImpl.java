@@ -76,7 +76,7 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("restaurantsWithLunchMenu", restaurantsWithLunchMenu);
         context.setVariable("restaurantsWithoutLunchMenu", restaurantsWithoutLunchMenu);
         context.setVariable("applicationLink", applicationLink);
-        context.setVariable("authToken", authToken);
+        context.setVariable("authToken", authToken.getAuthKey());
         return templateEngine.process("html/lunch-menu-template", context);
     }
 
