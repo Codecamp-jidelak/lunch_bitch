@@ -14,10 +14,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -44,11 +41,11 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public void sendDailyLunchMenusToSubscribers(List<LunchMenuDemand> lunchMenuDemandList) throws MessagingException {
+    public void sendDailyLunchMenusToSubscribers(List<LunchMenuDemand> lunchMenuDemandList, Map<String, AuthToken> unsubscribeTokensByEmails) throws MessagingException {
         for (LunchMenuDemand lunchMenu : lunchMenuDemandList) {
             lunchMessage.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(lunchMenu.getEmail()));
-            lunchMessage.setContent(buildLunchMenuList(lunchMenu.getRestaurants()), "text/html; charset=utf-8");
+            lunchMessage.setContent(buildLunchMenuList(lunchMenu.getRestaurants(), unsubscribeTokensByEmails.get(lunchMenu.getEmail())), "text/html; charset=utf-8");
             Transport.send(lunchMessage);
         }
     }
@@ -61,7 +58,7 @@ public class EmailServiceImpl implements EmailService {
         Transport.send(activationMessage);
     }
 
-    private String buildLunchMenuList(List<Restaurant> restaurants) throws MessagingException {
+    private String buildLunchMenuList(List<Restaurant> restaurants, AuthToken authToken) throws MessagingException {
         List<Restaurant> restaurantsWithLunchMenu = new ArrayList<>();
         List<Restaurant> restaurantsWithoutLunchMenu = new ArrayList<>();
 
@@ -78,6 +75,8 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("date", new Date());
         context.setVariable("restaurantsWithLunchMenu", restaurantsWithLunchMenu);
         context.setVariable("restaurantsWithoutLunchMenu", restaurantsWithoutLunchMenu);
+        context.setVariable("applicationLink", applicationLink);
+        context.setVariable("authToken", authToken);
         return templateEngine.process("html/lunch-menu-template", context);
     }
 

@@ -40,22 +40,30 @@
             </td>
         </tr>
     </div>
-    <tr>
-        <td bgcolor="#696969">
-            <h4 style="color:white; text-align:center;">
-                Pro tyto restaurace nejsou k dispozici jídelní lístky
-            </h4>
-        </td>
-    </tr>
-    <tr>
-        <td bgcolor="#ffffff">
-            <div th:each="restaurant : ${restaurantsWithoutLunchMenu}">
-                <div style="color:black; text-align:center; font-family:courier; padding: 1em 1em 1em 1em;"
-                     th:text="${restaurant.getName()}">
+    <div th:if="${!restaurantsWithoutLunchMenu.isEmpty()}">
+        <tr>
+            <td bgcolor="#696969">
+                <h4 style="color:white; text-align:center;">
+                    Pro tyto restaurace nejsou k dispozici jídelní lístky
+                </h4>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#ffffff">
+                <div th:each="restaurant : ${restaurantsWithoutLunchMenu}">
+                    <div style="color:black; text-align:center; font-family:courier; padding: 1em 1em 1em 1em;"
+                         th:text="${restaurant.getName()}">
+                    </div>
                 </div>
-            </div>
-        </td>
-    </tr>
+            </td>
+        </tr>
+    </div>
 </table>
+<div>
+    <p style="color:black; text-align:center; font-family:courier; padding: 1em 1em 1em 1em;">
+        Pro odhlášení odběru klikněte na následující link
+        <a th:href="${applicationLink} + '/unsubscribe/' + ${authToken}" th:text="link"></a>
+    </p>
+</div>
 </body>
 </html>

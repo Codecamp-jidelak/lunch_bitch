@@ -3,6 +3,7 @@ package cz.codecamp.lunchbitch.services.lunchMenuService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.codecamp.lunchbitch.models.AuthToken;
 import cz.codecamp.lunchbitch.models.Dish;
 import cz.codecamp.lunchbitch.models.LunchMenu;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
@@ -51,7 +52,7 @@ public class LunchMenuServiceImpl implements LunchMenuService {
     }
 
     @Override
-    public List<LunchMenuDemand> lunchMenuDownload(List<String> restaurantsIDs, List<LunchMenuDemand> demands) throws IOException, MessagingException {
+    public List<LunchMenuDemand> lunchMenuDownload(List<String> restaurantsIDs, List<LunchMenuDemand> demands, Map<String, AuthToken> unsubscribeTokensByEmails) throws IOException, MessagingException {
 
         Map<String, LunchMenu> lunchMenuMap = new HashMap<>();
 
@@ -70,7 +71,7 @@ public class LunchMenuServiceImpl implements LunchMenuService {
             }
 
         }
-        return mergerService.mergeLunchMenusWithRestaurants(lunchMenuMap, demands);
+        return mergerService.mergeLunchMenusWithRestaurants(lunchMenuMap, demands, unsubscribeTokensByEmails);
     }
 
 

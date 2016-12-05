@@ -1,5 +1,6 @@
 package cz.codecamp.lunchbitch.services.mergerService;
 
+import cz.codecamp.lunchbitch.models.AuthToken;
 import cz.codecamp.lunchbitch.models.LunchMenu;
 import cz.codecamp.lunchbitch.models.LunchMenuDemand;
 import cz.codecamp.lunchbitch.models.Restaurant;
@@ -23,7 +24,7 @@ public class MergerServiceImpl implements MergerService {
 
 
     @Override
-    public List<LunchMenuDemand> mergeLunchMenusWithRestaurants(Map<String, LunchMenu> lunchMenuMap, List<LunchMenuDemand> demands) throws MessagingException {
+    public List<LunchMenuDemand> mergeLunchMenusWithRestaurants(Map<String, LunchMenu> lunchMenuMap, List<LunchMenuDemand> demands, Map<String, AuthToken> unsubscribeTokensByEmails) throws MessagingException {
 
         for(LunchMenuDemand demand: demands){
 
@@ -34,7 +35,7 @@ public class MergerServiceImpl implements MergerService {
             }
 
         }
-        emailService.sendDailyLunchMenusToSubscribers(demands);
+        emailService.sendDailyLunchMenusToSubscribers(demands, unsubscribeTokensByEmails);
         return demands;
     }
 }
