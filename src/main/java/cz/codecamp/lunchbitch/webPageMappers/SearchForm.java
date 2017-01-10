@@ -17,7 +17,7 @@ public class SearchForm {
     private String OPTIONS_DESCRIPTION_ADDRESS = "Vyhledat podle adresy";
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Nesmí být prázdné")
     private String keyword;
     private String type;
     private String calledFrom;
