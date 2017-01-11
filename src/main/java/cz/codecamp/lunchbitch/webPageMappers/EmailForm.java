@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class EmailForm {
 
     @Email
-    @NotEmpty
+    @NotEmpty(message = "Nesmí být prázdné")
     private String email;
 
     public String getEmail() {
